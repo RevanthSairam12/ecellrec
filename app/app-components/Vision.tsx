@@ -26,7 +26,7 @@ export async function Vision() {
               students and provide them with the resources and support they need
               to turn their innovative ideas into successful ventures. We aim to
               create a vibrant ecosystem where creativity, collaboration, and
-              entrepreneurship thrive. some text here
+              entrepreneurship thrive.
             </p>
           </div>
         </BoxReveal>
