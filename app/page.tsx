@@ -22,7 +22,7 @@ export default function Home() {
         </div>
         <div className="px-4">
           <RainbowButton>
-            Know more
+            Know more!
           </RainbowButton>
         </div>
       </div>
