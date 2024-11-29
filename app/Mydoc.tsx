@@ -84,7 +84,7 @@ export default function DockDemo() {
               </Tooltip>
             </DockIcon>
           ))}
-          <Separator orientation="vertical" className="h-full" />
+          <Separator orientation="vertical"/>
           {Object.entries(DATA.contact.social).map(([name, social]) => (
             <DockIcon key={name}>
               <Tooltip>
@@ -103,7 +103,7 @@ export default function DockDemo() {
               </Tooltip>
             </DockIcon>
           ))}
-          <Separator orientation="vertical" className="h-full py-2" />
+          <Separator orientation="vertical" />
           {Object.entries(DATA.contact.other).map(([name, other]) => (
             <DockIcon key={name}>
               <Tooltip>
@@ -122,7 +122,7 @@ export default function DockDemo() {
               </Tooltip>
             </DockIcon>
           ))}
-          <Separator orientation="vertical" className="h-full py-2" />
+          <Separator orientation="vertical"/>
           <DockIcon>
             
                 <ModeToggle className="rounded-full" />
