@@ -50,7 +50,7 @@ export default function Home() {
       <div className="mt-4 items-center justify-center mx-auto ">
       <InfiniteMovingCardsDemo/>
       <BentoGridSecondDemo/>
-      <h1 className="text-center  text-4xl p-4 transition-all ease-in delay-200 from-white to-slate-400">Hear What's the Speakers got to say about the club</h1>
+      <h1 className="text-center  text-4xl p-4 transition-all ease-in delay-200 from-white to-slate-400">Hear What&#39;s the Speakers got to say about the club</h1>
      </div>
     </div>
   );
