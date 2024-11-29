@@ -1,6 +1,7 @@
-import { Button } from "@/components/ui/button";
 import BoxReveal from "@/components/ui/box-reveal";
 import ShineBorder from "@/components/ui/shine-border";
+import { CoolModeBtn } from "../CoolModeBtn";
+
 
 export async function Vision() {
   return (
@@ -32,7 +33,7 @@ export async function Vision() {
         </BoxReveal>
 
         <BoxReveal boxColor={"#5046e6"} duration={0.5}>
-          <Button className="mt-[1.6rem] bg-[#33e256] hover:bg-purple-700 text-black hover:text-white border-spacing-1 transition-all ease-in-out">Explore</Button>
+          <CoolModeBtn/>
         </BoxReveal>
       </ShineBorder>
     </div>
