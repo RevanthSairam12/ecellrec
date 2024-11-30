@@ -64,9 +64,17 @@ const config: Config = {
   		animation: {
   			grid: 'grid 15s linear infinite',
   			rainbow: 'rainbow var(--speed, 2s) infinite linear',
-  			shine: 'shine var(--duration) infinite linear'
+  			shine: 'shine var(--duration) infinite linear',
+			  scroll:
+			  "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite"
+	
   		},
   		keyframes: {
+			scroll: {
+				to: {
+				  transform: "translate(calc(-50% - 0.5rem))",
+				},
+			  },
   			grid: {
   				'0%': {
   					transform: 'translateY(-50%)'
@@ -98,5 +106,16 @@ const config: Config = {
   	}
   },
   plugins: [require("tailwindcss-animate")],
+ 			 [addVariablesForColors],
 };
 export default config;
+function addVariablesForColors({ addBase, theme }: any) {
+	let allColors = flattenColorPalette(theme("colors"));
+	let newVars = Object.fromEntries(
+	  Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+	);
+   
+	addBase({
+	  ":root": newVars,
+	});
+  }
