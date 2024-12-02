@@ -10,7 +10,7 @@ import BlurFade from "./BlurFadeCollage";
 import { Vision } from "@/app/pages/Vision";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { BentoGridSecondDemo } from "./pages/BentoGrid";
-import Testimonials from "./pages/Testimonials";
+import { Testimonials } from "./pages/Testimonials";
 
 export default function Home() {
   return (
