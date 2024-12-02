@@ -16,7 +16,7 @@ export default function RetroGrid({
       style={{ "--grid-angle": `${angle}deg` } as React.CSSProperties}
     >
       {/* Grid */}
-      <div className="absolute inset-0 [transform:rotateX(var(--grid-angle))]">
+      <div className="absolute inset-0 [transform:rotateX(var(--grid-angle))] dark:">
         <div
           className={cn(
             "animate-grid",
@@ -33,7 +33,7 @@ export default function RetroGrid({
       </div>
 
       {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent to-90% dark:from-black" />
+      <div className="absolute inset-0 bg-gradient-to-t from-violet-500 to-transparent to-90% dark:from-black" />
     </div>
   );
 }

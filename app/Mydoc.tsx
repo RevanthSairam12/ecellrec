@@ -50,12 +50,12 @@ const DATA = {
   ],
   contact: {
     social: {
-      Events: { name: "Events", url: "#", icon: Icons.events },
+      Events: { name: "Events", url: "/events", icon: Icons.events },
       Resources: { name: "Resources", url: "#", icon: Icons.resources },
     },
     other: {
       Team: { name: "Team", url: "#", icon: Icons.teams },
-      Testimonials: { name: "Testimonials", url: "#", icon: Icons.testimonial },
+      Testimonials: { name: "Testimonials", url: "#Testimonials", icon: Icons.testimonial },
       Contact: { name: "Contact", url: "#", icon: Contact },
     },
   },

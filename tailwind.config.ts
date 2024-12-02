@@ -64,7 +64,9 @@ const config: Config = {
   		animation: {
   			grid: 'grid 15s linear infinite',
   			rainbow: 'rainbow var(--speed, 2s) infinite linear',
-  			shine: 'shine var(--duration) infinite linear'
+  			shine: 'shine var(--duration) infinite linear',
+  			marquee: 'marquee var(--duration) infinite linear',
+  			'marquee-vertical': 'marquee-vertical var(--duration) linear infinite'
   		},
   		keyframes: {
   			grid: {
@@ -93,10 +95,46 @@ const config: Config = {
   				to: {
   					'background-position': '0% 0%'
   				}
+  			},
+  			marquee: {
+  				from: {
+  					transform: 'translateX(0)'
+  				},
+  				to: {
+  					transform: 'translateX(calc(-100% - var(--gap)))'
+  				}
+  			},
+  			'marquee-vertical': {
+  				from: {
+  					transform: 'translateY(0)'
+  				},
+  				to: {
+  					transform: 'translateY(calc(-100% - var(--gap)))'
+  				}
   			}
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    function addGlobalCSSVariables({ addBase, theme }: any) {
+      const colors = theme("colors");
+      const cssVars: Record<string, string> = {};
+
+      for (const [key, value] of Object.entries(colors)) {
+        if (typeof value === "string") {
+          cssVars[`--${key}`] = value;
+        } else {
+          for (const [subKey, subValue] of Object.entries(value)) {
+            cssVars[`--${key}-${subKey}`] = subValue as string;
+          }
+        }
+      }
+
+      addBase({
+        ":root": cssVars,
+      });
+    },
+  ],
 };
+
 export default config;
