@@ -58,7 +58,7 @@ export default function Home() {
         Resources
         </p>
       <br/>
-      <StickyScrollRevealDemo />
+      <StickyScrollRevealDemo/>
       </div>
       </section>
       <h1 className="text-center  text-4xl p-4 transition-all ease-in delay-200 from-white to-slate-400">Hear What&#39;s the Speakers got to say about the club</h1>
