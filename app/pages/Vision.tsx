@@ -4,7 +4,7 @@ import { CoolModeBtn } from "../CoolModeBtn";
 
 export async function Vision() {
   return (
-    <div className="flex items-center justify-center h-[600px] w-full bg-gradient-to-b from-violet-300 to-transparent to-90% dark:bg-black">
+    <div className="flex items-center justify-center h-[600px] w-full bg-gradient-to-b from-mylavender to-transparent to-90% dark:from-black">
       <ShineBorder
         className="relative flex h-auto w-full max-w-lg flex-col items-center justify-center overflow-hidden rounded-md bg-background p-10 md:shadow-xl"
         color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}

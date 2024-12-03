@@ -2,15 +2,11 @@
 import React from "react";
 import { Boxes } from "@/components/ui/background-boxes";
 import { EventsCard } from "../EventsCard";
-import Sidebar from "../side-comp/sidebar";
 
 export default function page() {
   return (
     <div className="h-full relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
       <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
-      <div className="absolute mt-44 left-0 top-0 z-40">
-        <Sidebar />
-      </div>
       <Boxes />
       <div className="h-screen flex flex-col justify-center items-center text-center">
         <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-wide z-20">

@@ -1,20 +1,20 @@
 import HeroVideoDialog from "@/components/ui/hero-video-dialog";
 
-export function HeroVideoDialog() {
+export default function EventsVideo() {
   return (
     <div className="relative">
       <HeroVideoDialog
         className="dark:hidden block"
         animationStyle="from-center"
-        videoSrc="https://www.youtube.com/embed/TNpY6ASDLxI"
-        thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
+        videoSrc="https://www.youtube.com/embed/rxVtQispBOY?si=WmFhBH10iYY0E7cf"
+        thumbnailSrc="https://i.ibb.co/hcH066Q/youtube-Thumbnail.jpg"
         thumbnailAlt="Hero Video"
       />
       <HeroVideoDialog
         className="hidden dark:block"
         animationStyle="from-center"
-        videoSrc="https://www.youtube.com/embed/TNpY6ASDLxI"
-        thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
+        videoSrc="https://www.youtube.com/embed/rxVtQispBOY?si=WmFhBH10iYY0E7cf"
+        thumbnailSrc="https://i.ibb.co/hcH066Q/youtube-Thumbnail.jpg"
         thumbnailAlt="Hero Video"
       />
     </div>

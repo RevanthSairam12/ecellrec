@@ -8,10 +8,11 @@ import Image from "next/image";
 import Mydoc from "./Mydoc";
 import BlurFade from "./BlurFadeCollage";
 import { Vision } from "@/app/pages/Vision";
+import { Mission } from '@/app/pages/Mission'
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { BentoGridSecondDemo } from "./pages/BentoGrid";
-import { Testimonials } from "./pages/Testimonials";
-import HeroVideoDialog from './pages/HeroVideoDialog';
+import { Testimonials } from "./pages/testimonials";
+import EventsVideo from './pages/EventsVideo';
 
 export default function Home() {
   return (
@@ -39,11 +40,6 @@ export default function Home() {
             className="w-full h-full object-contain"
           />
         </div>
-        {/* <div className="px-4">
-          <RainbowButton>
-            Know more!
-          </RainbowButton>
-        </div> */}
       </div>
 
       {/* Main Content */}
@@ -77,20 +73,31 @@ export default function Home() {
         <Vision />
       </div>
       {/* Mission */}
+      <div id="mission">
+        <Mission/>
+      </div>
       {/* events */}
-      <HeroVideoDialog/>
+      <div className="m-44" id="events">
+      <h1 className="text-4xl font-mono flex justify-center m-5">Expore Upcoming Events</h1>
+        <EventsVideo/>
+      </div>
       {/* events photo collage */}
       <div>
         <h1 className="text-4xl font-mono flex justify-center m-5">Highlights of Club</h1>
         <BlurFade/>
       </div>
+      {/* Resources */}
+      <div id="resources" className="mt-10">
+      <h1 className="text-4xl font-mono flex justify-center m-5">Resources</h1>
+      <BentoGridSecondDemo />
+      </div>
       <div className="mt-4 items-center justify-center mx-auto ">
         {/* testimonials */}
         <div id="Testimonials">
           <Testimonials />
-          </div>
+        </div>
 
-        <BentoGridSecondDemo />
+        
         
       </div>
     </div>
