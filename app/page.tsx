@@ -11,6 +11,7 @@ import { Vision } from "@/app/pages/Vision";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { BentoGridSecondDemo } from "./pages/BentoGrid";
 import { Testimonials } from "./pages/Testimonials";
+import HeroVideoDialog from './pages/HeroVideoDialog';
 
 export default function Home() {
   return (
@@ -76,6 +77,8 @@ export default function Home() {
         <Vision />
       </div>
       {/* Mission */}
+      {/* events */}
+      <HeroVideoDialog/>
       {/* events photo collage */}
       <div>
         <h1 className="text-4xl font-mono flex justify-center m-5">Highlights of Club</h1>

@@ -1,6 +1,6 @@
-import HeroVideoDialog from "@/components/magicui/hero-video-dialog";
+import HeroVideoDialog from "@/components/ui/hero-video-dialog";
 
-export function HeroVideoDialogDemo() {
+export function HeroVideoDialog() {
   return (
     <div className="relative">
       <HeroVideoDialog

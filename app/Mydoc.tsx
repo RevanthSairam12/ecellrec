@@ -50,7 +50,7 @@ const DATA = {
   ],
   contact: {
     social: {
-      Events: { name: "Events", url: "/events", icon: Icons.events },
+      Events: { name: "Events", url: "#", icon: Icons.events },
       Resources: { name: "Resources", url: "#", icon: Icons.resources },
     },
     other: {
