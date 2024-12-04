@@ -13,6 +13,7 @@ import { RainbowButton } from "@/components/ui/rainbow-button";
 import { BentoGridSecondDemo } from "./pages/BentoGrid";
 import { Testimonials } from "./pages/testimonials";
 import EventsVideo from './pages/EventsVideo';
+import Team from "./team-cmp/Team";
 
 export default function Home() {
   return (
@@ -90,6 +91,10 @@ export default function Home() {
       <div id="resources" className="mt-10">
       <h1 className="text-4xl font-mono flex justify-center m-5">Resources</h1>
       <BentoGridSecondDemo />
+      </div>
+      {/* Team */}
+      <div id="team">
+        <Team/>
       </div>
       <div className="mt-4 items-center justify-center mx-auto ">
         {/* testimonials */}
