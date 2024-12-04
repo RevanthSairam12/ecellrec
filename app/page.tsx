@@ -78,7 +78,7 @@ export default function Home() {
       </div>
       {/* events */}
       <div className="m-44" id="events">
-      <h1 className="text-4xl font-mono flex justify-center m-5">Expore Upcoming Events</h1>
+      <h1 className="text-4xl font-mono flex justify-center m-5">Explore Upcoming Events</h1>
         <EventsVideo/>
       </div>
       {/* events photo collage */}
