@@ -6,7 +6,7 @@ interface TeamCardProps {
   role: string;
   name: string;
   socialLinks: { platform: string; url: string }[];
-  imageUrl: any; 
+  imageUrl: string; 
 }
 
 const TeamCard: React.FC<TeamCardProps> = ({ role, name, socialLinks, imageUrl }) => {
