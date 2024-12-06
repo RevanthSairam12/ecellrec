@@ -1,19 +1,18 @@
 import React from 'react';
-import Image from 'next/image'; // Import Next.js Image component
+import Image from 'next/image';
 import styles from './TeamCard.module.css';
 
 interface TeamCardProps {
   role: string;
   name: string;
   socialLinks: { platform: string; url: string }[];
-  imageUrl: any; // Path to the image
+  imageUrl: any; 
 }
 
 const TeamCard: React.FC<TeamCardProps> = ({ role, name, socialLinks, imageUrl }) => {
   return (
     <div className={styles.card}>
       <div className={styles.imageContainer}>
-        {/* Use Next.js Image component for optimized image loading */}
         <Image 
           src={imageUrl} 
           alt={name} 
