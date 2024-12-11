@@ -1,4 +1,5 @@
 import BlurFade from "@/components/ui/blur-fade";
+import Image from "next/image"; 
 
 const images = Array.from({ length: 9 }, (_, i) => {
   const isLandscape = i % 2 === 0;
@@ -13,10 +14,13 @@ export default function BlurFadeCollage() {
       <div className="columns-2 gap-4 sm:columns-3">
         {images.map((imageUrl, idx) => (
           <BlurFade key={imageUrl} delay={0.25 + idx * 0.05} inView>
-            <img
+            <Image
               className="mb-4 size-full rounded-lg object-contain"
               src={imageUrl}
               alt={`Random stock image ${idx + 1}`}
+              width={800} // Set a default width
+              height={600} // Set a default height
+              layout="responsive" // Use responsive layout
             />
           </BlurFade>
         ))}
