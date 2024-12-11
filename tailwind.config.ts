@@ -117,24 +117,27 @@ const config: Config = {
   	}
   },
   plugins: [
-    function addGlobalCSSVariables({ addBase, theme }: any) {
-      const colors = theme("colors");
-      const cssVars: Record<string, string> = {};
-
-      for (const [key, value] of Object.entries(colors)) {
-        if (typeof value === "string") {
-          cssVars[`--${key}`] = value;
-        } else {
-          for (const [subKey, subValue] of Object.entries(value)) {
-            cssVars[`--${key}-${subKey}`] = subValue as string;
-          }
-        }
-      }
-
-      addBase({
-        ":root": cssVars,
-      });
-    },
+	function addGlobalCSSVariables({ addBase, theme }: { addBase: (base: Record<string, string>) => void; theme: (path: string) => Record<string, string> }) {
+		const colors = theme("colors");
+		const cssVars: Record<string, string> = {};
+	  
+		for (const [key, value] of Object.entries(colors)) {
+		  if (typeof value === "string") {
+			cssVars[`--${key}`] = value;
+		  } else if (typeof value === "object" && value !== null) {
+			// Ensure 'value' is an object and not null
+			for (const [subKey, subValue] of Object.entries(value)) {
+			  if (typeof subValue === "string") {
+				cssVars[`--${key}-${subKey}`] = subValue;
+			  }
+			}
+		  }
+		}
+	  
+		addBase({
+		  ":root": cssVars as unknown as string,
+		});
+	  },	  
   ],
 };
 
