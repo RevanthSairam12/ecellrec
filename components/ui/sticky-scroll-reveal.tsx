@@ -40,11 +40,7 @@ export const StickyScroll = ({
     setActiveCard(closestBreakpointIndex);
   });
 
-  const backgroundColors = [
-    "var(--slate-900)",
-    "var(--black)",
-    "var(--neutral-900)",
-  ];
+
   const linearGradients = React.useMemo(() => [
     "linear-gradient(to bottom right, var(--cyan-500), var(--emerald-500))",
     "linear-gradient(to bottom right, var(--pink-500), var(--indigo-500))",
@@ -61,10 +57,7 @@ export const StickyScroll = ({
 
   return (
     <motion.div
-      animate={{
-        backgroundColor: backgroundColors[activeCard % backgroundColors.length],
-      }}
-      className="h-[30rem] overflow-y-auto flex justify-center relative space-x-10 rounded-md p-10"
+      className="h-[30rem] overflow-y-auto flex justify-center relative space-x-10 rounded-md p-10 dark:bg-black"
       ref={ref}
     >
       <div className="div relative flex items-start px-4">
@@ -78,7 +71,7 @@ export const StickyScroll = ({
                 animate={{
                   opacity: activeCard === index ? 1 : 0.3,
                 }}
-                className="text-2xl font-bold text-slate-100"
+                className="text-2xl font-bold text-slate-800 dark:text-white"
               >
                 {item.title}
               </motion.h2>
@@ -89,7 +82,7 @@ export const StickyScroll = ({
                 animate={{
                   opacity: activeCard === index ? 1 : 0.3,
                 }}
-                className="text-kg text-slate-300 max-w-sm mt-10"
+                className="text-kg text-slate-900 max-w-sm mt-10 dark:text-slate-50"
               >
                 {item.description}
               </motion.p>

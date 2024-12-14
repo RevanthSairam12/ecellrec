@@ -53,7 +53,7 @@ const content = [
 ];
 export function Mission() {
   return (
-    <div className="p-10">
+    <div className="w-full">
       <StickyScroll content={content} />
     </div>
   );

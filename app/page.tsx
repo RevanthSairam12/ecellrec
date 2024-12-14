@@ -14,6 +14,7 @@ import { BentoGridSecondDemo } from "./pages/BentoGrid";
 import { Testimonials } from "./pages/testimonials";
 import EventsVideo from './pages/EventsVideo';
 import Team from "./team-cmp/Team";
+import Footer from "./pages/Footer";
 
 export default function Home() {
   return (
@@ -75,6 +76,7 @@ export default function Home() {
       </div>
       {/* Mission */}
       <div id="mission">
+        <h1 className="text-4xl font-mono flex justify-center m-5">Our Mission</h1>
         <Mission/>
       </div>
       {/* events */}
@@ -94,6 +96,7 @@ export default function Home() {
       </div>
       {/* Team */}
       <div id="team">
+      <h1 className="text-4xl font-mono flex justify-center m-5">Our Team</h1>
         <Team/>
       </div>
       <div className="mt-4 items-center justify-center mx-auto ">
@@ -101,10 +104,9 @@ export default function Home() {
         <div id="Testimonials">
           <Testimonials />
         </div>
-
-        
-        
       </div>
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
