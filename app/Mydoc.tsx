@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { CalendarIcon, Contact, HomeIcon, MailIcon, Star, Users, BookText, CalendarDays, Rocket, Eye } from "lucide-react";
+import { CalendarIcon, HomeIcon, MailIcon, Star, Users, BookText, CalendarDays, Rocket, Eye } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -56,7 +56,6 @@ const DATA = {
     other: {
       Team: { name: "Team", url: "#team", icon: Icons.teams },
       Testimonials: { name: "Testimonials", url: "#Testimonials", icon: Icons.testimonial },
-      Contact: { name: "Contact", url: "#", icon: Contact },
     },
   },
 };

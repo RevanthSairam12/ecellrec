@@ -50,7 +50,7 @@ export default function Home() {
         id="main"
       >
         <h1 className="pointer-events-none p-5 z-10 bg-gradient-to-b from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-center text-6xl md:text-8xl font-extrabold tracking-tight text-transparent">
-          Innovation-cell
+          Innovation Cell
         </h1>
         <h3 className="pointer-events-none p-5 z-10 bg-gradient-to-r from-purple-700 via-violet-500 to-blue-600 bg-clip-text text-center text-xl md:text-xl font-extrabold tracking-tight text-transparent">
           Raghu Engineering College
