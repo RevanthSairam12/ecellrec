@@ -1,11 +1,9 @@
 import BlurFade from "@/components/ui/blur-fade";
-import Image from "next/image"; 
+import Image from "next/image";
 
-const images = Array.from({ length: 9 }, (_, i) => {
-  const isLandscape = i % 2 === 0;
-  const width = isLandscape ? 800 : 600;
-  const height = isLandscape ? 600 : 800;
-  return `https://picsum.photos/seed/${i + 1}/${width}/${height}`;
+// Array of images stored in the public folder
+const images = Array.from({ length: 6 }, (_, i) => {
+  return `/group/group${i + 1}.jpg`
 });
 
 export default function BlurFadeCollage() {
@@ -17,9 +15,9 @@ export default function BlurFadeCollage() {
             <Image
               className="mb-4 size-full rounded-lg object-contain"
               src={imageUrl}
-              alt={`Random stock image ${idx + 1}`}
-              width={800} // Set a default width
-              height={600} // Set a default height
+              alt={`Image ${idx + 1}`}
+              width={800} // Adjust based on your image size
+              height={600} // Adjust based on your image size
               layout="responsive" // Use responsive layout
             />
           </BlurFade>
