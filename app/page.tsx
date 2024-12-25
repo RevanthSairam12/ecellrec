@@ -95,7 +95,7 @@ export default function Home() {
       <BentoGridSecondDemo />
       </div>
       {/* Team */}
-      <div id="team">
+      <div id="team" className="mt-40">
       <h1 className="text-4xl font-mono flex justify-center m-5">Our Team</h1>
         <Team/>
       </div>
