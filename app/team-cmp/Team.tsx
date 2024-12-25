@@ -47,33 +47,6 @@ const teamMembers = [
     imageUrl: "/ganesh.jpg",
   },
   {
-    role: "Web Tech Head",
-    name: "Pavan Teja Bhima",
-    socialLinks: [
-      { platform: 'Twitter', url: '' },
-      { platform: 'LinkedIn', url: '' },
-    ],
-    imageUrl: "/pavan.png",
-  },
-  {
-    role: "Web Tech Head",
-    name: "E. Vishal",
-    socialLinks: [
-      { platform: 'Twitter', url: '' },
-      { platform: 'LinkedIn', url: '' },
-    ],
-    imageUrl: "/vishal.jpg",
-  },
-  {
-    role: "Web Tech Head",
-    name: "G.V. Santhosh",
-    socialLinks: [
-      { platform: 'Twitter', url: '' },
-      { platform: 'LinkedIn', url: '' },
-    ],
-    imageUrl: "",
-  },
-  {
     role: "Marketing & People Relations Head",
     name: "Chetan Deva Pallela",
     socialLinks: [
@@ -90,6 +63,105 @@ const teamMembers = [
       { platform: 'LinkedIn', url: '' },
     ],
     imageUrl: "/Ritesh.jpg",
+  },
+  {
+    role: "Events & Operations Head",
+    name: "Ujjesha Nitya Routhu",
+    socialLinks: [
+      { platform: 'Twitter', url: '' },
+      { platform: 'LinkedIn', url: '' },
+    ],
+    imageUrl: "/nitya.jpg",
+  },
+  {
+    role: "Events & Operations Head",
+    name: "Aamukta Malyadha",
+    socialLinks: [
+      { platform: 'Twitter', url: '' },
+      { platform: 'LinkedIn', url: '' },
+    ],
+    imageUrl: "/aamukta.jpg",
+  },
+  {
+    role: "Creative Content Head",
+    name: "Ummidi Sri Vyshnavi",
+    socialLinks: [
+      { platform: 'Twitter', url: '' },
+      { platform: 'LinkedIn', url: '' },
+    ],
+    imageUrl: "/Vyshnavi.jpg",
+  },
+  {
+    role: "Creative Content Head",
+    name: "T.V. Sathwik Sai",
+    socialLinks: [
+      { platform: 'Twitter', url: '' },
+      { platform: 'LinkedIn', url: '' },
+    ],
+    imageUrl: "",
+  },
+  {
+    role: "Strategy & OutReach Head",
+    name: "B. Lakshmi Sanjana",
+    socialLinks: [
+      { platform: 'Twitter', url: '' },
+      { platform: 'LinkedIn', url: '' },
+    ],
+    imageUrl: "/Sanjana.png",
+  },
+  {
+    role: "Strategy & OutReach Head",
+    name: "Aditya Kamarsu",
+    socialLinks: [
+      { platform: 'Twitter', url: '' },
+      { platform: 'LinkedIn', url: '' },
+    ],
+    imageUrl: "",
+  },
+  {
+    role: "Media & OutReach Head",
+    name: "Abhishek Kumar",
+    socialLinks: [
+      { platform: 'Twitter', url: '' },
+      { platform: 'LinkedIn', url: '' },
+    ],
+    imageUrl: "/abhishek.jpg",
+  },
+  {
+    role: "Media & OutReach Head",
+    name: "Sree Venkatanadh",
+    socialLinks: [
+      { platform: 'Twitter', url: '' },
+      { platform: 'LinkedIn', url: '' },
+    ],
+    imageUrl: "",
+  },
+  {
+    role: "Web Tech Head",
+    name: "E. Vishal",
+    socialLinks: [
+      { platform: 'Twitter', url: '' },
+      { platform: 'LinkedIn', url: '' },
+    ],
+    imageUrl: "/vishal.jpg",
+  },
+  {
+    role: "Web Tech Head",
+    name: "Pavan Teja Bhima",
+    socialLinks: [
+      { platform: 'Twitter', url: '' },
+      { platform: 'LinkedIn', url: '' },
+    ],
+    imageUrl: "/pavan.png",
+  },
+  {
+    role: "Web Tech Head",
+    name: "G.V. Santhosh",
+    socialLinks: [
+      { platform: 'Twitter', url: '' },
+      { platform: 'LinkedIn', url: '' },
+    ],
+    imageUrl: "/santosh.jpg",
   },
   // Add additional members here as needed
 ];
