@@ -98,7 +98,7 @@ const teamMembers = [
       { platform: 'Twitter', url: '' },
       { platform: 'LinkedIn', url: '' },
     ],
-    imageUrl: "",
+    imageUrl: "/sathwik.jpg",
   },
   {
     role: "Strategy & OutReach Head",
@@ -116,7 +116,7 @@ const teamMembers = [
       { platform: 'Twitter', url: '' },
       { platform: 'LinkedIn', url: '' },
     ],
-    imageUrl: "",
+    imageUrl: "/aditya.jpg",
   },
   {
     role: "Media & OutReach Head",
@@ -134,7 +134,7 @@ const teamMembers = [
       { platform: 'Twitter', url: '' },
       { platform: 'LinkedIn', url: '' },
     ],
-    imageUrl: "",
+    imageUrl: "/venky.jpg",
   },
   {
     role: "Web Tech Head",
@@ -149,8 +149,8 @@ const teamMembers = [
     role: "Web Tech Head",
     name: "Pavan Teja Bhima",
     socialLinks: [
-      { platform: 'Twitter', url: '' },
-      { platform: 'LinkedIn', url: '' },
+      { platform: 'Twitter', url: 'https://x.com/pavantejabhima' },
+      { platform: 'LinkedIn', url: 'https://linkedin.com/in/pavantejabhima' },
     ],
     imageUrl: "/pavan.png",
   },
@@ -163,7 +163,6 @@ const teamMembers = [
     ],
     imageUrl: "/santosh.jpg",
   },
-  // Add additional members here as needed
 ];
 
 export default function Team() {

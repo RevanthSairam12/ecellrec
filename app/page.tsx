@@ -28,7 +28,7 @@ export default function Home() {
             className="w-full h-full object-contain"
           />
         </div>
-        <div className="w-36 h-36">
+        <div className="w-36 h-36 mx-5">
           <Image
             src={RaghuLogo}
             alt="Ecell Logo"
@@ -85,8 +85,8 @@ export default function Home() {
         <EventsVideo/>
       </div>
       {/* events photo collage */}
-      <div>
-        <h1 className="text-4xl font-mono flex justify-center m-5">Highlights of Club</h1>
+      <div className="m-10">
+        <h1 className="text-4xl font-mono flex justify-center m-10">Highlights of Club</h1>
         <BlurFade/>
       </div>
       {/* Resources */}
@@ -107,6 +107,9 @@ export default function Home() {
       </div>
       {/* Footer */}
       <Footer />
+      <div className="w-full h-10 bg-black text-white flex items-center justify-center font-mono overflow-hidden">
+        <span className="scrolling-text">Developed By WebTech Team © ECELL REC</span>
+      </div>
     </div>
   );
 }

@@ -106,6 +106,24 @@ html {
   animation: fadeUp 1s ease-out;
 }
 
+.scrolling-text {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  box-sizing: border-box;
+  animation: scroll 10s linear infinite;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+
 * {
   /* Hide scrollbar for all elements */
 ::-webkit-scrollbar {
