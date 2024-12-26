@@ -11,7 +11,7 @@ const content = [
     content: (
       <div className="h-full w-full  flex items-center justify-center text-white">
         <Image
-          src="/mission/mission1.jpg"
+          src="/mission/mission11.jpg"
           width={300}
           height={300}
           className="h-full w-full object-cover"
@@ -43,7 +43,7 @@ const content = [
     content: (
       <div className="h-full w-full  flex items-center justify-center text-white">
         <Image
-          src="/mission/mission3.jpg"
+          src="/mission/mission33.jpg"
           width={300}
           height={300}
           className="h-full w-full object-cover"
