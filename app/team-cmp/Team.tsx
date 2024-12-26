@@ -47,6 +47,33 @@ const teamMembers = [
     imageUrl: "/ganesh.jpg",
   },
   {
+    role: "Web Tech Head",
+    name: "E. Vishal",
+    socialLinks: [
+      { platform: 'Twitter', url: '' },
+      { platform: 'LinkedIn', url: '' },
+    ],
+    imageUrl: "/vishal.jpg",
+  },
+  {
+    role: "Web Tech Head",
+    name: "Pavan Teja Bhima",
+    socialLinks: [
+      { platform: 'Twitter', url: 'https://x.com/pavantejabhima' },
+      { platform: 'LinkedIn', url: 'https://linkedin.com/in/pavantejabhima' },
+    ],
+    imageUrl: "/pavan.png",
+  },
+  {
+    role: "Web Tech Head",
+    name: "G.V. Santhosh",
+    socialLinks: [
+      { platform: 'Twitter', url: '' },
+      { platform: 'LinkedIn', url: '' },
+    ],
+    imageUrl: "/santosh.jpg",
+  },
+  {
     role: "Marketing & People Relations Head",
     name: "Chetan Deva Pallela",
     socialLinks: [
@@ -136,38 +163,11 @@ const teamMembers = [
     ],
     imageUrl: "/venky.jpg",
   },
-  {
-    role: "Web Tech Head",
-    name: "E. Vishal",
-    socialLinks: [
-      { platform: 'Twitter', url: '' },
-      { platform: 'LinkedIn', url: '' },
-    ],
-    imageUrl: "/vishal.jpg",
-  },
-  {
-    role: "Web Tech Head",
-    name: "Pavan Teja Bhima",
-    socialLinks: [
-      { platform: 'Twitter', url: 'https://x.com/pavantejabhima' },
-      { platform: 'LinkedIn', url: 'https://linkedin.com/in/pavantejabhima' },
-    ],
-    imageUrl: "/pavan.png",
-  },
-  {
-    role: "Web Tech Head",
-    name: "G.V. Santhosh",
-    socialLinks: [
-      { platform: 'Twitter', url: '' },
-      { platform: 'LinkedIn', url: '' },
-    ],
-    imageUrl: "/santosh.jpg",
-  },
 ];
 
 export default function Team() {
   return (
-    <div className="flex flex-wrap justify-center gap-6">
+    <div className="flex flex-wrap justify-center sm:gap-20 gap-6">
       {teamMembers.map((member, index) => (
         <TeamCard
           key={index}

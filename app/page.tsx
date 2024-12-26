@@ -10,11 +10,12 @@ import BlurFade from "./BlurFadeCollage";
 import { Vision } from "@/app/pages/Vision";
 import { Mission } from '@/app/pages/Mission'
 import { RainbowButton } from "@/components/ui/rainbow-button";
-import { BentoGridSecondDemo } from "./pages/BentoGrid";
+import { BentoGridSecondDemo } from "./pages/BentoGridSecondDemo";
 import { Testimonials } from "./pages/testimonials";
 import EventsVideo from './pages/EventsVideo';
 import Team from "./team-cmp/Team";
 import Footer from "./pages/Footer";
+import TeamCard from "./team-cmp/TeamCard";
 
 export default function Home() {
   return (
@@ -75,24 +76,37 @@ export default function Home() {
         <Vision />
       </div>
       {/* Mission */}
-      <div id="mission">
+      <div id="mission" className="mt-10">
         <h1 className="text-4xl font-mono flex justify-center m-5">Our Mission</h1>
         <Mission/>
       </div>
       {/* events */}
-      <div className="m-44" id="events">
+      <div className="m-5 sm:m-44" id="events">
       <h1 className="text-4xl font-mono flex justify-center m-5">Explore Upcoming Events</h1>
         <EventsVideo/>
       </div>
       {/* events photo collage */}
-      <div className="m-10">
-        <h1 className="text-4xl font-mono flex justify-center m-10">Highlights of Club</h1>
+      <div className="m-5">
+        <h1 className="text-4xl font-mono flex justify-center m-10">Highlights</h1>
         <BlurFade/>
       </div>
       {/* Resources */}
-      <div id="resources" className="mt-10">
+      <div id="resources" className="mt-40">
       <h1 className="text-4xl font-mono flex justify-center m-5">Resources</h1>
       <BentoGridSecondDemo />
+      </div>
+      {/* coordinator */}
+      <div id="team" className="mt-40">
+      <h1 className="text-4xl font-mono flex justify-center m-5">Faculty Coordinator</h1>
+      <div className="flex justify-center">
+      <TeamCard
+          key={20}
+          role={"IIC Council Member"}
+          name={"Kiran Kumar Sir"}
+          imageUrl=""
+          socialLinks={[]}
+        />
+      </div>
       </div>
       {/* Team */}
       <div id="team" className="mt-40">
