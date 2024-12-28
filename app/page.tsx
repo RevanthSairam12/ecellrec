@@ -103,7 +103,7 @@ export default function Home() {
           key={20}
           role={"IIC Council Member"}
           name={"Kiran Kumar Sir"}
-          imageUrl=""
+          imageUrl="/kirankumar.png"
           socialLinks={[]}
         />
       </div>
