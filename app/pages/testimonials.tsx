@@ -4,39 +4,45 @@ import Image from "next/image";
 
 const reviews = [
   {
-    name: "Jack",
-    username: "@jack",
-    body: "I've never seen anything like this before. It's amazing. I love it.",
+    name: "Dr. R.Shivaranjani",
+    username: "Head of the department CSC&CSO",
+    body: "The focus on innovation inspired individual to think beyond traditional approaches and create solutions that effectively address real-world needs. This experience not only enhanced their perspective but also helped them to grow into a more confident and resourceful individual.",
     img: "https://avatar.vercel.sh/jack",
   },
   {
-    name: "Jill",
-    username: "@jill",
-    body: "I don't know what to say. I'm speechless. This is amazing.",
-    img: "https://avatar.vercel.sh/jill",
+    name: "Dr.G.Kiran Kumar",
+    username: "Faculty coordinator E-CELL REC",
+    body: "The impact you've made in nurturing creativity, building confidence, and turning ideas into actionable plans is remarkable. Kudos to the entire team for consistently going above and beyond to make a difference. Here's to many more milestones and success stories ahead! Keep inspiring and leading the way!",
+    img: "/kirankumar.png",
   },
   {
-    name: "John",
-    username: "@john",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/john",
-  },
-  {
-    name: "Jane",
-    username: "@jane",
-    body: "I'm at a loss for words. This is amazing. I love it.",
+    name: "Mr. Seshadri Kancherla",
+    username: "IIC: Innovation Ambassador (IA)",
+    body: "E-Cell inspire students to launch their own enterprises and foster an entrepreneurial culture. Additionally, they assist students in transforming their concepts into profitable enterprises.",
     img: "https://avatar.vercel.sh/jane",
   },
   {
-    name: "Jenny",
-    username: "@jenny",
-    body: "I'm at a loss for words. This is amazing. I love it.",
+    name: "Dr. Bhagavathula Meena ",
+    username: "Associate Professor & SBC - CSI",
+    body: "Young individuals are capable of innovating, sharing ideas, seeking for challenges, and benefiting from their Peer experiences. I am confident that the resources offered by E-Cell REC will help the students to succeed in their carreer and establish a strong professional network.",
+    img: "https://avatar.vercel.sh/john",
+  },
+  {
+    name: "Mr.E.Pavan Chandra ",
+    username: "CEO, XceedIQ",
+    body: "As an alumnus, it was an absolute privilege to visit my college as a guest. It's amazing to see how much support and encouragement the students have now. Great work by E-Cell REC, and I'm excited to see the incredible things the students will achieve!",
+    img: "https://avatar.vercel.sh/jane",
+  },
+  {
+    name: "Bora Suri Venkata Reddy",
+    username: "CSE Dept Assistant Professor and  NSS Programme Officer",
+    body: "At E-Cell, we believe every idea has the potential to change the world. Here, innovation meets opportunity, and together, we empower the entrepreneurs of tomorrow. Dream big, take risks, and let's build the future",
     img: "https://avatar.vercel.sh/jenny",
   },
   {
-    name: "James",
-    username: "@james",
-    body: "I'm at a loss for words. This is amazing. I love it.",
+    name: "Dr. Ch.Chakradhar",
+    username: "CSE Dept IIC coordinator",
+    body: "E-Cell helps students in the development of their entrepreneurial skills, connecting the people with similar or different ideology, and access resources to start their business",
     img: "https://avatar.vercel.sh/james",
   },
 ];
@@ -58,7 +64,7 @@ const ReviewCard = ({
   return (
     <figure
       className={cn(
-        "relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
+        "relative w-96 cursor-pointer overflow-hidden rounded-xl border p-4",
         // light styles
         "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
         // dark styles
@@ -66,7 +72,7 @@ const ReviewCard = ({
       )}
     >
       <div className="flex flex-row items-center gap-2">
-        <Image className="rounded-full" width="32" height="32" alt="" src={img} />
+        <Image className="rounded-full w-10 h-10 object-cover" width="32" height="32" alt="" src={img} />
         <div className="flex flex-col">
           <figcaption className="text-sm font-medium dark:text-white">
             {name}
