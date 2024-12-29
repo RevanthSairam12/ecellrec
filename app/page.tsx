@@ -56,7 +56,7 @@ export default function Home() {
         <h3 className="pointer-events-none p-5 z-10 bg-gradient-to-r from-purple-700 via-violet-500 to-blue-600 bg-clip-text text-center text-xl md:text-xl font-extrabold tracking-tight text-transparent">
           Raghu Engineering College
         </h3>
-        <div className="mb-64 hover:scale-110 ease-in-out duration-200">
+        <div className="mb-64 hover:scale-110 ease-in-out duration-200" onClick={() => window.location.href = "/joinUsForm"}>
           <RainbowButton>Join Us!</RainbowButton>
         </div>
         {/* Background Grid */}
