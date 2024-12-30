@@ -7,7 +7,7 @@ const reviews = [
     name: "Dr. R.Shivaranjani",
     username: "Head of the department CSC&CSO",
     body: "The focus on innovation inspired individual to think beyond traditional approaches and create solutions that effectively address real-world needs. This experience not only enhanced their perspective but also helped them to grow into a more confident and resourceful individual.",
-    img: "https://avatar.vercel.sh/jack",
+    img: "/hodmam.jpg",
   },
   {
     name: "Dr.G.Kiran Kumar",
@@ -19,13 +19,13 @@ const reviews = [
     name: "Mr. Seshadri Kancherla",
     username: "IIC: Innovation Ambassador (IA)",
     body: "E-Cell inspire students to launch their own enterprises and foster an entrepreneurial culture. Additionally, they assist students in transforming their concepts into profitable enterprises.",
-    img: "https://avatar.vercel.sh/jane",
+    img: "/mechsir.jpg",
   },
   {
     name: "Dr. Bhagavathula Meena ",
     username: "Associate Professor & SBC - CSI",
     body: "Young individuals are capable of innovating, sharing ideas, seeking for challenges, and benefiting from their Peer experiences. I am confident that the resources offered by E-Cell REC will help the students to succeed in their carreer and establish a strong professional network.",
-    img: "https://avatar.vercel.sh/john",
+    img: "/meena-madam.png",
   },
   {
     name: "Mr.E.Pavan Chandra ",
@@ -37,13 +37,19 @@ const reviews = [
     name: "Bora Suri Venkata Reddy",
     username: "CSE Dept Assistant Professor and  NSS Programme Officer",
     body: "At E-Cell, we believe every idea has the potential to change the world. Here, innovation meets opportunity, and together, we empower the entrepreneurs of tomorrow. Dream big, take risks, and let's build the future",
-    img: "https://avatar.vercel.sh/jenny",
+    img: "/kirannsssir.jpg",
   },
   {
     name: "Dr. Ch.Chakradhar",
     username: "CSE Dept IIC coordinator",
     body: "E-Cell helps students in the development of their entrepreneurial skills, connecting the people with similar or different ideology, and access resources to start their business",
-    img: "https://avatar.vercel.sh/james",
+    img: "/chakradharsir.jpg",
+  },
+  {
+    name: "N. Venkata Reddy",
+    username: "Founder - CEO, Teckybot",
+    body: "The E-Cell's dedication to fostering entrepreneurship and providing a platform for students to explore creative and impactful ideas is commendable. Their initiative to connect students with real-world experiences and industry experts is a testament to their commitment to shaping future leaders and innovators.",
+    img: "/teckybotsir.jpg",
   },
 ];
 
