@@ -31,7 +31,7 @@ const reviews = [
     name: "Mr.E.Pavan Chandra ",
     username: "CEO, XceedIQ",
     body: "As an alumnus, it was an absolute privilege to visit my college as a guest. It's amazing to see how much support and encouragement the students have now. Great work by E-Cell REC, and I'm excited to see the incredible things the students will achieve!",
-    img: "https://avatar.vercel.sh/jane",
+    img: "/pavanchandrasir.jpg",
   },
   {
     name: "Bora Suri Venkata Reddy",
