@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import RegistrationForm from "@/app/pages/joinUsForm";
+import RegistrationForm from "@/app/joinUsForm/joinUsForm";
 import RetroGrid from "@/components/ui/retro-grid";
 import EcellLogo from "@/app/images/EcellREClogo.png";
 import Image from "next/image";

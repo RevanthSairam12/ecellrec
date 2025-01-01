@@ -71,7 +71,7 @@ const JoinUsForm = () => {
         setIsSubmitting(true);
 
         try {
-            const response = await fetch("/api/joinus", {
+            const response = await fetch("/api/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const JoinUsForm = () => {
 
             const result = await response.json();
             if (result.success) {
-                router.push("/joinus/success");
+                router.push("/joinUsFor/result");
             } else {
                 console.error("Error submitting form:", result.error);
             }
