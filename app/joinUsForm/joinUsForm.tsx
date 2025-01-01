@@ -27,7 +27,7 @@ const joinUsFormSchema = z.object({
         .string({ required_error: "Roll number is required." })
         .min(5, { message: "Roll number must be at least 5 characters." }),
     branch: z
-        .string({ required_error: "Branch is required." })
+        .string({ required_error: "Branch is required." }) 
         .min(2, { message: "Branch must be at least 2 characters." }),
     college: z
         .string({ required_error: "College name is required." })
@@ -81,7 +81,7 @@ const JoinUsForm = () => {
 
             const result = await response.json();
             if (result.success) {
-                router.push("/joinUsFor/result");
+                router.push("/joinUsForm/result");
             } else {
                 console.error("Error submitting form:", result.error);
             }
