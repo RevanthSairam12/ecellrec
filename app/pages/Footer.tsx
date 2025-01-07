@@ -8,80 +8,80 @@ export default function Footer() {
       description: "",
       items: [
         {
-          title: "Features",
-          href: "/features",
+          title: "Events",
+          href: "/#",
         },
         {
-          title: "Pricing",
-          href: "/pricing",
+          title: "Ideas",
+          href: "/#",
         },
         {
-          title: "Contact",
-          href: "/contact",
+          title: "Team",
+          href: "/#team",
         },
         {
-          title: "Newsletter",
-          href: "/newsletter",
-        },
-      ],
-    },
-    {
-      title: "Product",
-      description: "Managing a small business today is already tough.",
-      items: [
-        {
-          title: "Reports",
-          href: "/reports",
-        },
-        {
-          title: "Statistics",
-          href: "/statistics",
-        },
-        {
-          title: "Dashboards",
-          href: "/dashboards",
-        },
-        {
-          title: "Recordings",
-          href: "/recordings",
+          title: "Blog",
+          href: "/#",
         },
       ],
     },
     {
-      title: "Company",
-      description: "Managing a small business today is already tough.",
+      title: "About",
+      description: "Learn more about our club and its mission.",
       items: [
         {
-          title: "About us",
-          href: "/about",
+          title: "Mission",
+          href: "/#mission",
         },
         {
-          title: "Fundraising",
-          href: "/fundraising",
+          title: "Vision",
+          href: "/#vision",
         },
         {
-          title: "Investors",
-          href: "/investors",
+          title: "History",
+          href: "/#",
         },
         {
-          title: "Contact us",
-          href: "/contact",
+          title: "Achievements",
+          href: "/#",
+        },
+      ],
+    },
+    {
+      title: "Get Involved",
+      description: "Join us and be a part of our community.",
+      items: [
+        {
+          title: "Membership",
+          href: "/#",
+        },
+        {
+          title: "Volunteer",
+          href: "/#",
+        },
+        {
+          title: "Sponsorship",
+          href: "/#",
+        },
+        {
+          title: "Contact Us",
+          href: "/#",
         },
       ],
     },
   ];
 
   return (
-    <div className="p-5 w-full py-20 lg:py-40 bg-white dark:bg-black dark:text-white">
+    <div className="p-5 w-full py-20 lg:py-40 bg-blue-300 dark:bg-black dark:text-white">
       <div className="container mx-auto">
         <div className="grid lg:grid-cols-2 gap-10 items-center">
           <div className="flex gap-8 flex-col items-start">
             <div className="flex gap-2 flex-col">
               <h2 className="text-3xl md:text-5xl tracking-tighter max-w-xl font-regular text-left">
-                ECELL REC CLUB
+                E-CELL REC CLUB
               </h2>
-              <p className="text-lg max-w-lg leading-relaxed tracking-tight text-left dark:text-white">
-                helps small businesses to create amazing identity.
+              <p className="text-md max-w-lg leading-relaxed tracking-tight text-left dark:text-white">
+                Empowering students to innovate and lead in the entrepreneurial world.
               </p>
             </div>
             <div className="flex gap-20 flex-row">
@@ -91,7 +91,7 @@ export default function Footer() {
                 <p>Visakhapatnam</p>
               </div>
               <div className="flex flex-col text-sm max-w-lg leading-relaxed tracking-tight text-left dark:text-white">
-                <Link href="/">Terms of service</Link>
+                <Link href="/">Terms of Service</Link>
                 <Link href="/">Privacy Policy</Link>
               </div>
             </div>

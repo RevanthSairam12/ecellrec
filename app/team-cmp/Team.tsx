@@ -17,7 +17,7 @@ const teamMembers = [
       { platform: 'Twitter', url: '#' },
       { platform: 'LinkedIn', url: '#' },
     ],
-    imageUrl: "",
+    imageUrl: "/ratnam.png",
   },
   {
     role: "Innovation & Incubation Head",
@@ -35,7 +35,7 @@ const teamMembers = [
       { platform: 'Twitter', url: '#' },
       { platform: 'LinkedIn', url: '#' },
     ],
-    imageUrl: "",
+    imageUrl: "/charan.jpg",
   },
   {
     role: "Design & Branding Head",

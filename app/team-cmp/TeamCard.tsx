@@ -13,7 +13,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ role, name, socialLinks, imageUrl }
   const getIconForPlatform = (platform: string) => {
     switch (platform.toLowerCase()) {
       case 'twitter':
-        return '/icons/x.png';
+        return '/icons/twitter-x-icon.jpg';
       case 'linkedin':
         return '/icons/in.png'; 
       default:
@@ -45,6 +45,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ role, name, socialLinks, imageUrl }
                   alt={link.platform} 
                   width={24} 
                   height={24} 
+                  className='rounded-md'
                 />
               </a>
             );

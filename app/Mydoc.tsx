@@ -1,12 +1,12 @@
 import React from "react";
 import Link from "next/link";
-import { CalendarIcon, HomeIcon, MailIcon, Star, Users, BookText, CalendarDays, Rocket, Eye } from "lucide-react";
+import { CalendarIcon, HomeIcon, MailIcon, Star, Users, BookText, CalendarDays, Rocket, Eye, InfoIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/app/dock-cmp/Separator";
 import { Tooltip, TooltipProvider, TooltipTrigger } from "@/app/dock-cmp/Tooltip";
-import { ModeToggle } from "@/app/dock-cmp/mode-toggle";
+// import { ModeToggle } from "@/app/dock-cmp/mode-toggle";
 import { Dock, DockIcon } from "@/components/ui/dock";
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
@@ -39,6 +39,7 @@ const Icons = {
   events: (props: IconProps) => (<CalendarDays {...props} />),
   mission: (props: IconProps) => (<Rocket {...props} />),
   vision: (props: IconProps) => (<Eye {...props} />),
+  about: (props: IconProps) => (<InfoIcon {...props} />),
   // Additional icons ...
 };
 
@@ -56,6 +57,7 @@ const DATA = {
     other: {
       Team: { name: "Team", url: "#team", icon: Icons.teams },
       Testimonials: { name: "Testimonials", url: "#Testimonials", icon: Icons.testimonial },
+      About: {name:"About", url:"/path", icon: Icons.about },
     },
   },
 };
@@ -121,12 +123,12 @@ export default function DockDemo() {
               </Tooltip>
             </DockIcon>
           ))}
-          <Separator orientation="vertical"/>
+          {/* <Separator orientation="vertical"/>
           <DockIcon>
             
                 <ModeToggle className="rounded-full" />
               
-          </DockIcon>
+          </DockIcon> */}
         </Dock>
       </TooltipProvider>
     </div>
