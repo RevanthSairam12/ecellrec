@@ -15,7 +15,7 @@ const teamMembers = [
     name: "P. Ratna Teja",
     socialLinks: [
       { platform: 'Twitter', url: '#' },
-      { platform: 'LinkedIn', url: '#' },
+      { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/ratna-teja-pothuraju-16a41b28b/' },
     ],
     imageUrl: "/ratnam.png",
   },
@@ -32,8 +32,8 @@ const teamMembers = [
     role: "Startup Assistance Program Head",
     name: "N. Charan Manikanta",
     socialLinks: [
-      { platform: 'Twitter', url: '#' },
-      { platform: 'LinkedIn', url: '#' },
+      { platform: 'Twitter', url: 'https://x.com/CharanMNX' },
+      { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/charan-manikanta/' },
     ],
     imageUrl: "/charan.jpg",
   },
@@ -42,7 +42,7 @@ const teamMembers = [
     name: "Tappiti Ganesh",
     socialLinks: [
       { platform: 'Twitter', url: '#' },
-      { platform: 'LinkedIn', url: '#' },
+      { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/ganeshtappiti/' },
     ],
     imageUrl: "/ganesh.jpg",
   },
@@ -51,7 +51,7 @@ const teamMembers = [
     name: "E. Vishal",
     socialLinks: [
       { platform: 'Twitter', url: '#' },
-      { platform: 'LinkedIn', url: '#' },
+      { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/vishal-epu-646822222/' },
     ],
     imageUrl: "/vishal.jpg",
   },
@@ -86,8 +86,8 @@ const teamMembers = [
     role: "Marketing & People Relations Head",
     name: "S. Ritesh Kumar",
     socialLinks: [
-      { platform: 'Twitter', url: 'https://x.com/Sanjana12041976' },
-      { platform: 'LinkedIn', url: 'https://linkedin.com/in/sanjana-bayana' },
+      { platform: 'Twitter', url: '' },
+      { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/rithesh-kumar-sanapathi-b05361313/' },
     ],
     imageUrl: "/Ritesh.jpg",
   },
@@ -114,7 +114,7 @@ const teamMembers = [
     name: "Ummidi Sri Vyshnavi",
     socialLinks: [
       { platform: 'Twitter', url: '#' },
-      { platform: 'LinkedIn', url: '#' },
+      { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/sri-vyshnavi-ummidi/' },
     ],
     imageUrl: "/Vyshnavi.jpg",
   },
@@ -131,8 +131,8 @@ const teamMembers = [
     role: "Strategy & OutReach Head",
     name: "B. Lakshmi Sanjana",
     socialLinks: [
-      { platform: 'Twitter', url: '#' },
-      { platform: 'LinkedIn', url: '#' },
+      { platform: 'Twitter', url: 'https://x.com/Sanjana12041976' },
+      { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/sanjana-bayana' },
     ],
     imageUrl: "/Sanjana.png",
   },
@@ -159,7 +159,7 @@ const teamMembers = [
     name: "Sree Venkatanadh",
     socialLinks: [
       { platform: 'Twitter', url: '#' },
-      { platform: 'LinkedIn', url: '#' },
+      { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/sree-venkatanadh-8b32b02a0/' },
     ],
     imageUrl: "/venky.jpg",
   },
