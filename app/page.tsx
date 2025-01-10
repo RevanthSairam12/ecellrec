@@ -50,10 +50,10 @@ export default function Home() {
         className="relative flex flex-col items-center justify-center h-screen w-full overflow-hidden fade-up"
         id="main"
       >
-        <h1 className="pointer-events-none p-5 z-10 bg-gradient-to-b from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-center text-6xl md:text-8xl font-extrabold tracking-tight text-transparent">
-          Innovation Cell
+        <h1 className="pointer-events-none p-5 z-10 bg-gradient-to-b from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-center text-4xl md:text-7xl font-extrabold tracking-tight text-transparent">
+          Entrepreneurship Cell
         </h1>
-        <h3 className="pointer-events-none p-5 z-10 bg-gradient-to-r from-purple-700 via-violet-500 to-blue-600 bg-clip-text text-center text-4xl font-extrabold tracking-tight text-transparent">
+        <h3 className="pointer-events-none p-5 z-10 bg-gradient-to-r from-purple-700 via-violet-500 to-blue-600 bg-clip-text text-center text-2xl md:text-4xl font-extrabold tracking-tight text-transparent">
           Raghu Engineering College
         </h3>
         <div className="mb-64 hover:scale-110 ease-in-out duration-200" onClick={() => window.location.href = "https://forms.gle/CpV14WHL2be2ZxVu9"}>
@@ -107,7 +107,7 @@ export default function Home() {
       <TeamCard
           key={20}
           role={""}
-          name={"Dr.G.Kiran Kumar"}
+          name={"Dr. G. Kiran Kumar"}
           imageUrl="/kirankumar.png"
           socialLinks={[]}
         />

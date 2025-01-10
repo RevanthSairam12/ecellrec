@@ -1,6 +1,7 @@
-import React from "react";
 import RetroGrid from "@/components/ui/retro-grid";
-
+import CloseBtn from "@/app/News/close.svg";
+import Image from "next/image";
+import Link from "next/link";
 
 type NewsItem = {
   title: string;
@@ -9,9 +10,23 @@ type NewsItem = {
 };
 
 const newsData: NewsItem[] = [
-  { title: "E-summit coming soon", description: "One of the biggest event held by E-CELL Andhra Pradesh.", type: "announcement" },
-  { title: "Volunteers meet for Event", description: "Volunteers are requested to meet at Seminar hall by 6PM..", type: "important" },
-  { title: "Hiring Volunteers for E-summit", description: "Grab the oppurtunity to take part in the biggest event to ever organize.", type: "update" },
+  {
+    title: "E-summit coming soon",
+    description: "One of the biggest events held by E-CELL Andhra Pradesh.",
+    type: "announcement",
+  },
+  {
+    title: "Volunteers meet for Event",
+    description:
+      "Volunteers are requested to meet at the Seminar Hall by 6 PM.",
+    type: "important",
+  },
+  {
+    title: "Hiring Volunteers for E-summit",
+    description:
+      "Grab the opportunity to take part in the biggest event ever organized.",
+    type: "update",
+  },
 ];
 
 const News: React.FC = () => {
@@ -22,24 +37,35 @@ const News: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-4 space-y-4">
-      <div className="text-xl font-bold bg-yellow-100 text-center px-4 py-2 shadow-md rounded-lg tracking-wide">
-        News Section
-      </div>
-      {newsData.map((news, index) => (
-        <div key={index} className="w-full max-w-xl p-4 border rounded-lg shadow-md bg-purple-300 relative cursor-pointer">
-        <span
-            className={`absolute top-2 right-2 px-3 py-1 text-sm font-medium rounded-full ${typeStyles[news.type]}`}
-          >
-            {news.type}
-          </span>
-          <h2 className="text-lg font-semibold">{news.title}</h2>
-          <p className="text-gray-600">{news.description}</p>
-
+    <>
+      <Link href="/" passHref>
+        <div className="fixed right-0 top-0 z-10 p-4 cursor-pointer">
+          <Image src={CloseBtn} width={30} height={30} alt="close" />
         </div>
-      ))}
-      <RetroGrid/>
-    </div>
+      </Link>
+      <div className="flex flex-col items-center p-4 space-y-4">
+        <div className="text-xl font-bold bg-yellow-100 text-center px-4 py-2 shadow-md rounded-lg tracking-wide">
+          News Section
+        </div>
+        {newsData.map((news, index) => (
+          <div
+            key={index}
+            className="w-full max-w-xl p-4 border rounded-lg shadow-md bg-purple-300 relative cursor-pointer"
+          >
+            <span
+              className={`absolute top-2 right-2 px-3 py-1 text-sm font-medium rounded-full ${
+                typeStyles[news.type]
+              }`}
+            >
+              {news.type}
+            </span>
+            <h2 className="text-lg font-semibold">{news.title}</h2>
+            <p className="text-gray-600">{news.description}</p>
+          </div>
+        ))}
+        <RetroGrid />
+      </div>
+    </>
   );
 };
 
