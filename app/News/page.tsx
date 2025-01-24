@@ -16,9 +16,9 @@ const newsData: NewsItem[] = [
     type: "announcement",
   },
   {
-    title: "Volunteers meet for Event",
+    title: "launching E-Summit website",
     description:
-      "Volunteers are requested to meet at the Seminar Hall by 6 PM.",
+      "The website for the E-Summit is going to be launched soon. Stay tuned for more updates.",
     type: "important",
   },
 ];
