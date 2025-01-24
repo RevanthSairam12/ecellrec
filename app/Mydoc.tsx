@@ -57,7 +57,7 @@ const DATA = {
     other: {
       Team: { name: "Team", url: "#team", icon: Icons.teams },
       Testimonials: { name: "Testimonials", url: "#Testimonials", icon: Icons.testimonial },
-      About: {name:"About", url:"/about", icon: Icons.about },
+      About: {name:"Advisory Board", url:"/about", icon: Icons.about },
     },
   },
 };

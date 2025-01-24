@@ -21,17 +21,15 @@ export async function Vision() {
         </BoxReveal>
 
         <BoxReveal boxColor={"#5046e6"} duration={0.5}>
-          <div className="mt-6">
+          <div className="mt-6 text-justify">
             <p>
-              Our long term vision to foster an entrepreneurial culture in our
-              campus while many focus on building startups which we also do ,
-              but our main focus lies in building entrepreneurs . A startup may
-              succeed or fail but an entrepreneur by nature never truly fails
-              they learn adapt and continue to innovate
+              To ignite and nurture entrepreneurial spirit
+              among students, empowering them to innovate, create, and lead
+              impactful ventures that contribute to economic growth and societal
+              progress.
             </p>
           </div>
         </BoxReveal>
-
       </ShineBorder>
     </div>
   );

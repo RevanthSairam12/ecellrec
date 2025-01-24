@@ -21,12 +21,6 @@ const newsData: NewsItem[] = [
       "Volunteers are requested to meet at the Seminar Hall by 6 PM.",
     type: "important",
   },
-  {
-    title: "Hiring Volunteers for E-summit",
-    description:
-      "Grab the opportunity to take part in the biggest event ever organized.",
-    type: "update",
-  },
 ];
 
 const News: React.FC = () => {
