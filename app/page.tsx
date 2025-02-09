@@ -9,7 +9,7 @@ import Mydoc from "./Mydoc";
 import BlurFade from "./BlurFadeCollage";
 import { Vision } from "@/app/pages/Vision";
 import { Mission } from '@/app/pages/Mission'
-import { RainbowButton } from "@/components/ui/rainbow-button";
+// import { RainbowButton } from "@/components/ui/rainbow-button";
 import { BentoGridSecondDemo } from "./pages/BentoGridSecondDemo";
 import { Testimonials } from "./pages/testimonials";
 import EventsVideo from './pages/EventsVideo';
@@ -56,14 +56,15 @@ export default function Home() {
         <h3 className="pointer-events-none p-5 z-10 bg-gradient-to-r from-purple-700 via-violet-500 to-blue-600 bg-clip-text text-center text-2xl md:text-4xl font-extrabold tracking-tight text-transparent">
           Raghu Engineering College
         </h3>
-        <div className="mb-64 hover:scale-110 ease-in-out duration-200" onClick={() => window.location.href = "https://forms.gle/CpV14WHL2be2ZxVu9"}>
-          <RainbowButton>Join Us!</RainbowButton>
+        <div className="mb-64 hover:scale-110 ease-in-out duration-200" onClick={() => window.location.href = "/News"}>
+          {/* <RainbowButton>Join Us!</RainbowButton> */}
+            <button
+            className="z-10 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full shadow-lg hover:from-blue-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            >
+            News!
+            </button>
         </div>
-        <button onClick={() => window.location.href = "/News"}
-      className="fixed bottom-5 right-5 z-10 bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
-    >
-      News!
-    </button>
+        
         {/* Background Grid */}
         <RetroGrid />
 

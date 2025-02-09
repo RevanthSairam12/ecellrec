@@ -22,7 +22,7 @@ const about = [
   {
     imageSrc:"/principal.jpg",
     name: "Dr. Ch. Srinivasu",
-    title: "Principal, Raghu Educational Society",
+    title: "Principal, Raghu Educational Institution",
   },
   {
     imageSrc:"/ramesh-sir.jpg",

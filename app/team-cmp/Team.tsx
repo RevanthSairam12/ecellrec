@@ -17,7 +17,7 @@ const teamMembers = [
       { platform: 'Twitter', url: '#' },
       { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/ratna-teja-pothuraju-16a41b28b/' },
     ],
-    imageUrl: "/ratnam.png",
+    imageUrl: "/ratna.png",
   },
   {
     role: "Innovation & Incubation Head",
