@@ -21,6 +21,11 @@ const newsData: NewsItem[] = [
       "The website for the E-Summit is going to be launched soon. Stay tuned for more updates.",
     type: "important",
   },
+  {
+    title: "E-Summit dates announced",
+    description: "E-SUMMIT'25 REC happening in 1st and 2nd March 2025.",
+    type: "update",
+  }
 ];
 
 const News: React.FC = () => {

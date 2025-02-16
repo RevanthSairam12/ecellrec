@@ -1,4 +1,6 @@
 import Link from "next/link";
+import EcellNew from "../images/ecellnew.png"
+import Image from "next/image";
 
 export default function Footer() {
   const navigationItems = [
@@ -72,17 +74,18 @@ export default function Footer() {
   ];
 
   return (
-    <div className="p-5 w-full py-20 lg:py-40 bg-blue-300 dark:bg-black dark:text-white">
+    <div className="p-5 w-full py-20 lg:py-40 bg-gradient-to-t from-violet-500 to-transparent to-90% dark:bg-black dark:text-white">
       <div className="container mx-auto">
         <div className="grid lg:grid-cols-2 gap-10 items-center">
           <div className="flex gap-8 flex-col items-start">
             <div className="flex gap-2 flex-col">
-              <h2 className="text-3xl md:text-5xl tracking-tighter max-w-xl font-regular text-left">
+              {/* <h2 className="text-3xl md:text-5xl tracking-tighter max-w-xl font-regular text-left">
                 E-CELL REC CLUB
-              </h2>
-              <p className="text-md max-w-lg leading-relaxed tracking-tight text-left dark:text-white">
-                Empowering students to innovate and lead in the entrepreneurial world.
-              </p>
+              </h2> */}
+              <Image src={EcellNew} alt="E-CELL REC" width={200} height={200} />
+                <p className="text-md max-w-lg leading-relaxed tracking-tight text-left dark:text-white">
+                Empowering Innovative Minds
+                </p>
             </div>
             <div className="flex gap-20 flex-row">
               <div className="flex flex-col text-sm max-w-lg leading-relaxed tracking-tight text-left dark:text-white">

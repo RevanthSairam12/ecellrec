@@ -1,7 +1,7 @@
 "use client";
 
 import RetroGrid from "@/components/ui/retro-grid";
-import EcellLogo from "./images/e-cell-rec.png";
+import EcellNew from "./images/new.svg"
 import IICLogo from "./images/iic.png";
 import RaghuLogo from "./images/raghu.png";
 import Image from "next/image";
@@ -24,7 +24,7 @@ export default function Home() {
       <div className="flex justify-between items-center px-5 -mt-7">
         <div className="w-36 h-36">
           <Image
-            src={EcellLogo}
+            src={EcellNew}
             alt="Ecell Logo"
             className="w-full h-full object-contain"
           />
