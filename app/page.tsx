@@ -9,7 +9,7 @@ import Mydoc from "./Mydoc";
 import BlurFade from "./BlurFadeCollage";
 import { Vision } from "@/app/pages/Vision";
 import { Mission } from '@/app/pages/Mission'
-// import { RainbowButton } from "@/components/ui/rainbow-button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import { BentoGridSecondDemo } from "./pages/BentoGridSecondDemo";
 import { Testimonials } from "./pages/testimonials";
 import EventsVideo from './pages/EventsVideo';
@@ -58,7 +58,6 @@ export default function Home() {
           Raghu Engineering College
         </h3>
         <div className="mb-64 hover:scale-110 ease-in-out duration-200" onClick={() => window.location.href = "/News"}>
-          {/* <RainbowButton>Join Us!</RainbowButton> */}
             <button
             className="z-10 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full shadow-lg hover:from-blue-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
             >
@@ -96,7 +95,11 @@ export default function Home() {
       <div className="mb-64 m-5 sm:m-44" id="events">
       <h1 className="text-xl sm:text-4xl font-mono flex justify-center m-5">Explore Upcoming Events</h1>
         <EventsVideo/>
+        <div className="flex justify-center p-10" onClick={() => window.location.href = "https://esummit-rec.vercel.app/"}>
+          <RainbowButton>Visit E-SUMMIT&apos;25 site</RainbowButton>
+        </div>
       </div>
+
       {/* events photo collage */}
       <div className="m-5">
         <h1 className="text-4xl font-mono flex justify-center m-10">Highlights</h1>
