@@ -1,7 +1,7 @@
 "use client";
 
 import RetroGrid from "@/components/ui/retro-grid";
-import EcellNew from "./images/new.svg"
+import EcellNew from "./images/ecellverynew.png"
 import IICLogo from "./images/iic.png";
 import RaghuLogo from "./images/raghu.png";
 import Image from "next/image";
@@ -30,14 +30,14 @@ export default function Home() {
             className="w-full h-full object-contain"
           />
         </div>
-        <div className="w-40 h-40 mx-5">
+        <div className="w-52 h-52 mx-5">
           <Image
             src={RaghuLogo}
             alt="Ecell Logo"
             className="w-full h-full object-contain"
           />
         </div>
-        <div className="w-40 h-40">
+        <div className="w-52 h-52">
           <Image
             src={IICLogo}
             alt="Ecell Logo"

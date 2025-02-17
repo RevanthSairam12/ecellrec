@@ -1,5 +1,5 @@
 import Link from "next/link";
-import EcellNew from "../images/ecellnew.png"
+import EcellNew from "../images/ecellverynew.png";
 import Image from "next/image";
 
 export default function Footer() {
