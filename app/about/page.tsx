@@ -1,7 +1,5 @@
 import React from "react";
-import CloseBtn from "@/app/News/close.svg";
 import Image from "next/image";
-import Link from "next/link";
 
 const about = [
   {
@@ -35,11 +33,6 @@ const about = [
 const page = () => {
   return (
     <>
-    <Link href="/" passHref>
-        <div className="fixed right-0 top-0 z-10 p-4 cursor-pointer">
-          <Image src={CloseBtn} width={30} height={30} alt="close" />
-        </div>
-      </Link>
       <div className="text-4xl text-blue-600 flex justify-center m-4" >Advisory Board</div>
       <div className="flex flex-wrap gap-4 m-4 p-4 rounded-lg justify-center">
         {about.map((member, index) => (

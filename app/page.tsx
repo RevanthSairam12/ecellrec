@@ -16,27 +16,28 @@ import EventsVideo from './pages/EventsVideo';
 import Team from "./team-cmp/Team";
 import Footer from "./pages/Footer";
 import TeamCard from "./team-cmp/TeamCard";
+import About from "./about/page";
 
 export default function Home() {
   return (
     <div id="#myhome">
       {/* Top Section with Icon and Button */}
       <div className="flex justify-between items-center px-5 -mt-7">
-        <div className="w-36 h-36">
+        <div className="w-40 h-40">
           <Image
             src={EcellNew}
             alt="Ecell Logo"
             className="w-full h-full object-contain"
           />
         </div>
-        <div className="w-36 h-36 mx-5">
+        <div className="w-40 h-40 mx-5">
           <Image
             src={RaghuLogo}
             alt="Ecell Logo"
             className="w-full h-full object-contain"
           />
         </div>
-        <div className="w-36 h-36">
+        <div className="w-40 h-40">
           <Image
             src={IICLogo}
             alt="Ecell Logo"
@@ -72,6 +73,11 @@ export default function Home() {
         <div className="fixed bottom-10 w-full flex justify-center z-10">
           <Mydoc />
         </div>
+      </div>
+
+      {/* About Section */}
+      <div className="flex flex-col items-center justify-center mx-auto mb-40" id="about">
+        <About/>
       </div>
 
       {/* Vision Component */}
