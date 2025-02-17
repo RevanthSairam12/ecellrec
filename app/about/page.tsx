@@ -23,6 +23,11 @@ const about = [
     title: "Principal, Raghu Educational Institution",
   },
   {
+    imageSrc:"/kiranspecial.png",
+    name: "Dr. G. Kiran Kumar",
+    title: "Faculty Coordinator of ECELL REC",
+  },
+  {
     imageSrc:"/ramesh-sir.jpg",
     name: "Dr. Ramesh Babu",
     title: "Coordinator - Entrepreneur Innovation Startup Committee (ESIC)",
