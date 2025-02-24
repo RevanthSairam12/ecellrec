@@ -11,20 +11,14 @@ type NewsItem = {
 
 const newsData: NewsItem[] = [
   {
-    title: "E-summit coming soon",
-    description: "One of the biggest events held by E-CELL Andhra Pradesh.",
-    type: "announcement",
-  },
-  {
-    title: "launching E-Summit website",
-    description:
-      "The website for the E-Summit is going to be launched soon. Stay tuned for more updates.",
-    type: "important",
-  },
-  {
     title: "E-Summit dates announced",
     description: "E-SUMMIT'25 REC happening in 1st and 2nd March 2025.",
     type: "update",
+  },
+  {
+    title: "E-Summit website launched",
+    description: "E-SUMMIT'25 REC website is now live. Check it out now.",
+    type: "important",
   }
 ];
 
