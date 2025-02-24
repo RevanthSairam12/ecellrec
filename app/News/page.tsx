@@ -6,6 +6,7 @@ import Link from "next/link";
 type NewsItem = {
   title: string;
   description: string;
+  linkUrl: string;
   type: "announcement" | "important" | "update";
 };
 
@@ -13,11 +14,13 @@ const newsData: NewsItem[] = [
   {
     title: "E-Summit dates announced",
     description: "E-SUMMIT'25 REC happening in 1st and 2nd March 2025.",
+    linkUrl: "",
     type: "update",
   },
   {
     title: "E-Summit website launched",
     description: "E-SUMMIT'25 REC website is now live. Check it out now.",
+    linkUrl: "https://esummit-rec.vercel.app/",
     type: "important",
   }
 ];
@@ -54,6 +57,10 @@ const News: React.FC = () => {
             </span>
             <h2 className="text-lg font-semibold">{news.title}</h2>
             <p className="text-gray-600">{news.description}</p>
+            { 
+              news.linkUrl === "" ? null : 
+              <a href={news.linkUrl}>Link To Page</a>
+            }
           </div>
         ))}
         <RetroGrid />
