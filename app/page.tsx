@@ -93,7 +93,7 @@ export default function Home() {
       </div>
       {/* events */}
       <div className="mb-64 m-5 sm:m-44" id="events">
-      <h1 className="text-xl sm:text-4xl font-mono flex justify-center m-5">Explore Upcoming Events</h1>
+      <h1 className="text-xl sm:text-4xl font-mono flex justify-center m-5">Explore Past Events</h1>
         <EventsVideo/>
         <div className="flex justify-center p-10" onClick={() => window.location.href = "https://esummit-rec.vercel.app/"}>
           <RainbowButton>Visit E-SUMMIT&apos;25 site</RainbowButton>
