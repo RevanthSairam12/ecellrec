@@ -1,197 +1,155 @@
 "use client";
-import React, { useState } from "react";
-import RetroGrid from "@/components/ui/retro-grid";
-import EcellNew from "./images/ecellverynew.png";
-import IICLogo from "./images/iic.png";
-import RaghuLogo from "./images/raghu.png";
+import React from "react";
 import Image from "next/image";
-import Mydoc from "./Mydoc";
-import BlurFade from "./BlurFadeCollage";
-import { Vision } from "@/app/pages/Vision";
-import { Mission } from '@/app/pages/Mission';
-import { RainbowButton } from "@/components/ui/rainbow-button";
-import { BentoGridSecondDemo } from "./pages/BentoGridSecondDemo";
-import { Testimonials } from "./pages/testimonials";
-import EventsVideo from './pages/EventsVideo';
-import Team from "./team-cmp/Team";
-import Footer from "./pages/Footer";
-import TeamCard from "./team-cmp/TeamCard";
-import About from "./about/page";
 
-const mathElements = [
-  { text: "(12+12)", style: "top-10 left-10 text-lg" },
-  { text: "-15+6", style: "top-1/2 left-4 text-2xl" },
-  { text: "3y", style: "top-1/3 left-1/4 text-base" },
-  { text: "24", style: "bottom-10 left-1/3 text-xl" },
-  { text: "12", style: "top-1/4 right-10 text-lg" },
-  { text: "17-6-4", style: "top-1/2 right-1/4 text-2xl" },
-  { text: "5x9", style: "bottom-1/4 right-1/3 text-lg" },
-  { text: "-8", style: "bottom-1/3 right-10 text-base" },
+const about = [
+  {
+    imageSrc: "/raghu-sir-1.jpg",
+    name: "Raghu Kalidindi",
+    title: "Chairman, Raghu Educational Society",
+    description: "Leading the vision and strategic direction of our educational institution with decades of experience in academic excellence.",
+    expertise: "Strategic Leadership",
+    color: "from-emerald-500 to-teal-600"
+  },
+  {
+    imageSrc: "/RamaDevi-Kalidindi-1.jpg",
+    name: "Rama Devi Kalidindi",
+    title: "Secretary, Raghu Educational Society",
+    description: "Overseeing administrative excellence and ensuring the highest standards of educational quality across all institutions.",
+    expertise: "Administrative Excellence",
+    color: "from-purple-500 to-pink-600"
+  },
+  {
+    imageSrc: "/Rahul-Kalidindi-1.jpg",
+    name: "Rahul Kalidindi",
+    title: "Director, Raghu Educational Society",
+    description: "Driving innovation and modern educational practices to prepare students for the challenges of tomorrow.",
+    expertise: "Innovation & Growth",
+    color: "from-blue-500 to-indigo-600"
+  },
+  {
+    imageSrc: "/principal.jpg",
+    name: "Dr. Ch. Srinivasu",
+    title: "Principal, Raghu Educational Institution",
+    description: "Providing academic leadership and fostering an environment of learning, research, and student development.",
+    expertise: "Academic Leadership",
+    color: "from-orange-500 to-red-600"
+  },
+  {
+    imageSrc: "/kiranspecial.png",
+    name: "Dr. G. Kiran Kumar",
+    title: "Faculty Coordinator of ECELL REC",
+    description: "Mentoring students in entrepreneurship and guiding the E-Cell initiatives towards success and innovation.",
+    expertise: "Entrepreneurship",
+    color: "from-green-500 to-emerald-600"
+  },
+  {
+    imageSrc: "/ramesh-sir.jpg",
+    name: "Dr. Ramesh Babu",
+    title: "Coordinator - Entrepreneur Innovation Startup Committee (ESIC)",
+    description: "Leading startup initiatives and fostering entrepreneurial spirit among students through innovative programs.",
+    expertise: "Startup Ecosystem",
+    color: "from-violet-500 to-purple-600"
+  },
 ];
 
-export default function Home() {
-  const [cookie, setCookie] = useState(false);
+const page = () => {
   return (
-    <>
-      {/* Neon-glow Hero Section */}
-      <div className="relative min-h-screen bg-[#10191a] overflow-hidden flex flex-col justify-center items-center">
-        {/* Floating Math Elements */}
-        <div className="absolute inset-0 pointer-events-none select-none">
-          {mathElements.map((el, i) => (
-            <span
-              key={i}
-              className={`absolute ${el.style} text-green-200/60 font-mono opacity-60 animate-float${i % 3}`}
-              style={{ filter: "blur(0.5px)" }}
+    <div className="min-h-screen bg-white">
+      {/* Header Section */}
+      <div className="container mx-auto px-6 py-20">
+        <div className="text-center">
+          <div className="inline-block mb-8">
+            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6">
+              Advisory Board
+            </h1>
+            <div className="h-1 w-full bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 rounded-full"></div>
+          </div>
+          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+            Meet our distinguished advisory board members who guide and inspire our entrepreneurial journey, 
+            bringing decades of experience and expertise to shape the future of E-CELL REC.
+          </p>
+        </div>
+      </div>
+
+      {/* Advisory Board Members Grid */}
+      <div className="container mx-auto px-6 pb-20">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
+          {about.map((member, index) => (
+            <div 
+              key={index} 
+              className="group relative"
+              style={{ animationDelay: `${index * 150}ms` }}
             >
-              {el.text}
-            </span>
+              {/* Modern Card */}
+              <div className="relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 overflow-hidden">
+                
+                {/* Top Gradient Accent */}
+                <div className={`h-2 bg-gradient-to-r ${member.color}`}></div>
+                
+                {/* Card Content */}
+                <div className="relative p-8">
+                  {/* Image Section */}
+                  <div className="flex justify-center mb-6">
+                    <div className="relative">
+                      {/* Image Container with Border */}
+                      <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-gray-100 shadow-lg group-hover:scale-105 transition-transform duration-500">
+                        <Image 
+                          src={member.imageSrc} 
+                          alt={member.name} 
+                          width={128}
+                          height={128}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                      
+                      {/* Expertise Badge */}
+                      <div className={`absolute -top-2 -right-2 bg-gradient-to-r ${member.color} text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg transform scale-0 group-hover:scale-100 transition-transform duration-500`}>
+                        {member.expertise}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Text Content */}
+                  <div className="text-center">
+                    <h3 className="text-2xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors duration-300">
+                      {member.name}
+                    </h3>
+                    <h4 className={`text-lg font-semibold bg-gradient-to-r ${member.color} bg-clip-text text-transparent mb-4`}>
+                      {member.title}
+                    </h4>
+                    <p className="text-gray-600 leading-relaxed text-sm">
+                      {member.description}
+                    </p>
+                  </div>
+
+                  {/* Decorative Elements */}
+                  <div className="absolute top-4 right-4 w-3 h-3 bg-blue-400 rounded-full opacity-0 group-hover:opacity-60 transition-all duration-500"></div>
+                  <div className="absolute bottom-4 left-4 w-2 h-2 bg-purple-400 rounded-full opacity-0 group-hover:opacity-60 transition-all duration-500"></div>
+                </div>
+
+                {/* Hover Effect Overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${member.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-2xl`}></div>
+              </div>
+            </div>
           ))}
         </div>
-        {/* Main Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center min-h-[80vh]">
-          <div className="mb-4 text-sm text-green-200 flex items-center gap-2">
-            <span className="inline-block w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            Our Capital, Your <span className="font-bold">Success</span>
-          </div>
-          <h1 className="text-4xl md:text-6xl font-extrabold text-center text-white drop-shadow-[0_0_20px_#00ffb3] mb-2 animate-glow">
-            No Time Limit Prop Firm
-          </h1>
-          <h2 className="text-2xl md:text-4xl font-bold text-center text-green-200 drop-shadow-[0_0_10px_#00ffb3] mb-6 animate-glow">
-            Conquer the market
-          </h2>
-          <div className="flex flex-wrap gap-3 justify-center mb-8">
-            <span className="flex items-center gap-1 px-3 py-1 bg-green-900/30 text-green-200 rounded-full text-xs font-medium border border-green-400/20">
-              <span className="text-lg">🧪</span> The Lab™ Native platform
+      </div>
+
+      {/* Bottom Section */}
+      <div className="container mx-auto px-6 pb-16">
+        <div className="text-center">
+          <div className="inline-flex items-center space-x-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-full px-8 py-4 shadow-lg border border-blue-100">
+            <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+            <span className="text-gray-700 font-medium">
+              Guiding Innovation • Fostering Excellence • Building Futures
             </span>
-            <span className="flex items-center gap-1 px-3 py-1 bg-green-900/30 text-green-200 rounded-full text-xs font-medium border border-green-400/20">
-              ⚡ Fast progress
-            </span>
-            <span className="flex items-center gap-1 px-3 py-1 bg-green-900/30 text-green-200 rounded-full text-xs font-medium border border-green-400/20">
-              ⏳ No time limit Prop firm
-            </span>
-            <span className="flex items-center gap-1 px-3 py-1 bg-green-900/30 text-green-200 rounded-full text-xs font-medium border border-green-400/20">
-              🌟 Unique programs
-            </span>
-          </div>
-          <div className="flex gap-4 mb-10">
-            <button className="px-8 py-3 rounded-full bg-gradient-to-r from-green-400 to-green-600 text-black font-bold shadow-lg hover:from-green-300 hover:to-green-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400">
-              Start a challenge
-            </button>
-            <button className="px-8 py-3 rounded-full border border-green-400 text-green-200 font-bold shadow-lg hover:bg-green-900/30 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400">
-              Free trial
-            </button>
+            <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse delay-500"></div>
           </div>
         </div>
-        {/* Cookie Consent Bar */}
-        {!cookie && (
-          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-[#181f1b] bg-opacity-90 border border-green-900/30 rounded-xl px-6 py-4 flex flex-col md:flex-row items-center gap-4 shadow-2xl backdrop-blur-md">
-            <span className="text-xs text-gray-200">
-              We use cookies and other technology to provide you with our services and for functional, analytical and advertising purposes. Please, read our Privacy Policy for more information.
-            </span>
-            <div className="flex gap-2 mt-2 md:mt-0">
-              <button
-                className="px-4 py-1 rounded bg-gray-700 text-gray-200 hover:bg-gray-600 text-xs font-semibold"
-                onClick={() => setCookie(true)}
-              >
-                Decline
-              </button>
-              <button
-                className="px-4 py-1 rounded bg-green-500 text-black hover:bg-green-400 text-xs font-semibold"
-                onClick={() => setCookie(true)}
-              >
-                Accept
-              </button>
-            </div>
-          </div>
-        )}
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-70 animate-bounce z-20">
-          <span className="text-xs text-green-200">Scroll to explore</span>
-          <svg className="w-5 h-5 text-green-200" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-        {/* Neon Glow Animations */}
-        <style jsx global>{`
-          @keyframes float0 { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
-          @keyframes float1 { 0% { transform: translateY(0); } 50% { transform: translateY(10px); } 100% { transform: translateY(0); } }
-          @keyframes float2 { 0% { transform: translateY(0); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0); } }
-          .animate-float0 { animation: float0 6s ease-in-out infinite; }
-          .animate-float1 { animation: float1 7s ease-in-out infinite; }
-          .animate-float2 { animation: float2 5s ease-in-out infinite; }
-          .animate-glow { text-shadow: 0 0 16px #00ffb3, 0 0 32px #00ffb3; }
-        `}</style>
       </div>
-
-      {/* About Section */}
-      <div className="flex flex-col items-center justify-center mx-auto mb-40" id="about">
-        <About />
-      </div>
-
-      {/* Vision Component */}
-      <div className="flex flex-col items-center justify-center mx-auto mb-40" id="vision">
-        <Vision />
-      </div>
-
-      {/* Mission */}
-      <div id="mission" className="mt-10">
-        <h1 className="text-4xl font-mono flex justify-center m-5">Our Mission</h1>
-        <Mission />
-      </div>
-
-      {/* Events */}
-      <div className="mb-64 m-5 sm:m-44" id="events">
-        <h1 className="text-xl sm:text-4xl font-mono flex justify-center m-5">Explore Past Events</h1>
-        <EventsVideo />
-        <div className="flex justify-center p-10" onClick={() => window.location.href = "https://esummit-rec.vercel.app/"}>
-          <RainbowButton>Visit E-SUMMIT&apos;25 site</RainbowButton>
-        </div>
-      </div>
-
-      {/* Highlights */}
-      <div className="m-5">
-        <h1 className="text-4xl font-mono flex justify-center m-10">Highlights</h1>
-        <BlurFade />
-      </div>
-
-      {/* Resources */}
-      <div id="resources" className="mt-40">
-        <h1 className="text-4xl font-mono flex justify-center m-5">Resources</h1>
-        <BentoGridSecondDemo />
-      </div>
-
-      {/* Faculty Coordinator */}
-      <div id="team" className="mt-40">
-        <h1 className="text-4xl font-mono flex justify-center m-5">Faculty Coordinator</h1>
-        <div className="flex justify-center">
-          <TeamCard
-            key={20}
-            role={""}
-            name={"Dr. G. Kiran Kumar"}
-            imageUrl="/kirankumar.png"
-            socialLinks={[]}
-          />
-        </div>
-      </div>
-
-      {/* Team */}
-      <div id="team" className="mt-40">
-        <h1 className="text-4xl font-mono flex justify-center m-5">Our Team</h1>
-        <Team />
-      </div>
-
-      {/* Testimonials */}
-      <div className="mt-4 items-center justify-center mx-auto ">
-        <div id="Testimonials">
-          <Testimonials />
-        </div>
-      </div>
-
-      {/* Footer */}
-      <Footer />
-      <div className="w-full h-10 bg-black text-white flex items-center justify-center font-mono overflow-hidden">
-        <span className="scrolling-text">Developed By WebTech Team © ECELL REC</span>
-      </div>
-    </>
+    </div>
   );
-}
+};
+
+export default page;
