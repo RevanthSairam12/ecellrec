@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import EcellNew from "./images/ecellverynew.png";
 import IICLogo from "./images/iic.png";
 import RaghuLogo from "./images/raghu.png";
@@ -29,40 +29,47 @@ const mathElements = [
 
 export default function Home() {
   const [cookie, setCookie] = useState(false);
+  // --- Moving Digits State ---
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [hovering, setHovering] = useState(false);
+  const heroRef = useRef(null);
+
+  // Listen for mouse movement over hero section
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!heroRef.current) return;
+      const rect = heroRef.current.getBoundingClientRect();
+      setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    };
+    const node = heroRef.current;
+    if (node) {
+      node.addEventListener("mousemove", handleMouseMove);
+      node.addEventListener("mouseenter", () => setHovering(true));
+      node.addEventListener("mouseleave", () => setHovering(false));
+    }
+    return () => {
+      if (node) {
+        node.removeEventListener("mousemove", handleMouseMove);
+        node.removeEventListener("mouseenter", () => setHovering(true));
+        node.removeEventListener("mouseleave", () => setHovering(false));
+      }
+    };
+  }, []);
+
+  // Words to display
+  const words = ["ecell", "rec", "ecell", "rec", "ecell", "rec", "ecell", "rec"];
+
   return (
     <>
-      {/* Logo Row */}
-      <div className="flex justify-between items-center px-5 pt-8 pb-2 w-full max-w-5xl mx-auto">
-        <div className="w-32 h-32 md:w-40 md:h-40">
-          <Image
-            src={EcellNew}
-            alt="Ecell Logo"
-            className="w-full h-full object-contain"
-            priority
-          />
-        </div>
-        <div className="w-36 h-36 md:w-52 md:h-52 mx-2 md:mx-5">
-          <Image
-            src={RaghuLogo}
-            alt="Raghu Logo"
-            className="w-full h-full object-contain"
-            priority
-          />
-        </div>
-        <div className="w-36 h-36 md:w-52 md:h-52">
-          <Image
-            src={IICLogo}
-            alt="IIC Logo"
-            className="w-full h-full object-contain"
-            priority
-          />
-        </div>
-      </div>
-
       {/* Neon-glow Hero Section */}
-      <div className="relative min-h-[60vh] bg-[#10191a] overflow-hidden flex flex-col justify-center items-center">
+      <div
+        ref={heroRef}
+        className="relative min-h-[60vh] bg-[#10191a] overflow-hidden flex flex-col justify-center items-center px-4 md:px-0"
+      >
+        {/* Gradient Overlay for polish */}
+        <div className="absolute inset-0 z-0 pointer-events-none" style={{background: 'linear-gradient(120deg, rgba(16,25,26,0.95) 60%, rgba(0,255,179,0.08) 100%)'}} />
         {/* Floating Math Elements */}
-        <div className="absolute inset-0 pointer-events-none select-none">
+        <div className="absolute inset-0 pointer-events-none select-none z-10">
           {mathElements.map((el, i) => (
             <span
               key={i}
@@ -73,40 +80,64 @@ export default function Home() {
             </span>
           ))}
         </div>
+        {/* Moving Words on Cursor Hover */}
+        {hovering && (
+          <div className="pointer-events-none absolute inset-0 z-30">
+            {words.map((word, i) => {
+              const angle = (i / words.length) * 2 * Math.PI;
+              const radius = 50 + 10 * (i % 2);
+              const x = mousePos.x + Math.cos(angle) * radius;
+              const y = mousePos.y + Math.sin(angle) * radius;
+              return (
+                <span
+                  key={i}
+                  className="absolute text-green-300 text-lg md:text-xl font-mono opacity-80 transition-all duration-200 select-none"
+                  style={{
+                    left: x,
+                    top: y,
+                    pointerEvents: "none",
+                    filter: "blur(0.5px)",
+                    textShadow: "0 0 8px #00ffb3, 0 0 16px #00ffb3"
+                  }}
+                >
+                  {word}
+                </span>
+              );
+            })}
+          </div>
+        )}
         {/* Main Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center min-h-[40vh]">
-          <div className="mb-4 text-sm text-green-200 flex items-center gap-2">
-            <span className="inline-block w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            Our Capital, Your <span className="font-bold">Success</span>
+        <div className="relative z-20 flex flex-col items-center justify-center min-h-[40vh] w-full">
+          {/* Logos inside hero section */}
+          <div className="flex justify-center items-center gap-6 md:gap-12 mb-8 md:mb-10">
+            <div className="w-20 h-20 md:w-32 md:h-32 flex items-center justify-center">
+              <Image
+                src={EcellNew}
+                alt="Ecell Logo"
+                className="w-full h-full object-contain drop-shadow-[0_0_16px_#00ffb3]"
+                priority
+              />
+            </div>
+            <div className="w-20 h-20 md:w-32 md:h-32 flex items-center justify-center">
+              <Image
+                src={RaghuLogo}
+                alt="Raghu Logo"
+                className="w-full h-full object-contain drop-shadow-[0_0_16px_#00ffb3]"
+                priority
+              />
+            </div>
+            <div className="w-20 h-20 md:w-32 md:h-32 flex items-center justify-center">
+              <Image
+                src={IICLogo}
+                alt="IIC Logo"
+                className="w-full h-full object-contain drop-shadow-[0_0_16px_#00ffb3]"
+                priority
+              />
+            </div>
           </div>
-          <h1 className="text-4xl md:text-6xl font-extrabold text-center text-white drop-shadow-[0_0_20px_#00ffb3] mb-2 animate-glow">
-            Entrepreneurship Cell
+          <h1 className="text-3xl md:text-6xl font-extrabold text-center text-white drop-shadow-[0_0_20px_#00ffb3] mb-2 md:mb-4 animate-glow uppercase tracking-wide px-2 md:px-0">
+            ENTREPRENEURSHIP CLUB
           </h1>
-          <h2 className="text-2xl md:text-4xl font-bold text-center text-green-200 drop-shadow-[0_0_10px_#00ffb3] mb-6 animate-glow">
-            Conquer the market
-          </h2>
-          <div className="flex flex-wrap gap-3 justify-center mb-8">
-            <span className="flex items-center gap-1 px-3 py-1 bg-green-900/30 text-green-200 rounded-full text-xs font-medium border border-green-400/20">
-              <span className="text-lg">🧪</span> The Lab™ Native platform
-            </span>
-            <span className="flex items-center gap-1 px-3 py-1 bg-green-900/30 text-green-200 rounded-full text-xs font-medium border border-green-400/20">
-              ⚡ Fast progress
-            </span>
-            <span className="flex items-center gap-1 px-3 py-1 bg-green-900/30 text-green-200 rounded-full text-xs font-medium border border-green-400/20">
-              ⏳ No time limit Prop firm
-            </span>
-            <span className="flex items-center gap-1 px-3 py-1 bg-green-900/30 text-green-200 rounded-full text-xs font-medium border border-green-400/20">
-              🌟 Unique programs
-            </span>
-          </div>
-          <div className="flex gap-4 mb-10">
-            <button className="px-8 py-3 rounded-full bg-gradient-to-r from-green-400 to-green-600 text-black font-bold shadow-lg hover:from-green-300 hover:to-green-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400">
-              Start a challenge
-            </button>
-            <button className="px-8 py-3 rounded-full border border-green-400 text-green-200 font-bold shadow-lg hover:bg-green-900/30 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400">
-              Free trial
-            </button>
-          </div>
         </div>
         {/* Cookie Consent Bar */}
         {!cookie && (
