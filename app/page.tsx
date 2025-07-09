@@ -1,9 +1,9 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
+import Image from "next/image";
 import EcellNew from "./images/ecellverynew.png";
 import IICLogo from "./images/iic.png";
 import RaghuLogo from "./images/raghu.png";
-import Image from "next/image";
 import { Vision } from "@/app/pages/Vision";
 import { Mission } from '@/app/pages/Mission';
 import { RainbowButton } from "@/components/ui/rainbow-button";
@@ -16,129 +16,62 @@ import TeamCard from "./team-cmp/TeamCard";
 import About from "./about/page";
 import BlurFade from "./BlurFadeCollage";
 
-const mathElements = [
-  { text: "(12+12)", style: "top-10 left-10 text-lg" },
-  { text: "-15+6", style: "top-1/2 left-4 text-2xl" },
-  { text: "3y", style: "top-1/3 left-1/4 text-base" },
-  { text: "24", style: "bottom-10 left-1/3 text-xl" },
-  { text: "12", style: "top-1/4 right-10 text-lg" },
-  { text: "17-6-4", style: "top-1/2 right-1/4 text-2xl" },
-  { text: "5x9", style: "bottom-1/4 right-1/3 text-lg" },
-  { text: "-8", style: "bottom-1/3 right-10 text-base" },
-];
-
 export default function Home() {
   const [cookie, setCookie] = useState(false);
-  // --- Moving Digits State ---
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [hovering, setHovering] = useState(false);
-  // FIX: Specify HTMLDivElement type for useRef
-  const heroRef = useRef<HTMLDivElement>(null);
-
-  // Listen for mouse movement over hero section
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!heroRef.current) return;
-      const rect = heroRef.current.getBoundingClientRect();
-      setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-    };
-    const node = heroRef.current;
-    if (node) {
-      node.addEventListener("mousemove", handleMouseMove);
-      node.addEventListener("mouseenter", () => setHovering(true));
-      node.addEventListener("mouseleave", () => setHovering(false));
-    }
-    return () => {
-      if (node) {
-        node.removeEventListener("mousemove", handleMouseMove);
-        node.removeEventListener("mouseenter", () => setHovering(true));
-        node.removeEventListener("mouseleave", () => setHovering(false));
-      }
-    };
-  }, []);
-
-  // Words to display
-  const words = ["ecell", "rec", "ecell", "rec", "ecell", "rec", "ecell", "rec"];
-
   return (
     <>
-      {/* Neon-glow Hero Section */}
-      <div
-        ref={heroRef}
-        className="relative min-h-[60vh] bg-[#10191a] overflow-hidden flex flex-col justify-center items-center px-4 md:px-0"
-      >
-        {/* Gradient Overlay for polish */}
-        <div className="absolute inset-0 z-0 pointer-events-none" style={{background: 'linear-gradient(120deg, rgba(16,25,26,0.95) 60%, rgba(0,255,179,0.08) 100%)'}} />
-        {/* Floating Math Elements */}
-        <div className="absolute inset-0 pointer-events-none select-none z-10">
-          {mathElements.map((el, i) => (
-            <span
-              key={i}
-              className={`absolute ${el.style} text-green-200/60 font-mono opacity-60 animate-float${i % 3}`}
-              style={{ filter: "blur(0.5px)" }}
-            >
-              {el.text}
-            </span>
-          ))}
+      {/* Logo Row */}
+      <div className="flex justify-between items-center px-5 pt-8 pb-2 w-full max-w-5xl mx-auto">
+        <div className="w-32 h-32 md:w-40 md:h-40">
+          <Image
+            src={EcellNew}
+            alt="Ecell Logo"
+            className="w-full h-full object-contain"
+            priority
+          />
         </div>
-        {/* Moving Words on Cursor Hover */}
-        {hovering && (
-          <div className="pointer-events-none absolute inset-0 z-30">
-            {words.map((word, i) => {
-              const angle = (i / words.length) * 2 * Math.PI;
-              const radius = 50 + 10 * (i % 2);
-              const x = mousePos.x + Math.cos(angle) * radius;
-              const y = mousePos.y + Math.sin(angle) * radius;
-              return (
-                <span
-                  key={i}
-                  className="absolute text-green-300 text-lg md:text-xl font-mono opacity-80 transition-all duration-200 select-none"
-                  style={{
-                    left: x,
-                    top: y,
-                    pointerEvents: "none",
-                    filter: "blur(0.5px)",
-                    textShadow: "0 0 8px #00ffb3, 0 0 16px #00ffb3"
-                  }}
-                >
-                  {word}
-                </span>
-              );
-            })}
-          </div>
-        )}
-        {/* Main Content */}
-        <div className="relative z-20 flex flex-col items-center justify-center min-h-[40vh] w-full">
-          {/* Logos inside hero section */}
-          <div className="flex justify-center items-center gap-6 md:gap-12 mb-8 md:mb-10">
-            <div className="w-20 h-20 md:w-32 md:h-32 flex items-center justify-center">
-              <Image
-                src={EcellNew}
-                alt="Ecell Logo"
-                className="w-full h-full object-contain drop-shadow-[0_0_16px_#00ffb3]"
-                priority
-              />
-            </div>
-            <div className="w-20 h-20 md:w-32 md:h-32 flex items-center justify-center">
-              <Image
-                src={RaghuLogo}
-                alt="Raghu Logo"
-                className="w-full h-full object-contain drop-shadow-[0_0_16px_#00ffb3]"
-                priority
-              />
-            </div>
-            <div className="w-20 h-20 md:w-32 md:h-32 flex items-center justify-center">
-              <Image
-                src={IICLogo}
-                alt="IIC Logo"
-                className="w-full h-full object-contain drop-shadow-[0_0_16px_#00ffb3]"
-                priority
-              />
-            </div>
-          </div>
-          <h1 className="text-3xl md:text-6xl font-extrabold text-center text-white drop-shadow-[0_0_20px_#00ffb3] mb-2 md:mb-4 animate-glow uppercase tracking-wide px-2 md:px-0">
-            ENTREPRENEURSHIP CLUB
+        <div className="w-36 h-36 md:w-52 md:h-52 mx-2 md:mx-5">
+          <Image
+            src={RaghuLogo}
+            alt="Raghu Logo"
+            className="w-full h-full object-contain"
+            priority
+          />
+        </div>
+        <div className="w-36 h-36 md:w-52 md:h-52">
+          <Image
+            src={IICLogo}
+            alt="IIC Logo"
+            className="w-full h-full object-contain"
+            priority
+          />
+        </div>
+      </div>
+
+      {/* Modern Hero Section */}
+      <div className="relative min-h-[60vh] flex flex-col items-center justify-center bg-gradient-to-br from-[#0f2027] via-[#2c5364] to-[#232526] overflow-hidden">
+        {/* Glowing Background Circles */}
+        <div className="absolute -top-32 -left-32 w-96 h-96 bg-green-400/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-purple-400/10 rounded-full blur-2xl animate-pulse delay-500 -translate-x-1/2 -translate-y-1/2" />
+        <div className="relative z-10 flex flex-col items-center justify-center min-h-[40vh] px-4">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-center text-white drop-shadow-[0_0_20px_#00ffb3] mb-4 animate-glow">
+            Entrepreneurship Cell
           </h1>
+          <h2 className="text-xl md:text-2xl font-medium text-center text-green-200 drop-shadow-[0_0_10px_#00ffb3] mb-8 animate-glow">
+            Igniting Innovation. Empowering Leaders. Building Startups.
+          </h2>
+          <p className="text-center text-gray-300 max-w-2xl mb-10 text-base md:text-lg">
+            Join a vibrant community of innovators, dreamers, and doers. At E-Cell REC, we nurture entrepreneurial spirit, provide resources, and connect you with mentors to turn your ideas into reality.
+          </p>
+          <div className="flex gap-4 mb-10">
+            <button className="px-8 py-3 rounded-full bg-gradient-to-r from-green-400 to-green-600 text-black font-bold shadow-lg hover:from-green-300 hover:to-green-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400">
+              Get Started
+            </button>
+            <button className="px-8 py-3 rounded-full border border-green-400 text-green-200 font-bold shadow-lg hover:bg-green-900/30 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400">
+              Learn More
+            </button>
+          </div>
         </div>
         {/* Cookie Consent Bar */}
         {!cookie && (
@@ -162,21 +95,8 @@ export default function Home() {
             </div>
           </div>
         )}
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-70 animate-bounce z-20">
-          <span className="text-xs text-green-200">Scroll to explore</span>
-          <svg className="w-5 h-5 text-green-200" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
         {/* Neon Glow Animations */}
         <style jsx global>{`
-          @keyframes float0 { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
-          @keyframes float1 { 0% { transform: translateY(0); } 50% { transform: translateY(10px); } 100% { transform: translateY(0); } }
-          @keyframes float2 { 0% { transform: translateY(0); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0); } }
-          .animate-float0 { animation: float0 6s ease-in-out infinite; }
-          .animate-float1 { animation: float1 7s ease-in-out infinite; }
-          .animate-float2 { animation: float2 5s ease-in-out infinite; }
           .animate-glow { text-shadow: 0 0 16px #00ffb3, 0 0 32px #00ffb3; }
         `}</style>
       </div>
