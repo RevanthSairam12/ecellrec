@@ -32,7 +32,8 @@ export default function Home() {
   // --- Moving Digits State ---
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [hovering, setHovering] = useState(false);
-  const heroRef = useRef(null);
+  // FIX: Specify HTMLDivElement type for useRef
+  const heroRef = useRef<HTMLDivElement>(null);
 
   // Listen for mouse movement over hero section
   useEffect(() => {
