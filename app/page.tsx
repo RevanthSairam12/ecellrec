@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import EcellNew from "./images/ecellverynew.png";
 import IICLogo from "./images/iic.png";
