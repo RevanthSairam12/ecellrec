@@ -32,13 +32,13 @@ export default function Home() {
           <div className="w-40 md:w-56 h-auto flex items-center justify-start mt-3">
             <Image src={EcellNew} alt="Ecell Logo" className="object-contain" priority />
           </div>
-          {/* Center logo */}
-          <div className="w-40 md:w-56 h-auto flex items-center justify-center mt-3 mx-auto" style={{position:'absolute', left:'50%', transform:'translateX(-50%)'}}>
-            <Image src={RaghuLogo} alt="Raghu Logo" className="object-contain" priority />
-          </div>
           {/* Right logo */}
-          <div className="w-40 md:w-56 h-auto flex items-center justify-end mt-3 ml-auto">
+          <div className="w-40 md:w-56 h-auto flex items-center justify-end mt-3">
             <Image src={IICLogo} alt="IIC Logo" className="object-contain" priority />
+          </div>
+          {/* Center logo absolutely centered */}
+          <div className="w-40 md:w-56 h-auto flex items-center justify-center mt-3" style={{position:'absolute', left:'50%', transform:'translateX(-50%)'}}>
+            <Image src={RaghuLogo} alt="Raghu Logo" className="object-contain" priority />
           </div>
         </div>
         {/* Content */}
