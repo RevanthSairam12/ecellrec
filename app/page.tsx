@@ -1,155 +1,175 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import EcellNew from "./images/ecellverynew.png";
+import IICLogo from "./images/iic.png";
+import RaghuLogo from "./images/raghu.png";
+import { Vision } from "@/app/pages/Vision";
+import { Mission } from '@/app/pages/Mission';
+import { RainbowButton } from "@/components/ui/rainbow-button";
+import { BentoGridSecondDemo } from "./pages/BentoGridSecondDemo";
+import { Testimonials } from "./pages/testimonials";
+import EventsVideo from './pages/EventsVideo';
+import Team from "./team-cmp/Team";
+import Footer from "./pages/Footer";
+import TeamCard from "./team-cmp/TeamCard";
+import About from "./about/page";
+import BlurFade from "./BlurFadeCollage";
 
-const about = [
-  {
-    imageSrc: "/raghu-sir-1.jpg",
-    name: "Raghu Kalidindi",
-    title: "Chairman, Raghu Educational Society",
-    description: "Leading the vision and strategic direction of our educational institution with decades of experience in academic excellence.",
-    expertise: "Strategic Leadership",
-    color: "from-emerald-500 to-teal-600"
-  },
-  {
-    imageSrc: "/RamaDevi-Kalidindi-1.jpg",
-    name: "Rama Devi Kalidindi",
-    title: "Secretary, Raghu Educational Society",
-    description: "Overseeing administrative excellence and ensuring the highest standards of educational quality across all institutions.",
-    expertise: "Administrative Excellence",
-    color: "from-purple-500 to-pink-600"
-  },
-  {
-    imageSrc: "/Rahul-Kalidindi-1.jpg",
-    name: "Rahul Kalidindi",
-    title: "Director, Raghu Educational Society",
-    description: "Driving innovation and modern educational practices to prepare students for the challenges of tomorrow.",
-    expertise: "Innovation & Growth",
-    color: "from-blue-500 to-indigo-600"
-  },
-  {
-    imageSrc: "/principal.jpg",
-    name: "Dr. Ch. Srinivasu",
-    title: "Principal, Raghu Educational Institution",
-    description: "Providing academic leadership and fostering an environment of learning, research, and student development.",
-    expertise: "Academic Leadership",
-    color: "from-orange-500 to-red-600"
-  },
-  {
-    imageSrc: "/kiranspecial.png",
-    name: "Dr. G. Kiran Kumar",
-    title: "Faculty Coordinator of ECELL REC",
-    description: "Mentoring students in entrepreneurship and guiding the E-Cell initiatives towards success and innovation.",
-    expertise: "Entrepreneurship",
-    color: "from-green-500 to-emerald-600"
-  },
-  {
-    imageSrc: "/ramesh-sir.jpg",
-    name: "Dr. Ramesh Babu",
-    title: "Coordinator - Entrepreneur Innovation Startup Committee (ESIC)",
-    description: "Leading startup initiatives and fostering entrepreneurial spirit among students through innovative programs.",
-    expertise: "Startup Ecosystem",
-    color: "from-violet-500 to-purple-600"
-  },
-];
-
-const page = () => {
+export default function Home() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header Section */}
-      <div className="container mx-auto px-6 py-20">
-        <div className="text-center">
-          <div className="inline-block mb-8">
-            <h1 className="bebas text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6">
-              Advisory Board
-            </h1>
-            <div className="h-1 w-full bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 rounded-full"></div>
+    <>
+      {/* HERO SECTION - Redesigned */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center w-full overflow-hidden">
+        {/* Placeholder Background Image */}
+        <div className="absolute inset-0 w-full h-full">
+          <div className="w-full h-full bg-[url('/ecellverynew.png')] bg-cover bg-center opacity-40" />
+          <div className="absolute inset-0 bg-[#1a232e] bg-opacity-80" />
+        </div>
+        {/* Animated Blurred Circles in Background */}
+        <div className="pointer-events-none select-none">
+          <div className="absolute -top-32 -left-32 w-96 h-96 bg-green-400/20 rounded-full blur-3xl animate-pulse-slow" />
+          <div className="absolute top-20 right-0 w-80 h-80 bg-blue-500/20 rounded-full blur-2xl animate-pulse-slow delay-500" />
+          <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-purple-400/10 rounded-full blur-2xl animate-pulse-slow delay-1000 -translate-x-1/2" />
+        </div>
+        {/* LOGOS ROW: left, center, right with animation */}
+        <div className="absolute top-0 left-0 z-20 w-full flex flex-row justify-between items-start px-4">
+          {/* Left logo */}
+          <div className="w-40 md:w-56 h-auto flex items-center justify-start mt-3 animate-fade-in-up" style={{animationDelay:'0.2s'}}>
+            <Image src={EcellNew} alt="Ecell Logo" className="object-contain" priority />
           </div>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Meet our distinguished advisory board members who guide and inspire our entrepreneurial journey, 
-            bringing decades of experience and expertise to shape the future of E-CELL REC.
+          {/* Right logo */}
+          <div className="w-40 md:w-56 h-auto flex items-center justify-end mt-3 animate-fade-in-up" style={{animationDelay:'0.4s'}}>
+            <Image src={IICLogo} alt="IIC Logo" className="object-contain" priority />
+          </div>
+          {/* Center logo absolutely centered */}
+          <div className="w-40 md:w-56 h-auto flex items-center justify-center mt-3 animate-fade-in-up" style={{position:'absolute', left:'50%', transform:'translateX(-50%)', animationDelay:'0.6s'}}>
+            <Image src={RaghuLogo} alt="Raghu Logo" className="object-contain" priority />
+          </div>
+        </div>
+        {/* Content with animation */}
+        <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-3xl px-6 py-16 gap-8 mt-8">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-[#e6c97b] mb-4 tracking-tight text-center animate-fade-in-up" style={{letterSpacing: '1px', animationDelay:'0.8s'}}>
+            E-CELL IIT BOMBAY
+          </h1>
+          <p className="text-lg md:text-xl text-white mb-6 font-medium leading-relaxed text-center animate-fade-in-up" style={{animationDelay:'1s'}}>
+            The Entrepreneurship Cell (E-Cell) of IIT Bombay has been inspiring Entrepreneurs since 1998 and is Asia&#39;s largest student-run entrepreneurship-promoting Non-Profit Organization as designated by Thomson Reuters.
           </p>
+          <button className="flex items-center gap-2 px-8 py-3 rounded-full bg-[#d1b06b] hover:bg-[#e6c97b] text-lg font-bold text-[#232526] shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#e6c97b] transform hover:scale-105 animate-fade-in-up" style={{animationDelay:'1.2s'}}>
+            Know More <span className="text-2xl">→</span>
+          </button>
+        </div>
+        {/* Down Arrow with bounce animation */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce-slow">
+          <span className="text-4xl text-[#e6c97b]">↓</span>
+        </div>
+        {/* Custom Animations */}
+        <style jsx global>{`
+          @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: translateY(0); }
+          }
+          .animate-fade-in-up {
+            opacity: 0;
+            animation: fadeInUp 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+          }
+          @keyframes pulseSlow {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+          }
+          .animate-pulse-slow {
+            animation: pulseSlow 4s ease-in-out infinite;
+          }
+          @keyframes bounceSlow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(16px); }
+          }
+          .animate-bounce-slow {
+            animation: bounceSlow 2s infinite;
+          }
+        `}</style>
+      </section>
+
+      {/* About Section */}
+      <div className="relative flex flex-col items-center justify-center mx-auto mb-40 animate-fade-in-up" id="about" style={{animationDelay:'0.2s'}}>
+        {/* Animated blurred background */}
+        <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-96 h-40 bg-green-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
+        <About />
+      </div>
+
+      {/* Vision Component */}
+      <div className="relative flex flex-col items-center justify-center mx-auto mb-40 animate-fade-in-up" id="vision" style={{animationDelay:'0.3s'}}>
+        <div className="absolute top-0 right-0 w-80 h-32 bg-blue-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
+        <Vision />
+      </div>
+
+      {/* Mission */}
+      <div id="mission" className="relative mt-10 animate-fade-in-up" style={{animationDelay:'0.4s'}}>
+        <div className="absolute -top-10 left-0 w-64 h-24 bg-yellow-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
+        <h1 className="text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'0.5s'}}>Our Mission</h1>
+        <Mission />
+      </div>
+
+      {/* Events */}
+      <div className="relative mb-64 m-5 sm:m-44 animate-fade-in-up" id="events" style={{animationDelay:'0.5s'}}>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-32 bg-purple-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
+        <h1 className="text-xl sm:text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'0.6s'}}>Explore Past Events</h1>
+        <EventsVideo />
+        <div className="flex justify-center p-10 animate-fade-in-up" style={{animationDelay:'0.7s'}} onClick={() => window.location.href = "https://esummit-rec.vercel.app/"}>
+          <RainbowButton>Visit E-SUMMIT&apos;25 site</RainbowButton>
         </div>
       </div>
 
-      {/* Advisory Board Members Grid */}
-      <div className="container mx-auto px-6 pb-20">
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
-          {about.map((member, index) => (
-            <div 
-              key={index} 
-              className="group relative"
-              style={{ animationDelay: `${index * 150}ms` }}
-            >
-              {/* Modern Card */}
-              <div className="relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 overflow-hidden">
-                
-                {/* Top Gradient Accent */}
-                <div className={`h-2 bg-gradient-to-r ${member.color}`}></div>
-                
-                {/* Card Content */}
-                <div className="relative p-8">
-                  {/* Image Section */}
-                  <div className="flex justify-center mb-6">
-                    <div className="relative">
-                      {/* Image Container with Border */}
-                      <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-gray-100 shadow-lg group-hover:scale-105 transition-transform duration-500">
-                        <Image 
-                          src={member.imageSrc} 
-                          alt={member.name} 
-                          width={128}
-                          height={128}
-                          className="object-cover w-full h-full"
-                        />
-                      </div>
-                      
-                      {/* Expertise Badge */}
-                      <div className={`absolute -top-2 -right-2 bg-gradient-to-r ${member.color} text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg transform scale-0 group-hover:scale-100 transition-transform duration-500`}>
-                        {member.expertise}
-                      </div>
-                    </div>
-                  </div>
+      {/* Highlights */}
+      <div className="relative m-5 animate-fade-in-up" style={{animationDelay:'0.6s'}}>
+        <div className="absolute -top-8 right-0 w-72 h-24 bg-pink-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
+        <h1 className="bebas text-4xl font-mono flex justify-center m-10 animate-fade-in-up" style={{animationDelay:'0.7s'}}>Highlights</h1>
+        <BlurFade />
+      </div>
 
-                  {/* Text Content */}
-                  <div className="text-center">
-                    <h3 className="text-2xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors duration-300">
-                      {member.name}
-                    </h3>
-                    <h4 className={`text-lg font-semibold bg-gradient-to-r ${member.color} bg-clip-text text-transparent mb-4`}>
-                      {member.title}
-                    </h4>
-                    <p className="text-gray-600 leading-relaxed text-sm">
-                      {member.description}
-                    </p>
-                  </div>
+      {/* Resources */}
+      <div id="resources" className="relative mt-40 animate-fade-in-up" style={{animationDelay:'0.7s'}}>
+        <div className="absolute top-0 left-0 w-80 h-32 bg-green-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
+        <h1 className="bebas text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'0.8s'}}>Resources</h1>
+        <BentoGridSecondDemo />
+      </div>
 
-                  {/* Decorative Elements */}
-                  <div className="absolute top-4 right-4 w-3 h-3 bg-blue-400 rounded-full opacity-0 group-hover:opacity-60 transition-all duration-500"></div>
-                  <div className="absolute bottom-4 left-4 w-2 h-2 bg-purple-400 rounded-full opacity-0 group-hover:opacity-60 transition-all duration-500"></div>
-                </div>
-
-                {/* Hover Effect Overlay */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${member.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-2xl`}></div>
-              </div>
-            </div>
-          ))}
+      {/* Faculty Coordinator */}
+      <div id="team" className="relative mt-40 animate-fade-in-up" style={{animationDelay:'0.8s'}}>
+        <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-72 h-24 bg-blue-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
+        <h1 className="bebas text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'0.9s'}}>Faculty Coordinator</h1>
+        <div className="flex justify-center animate-fade-in-up" style={{animationDelay:'1s'}}>
+          <TeamCard
+            key={20}
+            role={""}
+            name={"Dr. G. Kiran Kumar"}
+            imageUrl="/kirankumar.png"
+            socialLinks={[]}
+          />
         </div>
       </div>
 
-      {/* Bottom Section */}
-      <div className="container mx-auto px-6 pb-16">
-        <div className="text-center">
-          <div className="inline-flex items-center space-x-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-full px-8 py-4 shadow-lg border border-blue-100">
-            <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-            <span className="text-gray-700 font-medium">
-              Guiding Innovation • Fostering Excellence • Building Futures
-            </span>
-            <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse delay-500"></div>
-          </div>
+      {/* Team */}
+      <div id="team" className="relative mt-40 animate-fade-in-up" style={{animationDelay:'0.9s'}}>
+        <div className="absolute top-0 right-0 w-80 h-32 bg-purple-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
+        <h1 className="bebas text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'1s'}}>Our Team</h1>
+        <Team />
+      </div>
+
+      {/* Testimonials */}
+      <div className="relative mt-4 items-center justify-center mx-auto animate-fade-in-up" style={{animationDelay:'1s'}}>
+        <div className="absolute -top-8 left-0 w-72 h-24 bg-yellow-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
+        <h1 className="bebas text-4xl font-mono flex justify-center m-5 animate-fade-in-up">Testimonials</h1>
+        <div id="Testimonials">
+          <Testimonials />
         </div>
       </div>
-    </div>
+
+      {/* Footer */}
+      <Footer />
+      <div className="w-full h-10 bg-black text-white flex items-center justify-center font-mono overflow-hidden">
+        <span className="scrolling-text">Developed By WebTech Team © ECELL REC</span>
+      </div>
+    </>
   );
-};
-
-export default page;
+}
