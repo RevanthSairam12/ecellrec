@@ -17,7 +17,6 @@ import About from "./about/page";
 import BlurFade from "./BlurFadeCollage";
 
 export default function Home() {
-  const [cookie, setCookie] = useState(false);
   return (
     <>
       {/* HERO SECTION - Redesigned */}
@@ -33,7 +32,7 @@ export default function Home() {
           <div className="flex-1 flex flex-col justify-center items-start max-w-xl">
             <h1 className="text-4xl md:text-5xl font-extrabold text-[#e6c97b] mb-6 tracking-tight" style={{letterSpacing: '1px'}}>E-CELL IIT BOMBAY</h1>
             <p className="text-lg md:text-xl text-white mb-8 font-medium leading-relaxed">
-              The Entrepreneurship Cell (E-Cell) of IIT Bombay has been inspiring Entrepreneurs since 1998 and is Asia's largest student-run entrepreneurship-promoting Non-Profit Organization as designated by Thomson Reuters.
+              The Entrepreneurship Cell (E-Cell) of IIT Bombay has been inspiring Entrepreneurs since 1998 and is Asia&#39;s largest student-run entrepreneurship-promoting Non-Profit Organization as designated by Thomson Reuters.
             </p>
             <button className="flex items-center gap-2 px-8 py-3 rounded-full bg-[#d1b06b] hover:bg-[#e6c97b] text-lg font-bold text-[#232526] shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#e6c97b]">
               Know More <span className="text-2xl">→</span>
