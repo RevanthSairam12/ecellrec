@@ -27,14 +27,17 @@ export default function Home() {
           <div className="absolute inset-0 bg-[#1a232e] bg-opacity-80" />
         </div>
         {/* LOGOS ROW: left, center, right */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20 w-full max-w-6xl flex flex-row justify-between items-start px-4 mt-4">
-          <div className="w-40 md:w-56 h-auto flex items-center justify-start">
+        <div className="absolute top-0 left-0 z-20 w-full max-w-6xl flex flex-row justify-between items-start px-4">
+          {/* Left logo */}
+          <div className="w-40 md:w-56 h-auto flex items-center justify-start mt-3">
             <Image src={EcellNew} alt="Ecell Logo" className="object-contain" priority />
           </div>
-          <div className="w-40 md:w-56 h-auto flex items-center justify-center">
+          {/* Center logo */}
+          <div className="w-40 md:w-56 h-auto flex items-center justify-center mt-3 mx-auto" style={{position:'absolute', left:'50%', transform:'translateX(-50%)'}}>
             <Image src={RaghuLogo} alt="Raghu Logo" className="object-contain" priority />
           </div>
-          <div className="w-40 md:w-56 h-auto flex items-center justify-end">
+          {/* Right logo */}
+          <div className="w-40 md:w-56 h-auto flex items-center justify-end mt-3 ml-auto">
             <Image src={IICLogo} alt="IIC Logo" className="object-contain" priority />
           </div>
         </div>
