@@ -28,13 +28,13 @@ export default function Home() {
         </div>
         {/* LOGOS ROW: left, center, right */}
         <div className="relative z-20 w-full max-w-6xl flex flex-row justify-between items-start px-4 pt-0">
-          <div className="w-32 md:w-48 h-auto flex items-center justify-start">
+          <div className="w-40 md:w-56 h-auto flex items-center justify-start">
             <Image src={EcellNew} alt="Ecell Logo" className="object-contain" priority />
           </div>
-          <div className="w-32 md:w-48 h-auto flex items-center justify-center">
+          <div className="w-40 md:w-56 h-auto flex items-center justify-center">
             <Image src={RaghuLogo} alt="Raghu Logo" className="object-contain" priority />
           </div>
-          <div className="w-32 md:w-48 h-auto flex items-center justify-end">
+          <div className="w-40 md:w-56 h-auto flex items-center justify-end">
             <Image src={IICLogo} alt="IIC Logo" className="object-contain" priority />
           </div>
         </div>
