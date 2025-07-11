@@ -123,21 +123,21 @@ export default function Home() {
       {/* Highlights */}
       <div className="relative m-5 animate-fade-in-up" style={{animationDelay:'0.6s'}}>
         <div className="absolute -top-8 right-0 w-72 h-24 bg-pink-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
-        <h1 className="text-4xl font-mono flex justify-center m-10 animate-fade-in-up" style={{animationDelay:'0.7s', fontFamily: 'Bebas Neue, sans-serif'}}>Highlights</h1>
+        <h1 className="bebas text-4xl font-mono flex justify-center m-10 animate-fade-in-up" style={{animationDelay:'0.7s'}}>Highlights</h1>
         <BlurFade />
       </div>
 
       {/* Resources */}
       <div id="resources" className="relative mt-40 animate-fade-in-up" style={{animationDelay:'0.7s'}}>
         <div className="absolute top-0 left-0 w-80 h-32 bg-green-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
-        <h1 className="text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'0.8s', fontFamily: 'Bebas Neue, sans-serif'}}>Resources</h1>
+        <h1 className="bebas text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'0.8s'}}>Resources</h1>
         <BentoGridSecondDemo />
       </div>
 
       {/* Faculty Coordinator */}
       <div id="team" className="relative mt-40 animate-fade-in-up" style={{animationDelay:'0.8s'}}>
         <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-72 h-24 bg-blue-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
-        <h1 className="text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'0.9s', fontFamily: 'Bebas Neue, sans-serif'}}>Faculty Coordinator</h1>
+        <h1 className="bebas text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'0.9s'}}>Faculty Coordinator</h1>
         <div className="flex justify-center animate-fade-in-up" style={{animationDelay:'1s'}}>
           <TeamCard
             key={20}
@@ -152,14 +152,14 @@ export default function Home() {
       {/* Team */}
       <div id="team" className="relative mt-40 animate-fade-in-up" style={{animationDelay:'0.9s'}}>
         <div className="absolute top-0 right-0 w-80 h-32 bg-purple-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
-        <h1 className="text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'1s', fontFamily: 'Bebas Neue, sans-serif'}}>Our Team</h1>
+        <h1 className="bebas text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'1s'}}>Our Team</h1>
         <Team />
       </div>
 
       {/* Testimonials */}
       <div className="relative mt-4 items-center justify-center mx-auto animate-fade-in-up" style={{animationDelay:'1s'}}>
         <div className="absolute -top-8 left-0 w-72 h-24 bg-yellow-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
-        <h1 className="text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{fontFamily: 'Bebas Neue, sans-serif'}}>Testimonials</h1>
+        <h1 className="bebas text-4xl font-mono flex justify-center m-5 animate-fade-in-up">Testimonials</h1>
         <div id="Testimonials">
           <Testimonials />
         </div>
