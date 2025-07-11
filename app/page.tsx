@@ -91,46 +91,54 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <div className="flex flex-col items-center justify-center mx-auto mb-40" id="about">
+      <div className="relative flex flex-col items-center justify-center mx-auto mb-40 animate-fade-in-up" id="about" style={{animationDelay:'0.2s'}}>
+        {/* Animated blurred background */}
+        <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-96 h-40 bg-green-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
         <About />
       </div>
 
       {/* Vision Component */}
-      <div className="flex flex-col items-center justify-center mx-auto mb-40" id="vision">
+      <div className="relative flex flex-col items-center justify-center mx-auto mb-40 animate-fade-in-up" id="vision" style={{animationDelay:'0.3s'}}>
+        <div className="absolute top-0 right-0 w-80 h-32 bg-blue-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
         <Vision />
       </div>
 
       {/* Mission */}
-      <div id="mission" className="mt-10">
-        <h1 className="text-4xl font-mono flex justify-center m-5">Our Mission</h1>
+      <div id="mission" className="relative mt-10 animate-fade-in-up" style={{animationDelay:'0.4s'}}>
+        <div className="absolute -top-10 left-0 w-64 h-24 bg-yellow-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
+        <h1 className="text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'0.5s'}}>Our Mission</h1>
         <Mission />
       </div>
 
       {/* Events */}
-      <div className="mb-64 m-5 sm:m-44" id="events">
-        <h1 className="text-xl sm:text-4xl font-mono flex justify-center m-5">Explore Past Events</h1>
+      <div className="relative mb-64 m-5 sm:m-44 animate-fade-in-up" id="events" style={{animationDelay:'0.5s'}}>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-32 bg-purple-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
+        <h1 className="text-xl sm:text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'0.6s'}}>Explore Past Events</h1>
         <EventsVideo />
-        <div className="flex justify-center p-10" onClick={() => window.location.href = "https://esummit-rec.vercel.app/"}>
+        <div className="flex justify-center p-10 animate-fade-in-up" style={{animationDelay:'0.7s'}} onClick={() => window.location.href = "https://esummit-rec.vercel.app/"}>
           <RainbowButton>Visit E-SUMMIT&apos;25 site</RainbowButton>
         </div>
       </div>
 
       {/* Highlights */}
-      <div className="m-5">
-        <h1 className="text-4xl font-mono flex justify-center m-10">Highlights</h1>
+      <div className="relative m-5 animate-fade-in-up" style={{animationDelay:'0.6s'}}>
+        <div className="absolute -top-8 right-0 w-72 h-24 bg-pink-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
+        <h1 className="text-4xl font-mono flex justify-center m-10 animate-fade-in-up" style={{animationDelay:'0.7s'}}>Highlights</h1>
         <BlurFade />
       </div>
 
       {/* Resources */}
-      <div id="resources" className="mt-40">
-        <h1 className="text-4xl font-mono flex justify-center m-5">Resources</h1>
+      <div id="resources" className="relative mt-40 animate-fade-in-up" style={{animationDelay:'0.7s'}}>
+        <div className="absolute top-0 left-0 w-80 h-32 bg-green-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
+        <h1 className="text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'0.8s'}}>Resources</h1>
         <BentoGridSecondDemo />
       </div>
 
       {/* Faculty Coordinator */}
-      <div id="team" className="mt-40">
-        <h1 className="text-4xl font-mono flex justify-center m-5">Faculty Coordinator</h1>
-        <div className="flex justify-center">
+      <div id="team" className="relative mt-40 animate-fade-in-up" style={{animationDelay:'0.8s'}}>
+        <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-72 h-24 bg-blue-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
+        <h1 className="text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'0.9s'}}>Faculty Coordinator</h1>
+        <div className="flex justify-center animate-fade-in-up" style={{animationDelay:'1s'}}>
           <TeamCard
             key={20}
             role={""}
@@ -142,13 +150,15 @@ export default function Home() {
       </div>
 
       {/* Team */}
-      <div id="team" className="mt-40">
-        <h1 className="text-4xl font-mono flex justify-center m-5">Our Team</h1>
+      <div id="team" className="relative mt-40 animate-fade-in-up" style={{animationDelay:'0.9s'}}>
+        <div className="absolute top-0 right-0 w-80 h-32 bg-purple-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
+        <h1 className="text-4xl font-mono flex justify-center m-5 animate-fade-in-up" style={{animationDelay:'1s'}}>Our Team</h1>
         <Team />
       </div>
 
       {/* Testimonials */}
-      <div className="mt-4 items-center justify-center mx-auto ">
+      <div className="relative mt-4 items-center justify-center mx-auto animate-fade-in-up" style={{animationDelay:'1s'}}>
+        <div className="absolute -top-8 left-0 w-72 h-24 bg-yellow-400/10 rounded-full blur-2xl animate-pulse-slow -z-10" />
         <div id="Testimonials">
           <Testimonials />
         </div>
