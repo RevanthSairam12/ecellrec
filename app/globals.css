@@ -124,6 +124,9 @@ html {
   }
 }
 
+.bebas {
+  font-family: 'Bebas Neue', sans-serif;
+}
 
 * {
   /* Hide scrollbar for all elements */
