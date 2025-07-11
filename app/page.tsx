@@ -26,21 +26,20 @@ export default function Home() {
           <div className="w-full h-full bg-[url('/ecellverynew.png')] bg-cover bg-center opacity-40" />
           <div className="absolute inset-0 bg-[#1a232e] bg-opacity-80" />
         </div>
-        {/* Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-3xl px-6 py-16 gap-8">
-          {/* LOGOS CENTERED ABOVE HEADING */}
-          <div className="flex flex-row items-center justify-center gap-8 md:gap-16 w-full">
-            <div className="w-28 md:w-40 h-auto flex items-center justify-center">
-              <Image src={EcellNew} alt="Ecell Logo" className="object-contain" priority />
-            </div>
-            <div className="w-24 md:w-36 h-auto flex items-center justify-center">
-              <Image src={RaghuLogo} alt="Raghu Logo" className="object-contain" priority />
-            </div>
-            <div className="w-24 md:w-36 h-auto flex items-center justify-center">
-              <Image src={IICLogo} alt="IIC Logo" className="object-contain" priority />
-            </div>
+        {/* LOGOS ROW: left, center, right */}
+        <div className="relative z-20 w-full max-w-6xl flex flex-row justify-between items-start px-8 pt-8">
+          <div className="w-20 md:w-32 h-auto flex items-center justify-start">
+            <Image src={EcellNew} alt="Ecell Logo" className="object-contain" priority />
           </div>
-          {/* Heading, Description, Button */}
+          <div className="w-20 md:w-32 h-auto flex items-center justify-center">
+            <Image src={RaghuLogo} alt="Raghu Logo" className="object-contain" priority />
+          </div>
+          <div className="w-20 md:w-32 h-auto flex items-center justify-end">
+            <Image src={IICLogo} alt="IIC Logo" className="object-contain" priority />
+          </div>
+        </div>
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-3xl px-6 py-16 gap-8 mt-8">
           <h1 className="text-4xl md:text-5xl font-extrabold text-[#e6c97b] mb-4 tracking-tight text-center" style={{letterSpacing: '1px'}}>E-CELL IIT BOMBAY</h1>
           <p className="text-lg md:text-xl text-white mb-6 font-medium leading-relaxed text-center">
             The Entrepreneurship Cell (E-Cell) of IIT Bombay has been inspiring Entrepreneurs since 1998 and is Asia&#39;s largest student-run entrepreneurship-promoting Non-Profit Organization as designated by Thomson Reuters.
