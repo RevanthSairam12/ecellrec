@@ -27,7 +27,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-[#1a232e] bg-opacity-80" />
         </div>
         {/* LOGOS ROW: left, center, right */}
-        <div className="relative z-20 w-full max-w-6xl flex flex-row justify-between items-start px-4 pt-0">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20 w-full max-w-6xl flex flex-row justify-between items-start px-4">
           <div className="w-40 md:w-56 h-auto flex items-center justify-start">
             <Image src={EcellNew} alt="Ecell Logo" className="object-contain" priority />
           </div>
