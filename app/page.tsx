@@ -43,7 +43,7 @@ export default function Home() {
             <Image src={IICLogo} alt="IIC Logo" className="object-contain" priority />
           </div>
           {/* Center logo absolutely centered */}
-          <div className="w-40 md:w-50 h-auto flex items-center justify-center mt-3 animate-fade-in-up" style={{position:'absolute', left:'50%', transform:'translateX(-50%)', animationDelay:'0.6s'}}>
+          <div className="w-40 md:w-56 h-auto flex items-center justify-center mt-3 animate-fade-in-up" style={{position:'absolute', left:'40%', transform:'translateX(-50%)', animationDelay:'0.6s'}}>
             <Image src={RaghuLogo} alt="Raghu Logo" className="object-contain" priority />
           </div>
         </div>
