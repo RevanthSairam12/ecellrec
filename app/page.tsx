@@ -8,6 +8,7 @@ import { Vision } from "@/app/pages/Vision";
 import { Mission } from '@/app/pages/Mission';
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { BentoGridSecondDemo } from "./pages/BentoGridSecondDemo";
+import Mydoc from "./Mydoc";
 import { Testimonials } from "./pages/testimonials";
 import EventsVideo from './pages/EventsVideo';
 import Team from "./team-cmp/Team";
@@ -21,7 +22,7 @@ export default function Home() {
   return (
     <>
       <div className="fixed top-0 left-0 w-full z-50 flex justify-center bg-transparent pointer-events-auto">
-        <DockDemo />
+        <Mydoc />
       </div>
       {/* HERO SECTION - Redesigned */}
       <section className="relative min-h-screen flex flex-col items-center justify-center w-full overflow-hidden mt-24">
@@ -89,7 +90,7 @@ export default function Home() {
         `}</style>
       </section>
 
-      <div className="fixed bottom-10 w-full flex justify-center z-10">
+<div className="fixed bottom-10 w-full flex justify-center z-10">
           <Mydoc />
         </div>
       </div>
