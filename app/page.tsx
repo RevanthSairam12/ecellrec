@@ -6,7 +6,6 @@ import IICLogo from "./images/iic.png";
 import RaghuLogo from "./images/raghu.png";
 import Mydoc from "./Mydoc";
 import { Vision } from "@/app/pages/Vision";
-import { Mission } from '@/app/pages/Mission';
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { BentoGridSecondDemo } from "./pages/BentoGridSecondDemo";
 import { Testimonials } from "./pages/testimonials";
