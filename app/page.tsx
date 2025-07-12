@@ -4,11 +4,11 @@ import Image from "next/image";
 import EcellNew from "./images/ecellverynew.png";
 import IICLogo from "./images/iic.png";
 import RaghuLogo from "./images/raghu.png";
+import Mydoc from "./Mydoc";
 import { Vision } from "@/app/pages/Vision";
 import { Mission } from '@/app/pages/Mission';
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { BentoGridSecondDemo } from "./pages/BentoGridSecondDemo";
-import Mydoc from "./Mydoc";
 import { Testimonials } from "./pages/testimonials";
 import EventsVideo from './pages/EventsVideo';
 import Team from "./team-cmp/Team";
@@ -16,84 +16,84 @@ import Footer from "./pages/Footer";
 import TeamCard from "./team-cmp/TeamCard";
 import About from "./about/page";
 import BlurFade from "./BlurFadeCollage";
-import DockDemo from "./Mydoc";
 
 export default function Home() {
   return (
     <>
-      <div className="fixed top-0 left-0 w-full z-50 flex justify-center bg-transparent pointer-events-auto">
-        <Mydoc />
-      </div>
       {/* HERO SECTION - Redesigned */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center w-full overflow-hidden mt-24">
-        {/* Animated Blurred Background Circles */}
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-green-400/20 rounded-full blur-3xl animate-pulse z-0" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000 z-0" />
-        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-purple-400/10 rounded-full blur-2xl animate-pulse delay-500 -translate-x-1/2 -translate-y-1/2 z-0" />
+      <section className="relative min-h-screen flex flex-col items-center justify-center w-full overflow-hidden">
+        {/* Placeholder Background Image */}
+        <div className="absolute inset-0 w-full h-full">
+          <div className="w-full h-full bg-[url('/ecellverynew.png')] bg-cover bg-center opacity-40" />
+          <div className="absolute inset-0 bg-[#1a232e] bg-opacity-80" />
+        </div>
+        {/* Animated Blurred Circles in Background */}
+        <div className="pointer-events-none select-none">
+          <div className="absolute -top-32 -left-32 w-96 h-96 bg-green-400/20 rounded-full blur-3xl animate-pulse-slow" />
+          <div className="absolute top-20 right-0 w-80 h-80 bg-blue-500/20 rounded-full blur-2xl animate-pulse-slow delay-500" />
+          <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-purple-400/10 rounded-full blur-2xl animate-pulse-slow delay-1000 -translate-x-1/2" />
+        </div>
         {/* LOGOS ROW: left, center, right with animation */}
         <div className="absolute top-0 left-0 z-20 w-full flex flex-row justify-between items-start px-4">
           {/* Left logo */}
-          <div className="w-40 md:w-56 h-auto flex items-center justify-start mt-3 animate-slide-in-left">
+          <div className="w-40 md:w-56 h-auto flex items-center justify-start mt-3 animate-fade-in-up" style={{animationDelay:'0.2s'}}>
             <Image src={EcellNew} alt="Ecell Logo" className="object-contain" priority />
           </div>
           {/* Right logo */}
-          <div className="w-40 md:w-56 h-auto flex items-center justify-end mt-3 animate-slide-in-right">
+          <div className="w-40 md:w-56 h-auto flex items-center justify-end mt-3 animate-fade-in-up" style={{animationDelay:'0.4s'}}>
             <Image src={IICLogo} alt="IIC Logo" className="object-contain" priority />
           </div>
           {/* Center logo absolutely centered */}
-          <div className="w-40 md:w-56 h-auto flex items-center justify-center mt-3 animate-slide-in-top" style={{position:'absolute', left:'50%', transform:'translateX(-50%)'}}>
+          <div className="w-40 md:w-56 h-auto flex items-center justify-center mt-3 animate-fade-in-up" style={{position:'absolute', left:'50%', transform:'translateX(-50%)', animationDelay:'0.6s'}}>
             <Image src={RaghuLogo} alt="Raghu Logo" className="object-contain" priority />
           </div>
         </div>
         {/* Content with animation */}
         <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-3xl px-6 py-16 gap-8 mt-8">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-[#e6c97b] mb-4 tracking-tight text-center animate-glow-fade-up" style={{letterSpacing: '1px'}}>E-CELL IIT BOMBAY</h1>
-          <p className="text-lg md:text-xl text-white mb-6 font-medium leading-relaxed text-center animate-fade-in-delay">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-[#e6c97b] mb-4 tracking-tight text-center animate-fade-in-up" style={{letterSpacing: '1px', animationDelay:'0.8s'}}>
+            E-CELL IIT BOMBAY
+          </h1>
+          <p className="text-lg md:text-xl text-white mb-6 font-medium leading-relaxed text-center animate-fade-in-up" style={{animationDelay:'1s'}}>
             The Entrepreneurship Cell (E-Cell) of IIT Bombay has been inspiring Entrepreneurs since 1998 and is Asia&#39;s largest student-run entrepreneurship-promoting Non-Profit Organization as designated by Thomson Reuters.
           </p>
-          <button className="flex items-center gap-2 px-8 py-3 rounded-full bg-[#d1b06b] hover:bg-[#e6c97b] text-lg font-bold text-[#232526] shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#e6c97b] animate-fade-in-delay hover:scale-105 hover:shadow-2xl">
+          <button className="flex items-center gap-2 px-8 py-3 rounded-full bg-[#d1b06b] hover:bg-[#e6c97b] text-lg font-bold text-[#232526] shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#e6c97b] transform hover:scale-105 animate-fade-in-up" style={{animationDelay:'1.2s'}}>
             Know More <span className="text-2xl">→</span>
           </button>
         </div>
-        {/* Down Arrow with bounce */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+        {/* Down Arrow with bounce animation */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce-slow">
           <span className="text-4xl text-[#e6c97b]">↓</span>
         </div>
-        {/* Animation Styles */}
+        {/* Custom Animations */}
         <style jsx global>{`
-          @keyframes slideInLeft {
-            0% { opacity: 0; transform: translateX(-60px); }
-            100% { opacity: 1; transform: translateX(0); }
-          }
-          @keyframes slideInRight {
-            0% { opacity: 0; transform: translateX(60px); }
-            100% { opacity: 1; transform: translateX(0); }
-          }
-          @keyframes slideInTop {
-            0% { opacity: 0; transform: translateY(-60px); }
+          @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(40px); }
             100% { opacity: 1; transform: translateY(0); }
           }
-          @keyframes glowFadeUp {
-            0% { opacity: 0; transform: translateY(40px); text-shadow: none; }
-            100% { opacity: 1; transform: translateY(0); text-shadow: 0 0 16px #e6c97b, 0 0 32px #e6c97b; }
+          .animate-fade-in-up {
+            opacity: 0;
+            animation: fadeInUp 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
           }
-          @keyframes fadeInDelay {
-            0% { opacity: 0; }
-            60% { opacity: 0; }
-            100% { opacity: 1; }
+          @keyframes pulseSlow {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
           }
-          .animate-slide-in-left { animation: slideInLeft 1s cubic-bezier(0.4,0,0.2,1) both; }
-          .animate-slide-in-right { animation: slideInRight 1s cubic-bezier(0.4,0,0.2,1) both; }
-          .animate-slide-in-top { animation: slideInTop 1s cubic-bezier(0.4,0,0.2,1) both; }
-          .animate-glow-fade-up { animation: glowFadeUp 1.2s cubic-bezier(0.4,0,0.2,1) both; }
-          .animate-fade-in-delay { animation: fadeInDelay 1.6s cubic-bezier(0.4,0,0.2,1) both; }
+          .animate-pulse-slow {
+            animation: pulseSlow 4s ease-in-out infinite;
+          }
+          @keyframes bounceSlow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(16px); }
+          }
+          .animate-bounce-slow {
+            animation: bounceSlow 2s infinite;
+          }
         `}</style>
       </section>
 
-<div className="fixed bottom-10 w-full flex justify-center z-10">
+      <div className="fixed bottom-10 w-full flex justify-center z-10">
           <Mydoc />
         </div>
-      </div>
 
       {/* About Section */}
       <div className="flex flex-col items-center justify-center mx-auto mb-40" id="about">
