@@ -5,7 +5,7 @@ import EcellNew from "./images/ecellverynew.png";
 import IICLogo from "./images/iic.png";
 import RaghuLogo from "./images/raghu.png";
 import { Vision } from "@/app/pages/Vision";
-import { Mission } from '@/app/pages/Mission';
+import Mydoc from "./Mydoc";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { BentoGridSecondDemo } from "./pages/BentoGridSecondDemo";
 import { Testimonials } from "./pages/testimonials";
@@ -90,6 +90,11 @@ export default function Home() {
         `}</style>
       </section>
 
+      <div className="fixed bottom-10 w-full flex justify-center z-10">
+          <Mydoc />
+        </div>
+      </div>
+      
       {/* About Section */}
       <div className="flex flex-col items-center justify-center mx-auto mb-40" id="about">
         <About />
