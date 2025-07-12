@@ -50,7 +50,7 @@ export default function Home() {
         {/* Content with animation */}
         <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-3xl px-6 py-16 gap-8 mt-8">
           <h1 className="text-4xl md:text-5xl font-extrabold text-[#e6c97b] mb-4 tracking-tight text-center animate-fade-in-up" style={{letterSpacing: '1px', animationDelay:'0.8s'}}>
-            E-CELL IIT BOMBAY
+            E-CELL REC
           </h1>
           <p className="text-lg md:text-xl text-white mb-6 font-medium leading-relaxed text-center animate-fade-in-up" style={{animationDelay:'1s'}}>
             The Entrepreneurship Cell (E-Cell) of IIT Bombay has been inspiring Entrepreneurs since 1998 and is Asia&#39;s largest student-run entrepreneurship-promoting Non-Profit Organization as designated by Thomson Reuters.
@@ -105,10 +105,7 @@ export default function Home() {
       </div>
 
       {/* Mission */}
-      <div id="mission" className="mt-10">
-        <h1 className="text-4xl font-mono flex justify-center m-5">Our Mission</h1>
-        <Mission />
-      </div>
+     
 
       {/* Events */}
       <div className="mb-64 m-5 sm:m-44" id="events">
