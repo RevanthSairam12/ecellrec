@@ -67,7 +67,7 @@ const Calendar = () => {
       const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/IN`);
       const holidays = await response.json();
       
-      const formattedHolidays = holidays.map((holiday: any) => ({
+      const formattedHolidays = holidays.map((holiday: { date: string; localName: string }) => ({
         date: holiday.date,
         name: holiday.localName,
         color: '#ef4444'
@@ -91,8 +91,9 @@ const Calendar = () => {
 
   // Fetch holidays when component mounts or year changes
   React.useEffect(() => {
-    fetchPublicHolidays(currentDate.getFullYear());
-  }, [currentDate.getFullYear()]);
+    const year = currentDate.getFullYear();
+    fetchPublicHolidays(year);
+  }, [currentDate]);
 
   const colors = [
     { hex: '#3b82f6', name: 'Blue' },
