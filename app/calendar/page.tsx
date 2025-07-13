@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,10 +11,6 @@ import {
   Edit, 
   Trash2, 
   Calendar as CalendarIcon,
-  Clock,
-  MapPin,
-  Users,
-  Star,
   Flag
 } from "lucide-react";
 
@@ -44,7 +40,7 @@ const Calendar = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(true); // For demo purposes
+  const [isAdmin] = useState(true); // For demo purposes
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -74,7 +70,6 @@ const Calendar = () => {
     const year = date.getFullYear();
     const month = date.getMonth();
     const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
     const startDate = new Date(firstDay);
     startDate.setDate(startDate.getDate() - firstDay.getDay());
     
