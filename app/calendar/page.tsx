@@ -32,7 +32,7 @@ interface CalendarDay {
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<'month' | 'week'>('month');
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events] = useState<Event[]>([]);
   const [isLoadingHolidays, setIsLoadingHolidays] = useState(true);
 
   // State for public holidays
