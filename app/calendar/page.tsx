@@ -12,7 +12,8 @@ import {
   Search,
   Filter,
   Grid3X3,
-  CalendarDays
+  CalendarDays,
+  X
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore";
@@ -39,104 +40,42 @@ interface CalendarDay {
   events: Event[];
 }
 
-interface AddEventFormProps {
-  onAdd: (eventData: Omit<Event, 'id' | 'createdAt'>) => Promise<string | undefined>;
-  onClose: () => void;
-}
-
-const AddEventForm: React.FC<AddEventFormProps> = ({ onAdd, onClose }) => {
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    date: '',
-    time: '',
-    location: '',
-    attendees: [] as string[],
-    isHoliday: false,
-    isPublicHoliday: false,
-    color: '#3b82f6',
-    createdBy: 'admin'
-  });
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await onAdd(formData);
-    onClose();
-  };
-
+// Read-only event display component
+const EventDisplay: React.FC<{ event: Event; onClose: () => void }> = ({ event, onClose }) => {
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
-        <input
-          type="text"
-          placeholder="Event title"
-          value={formData.title}
-          onChange={(e) => setFormData({...formData, title: e.target.value})}
-          className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-          required
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
-        <textarea
-          placeholder="Event description"
-          value={formData.description}
-          onChange={(e) => setFormData({...formData, description: e.target.value})}
-          className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-          rows={3}
-        />
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Date</label>
-          <input
-            type="date"
-            value={formData.date}
-            onChange={(e) => setFormData({...formData, date: e.target.value})}
-            className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Time</label>
-          <input
-            type="time"
-            value={formData.time}
-            onChange={(e) => setFormData({...formData, time: e.target.value})}
-            className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-            required
-          />
-        </div>
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">Location</label>
-        <input
-          type="text"
-          placeholder="Event location"
-          value={formData.location}
-          onChange={(e) => setFormData({...formData, location: e.target.value})}
-          className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">Color</label>
-        <input
-          type="color"
-          value={formData.color}
-          onChange={(e) => setFormData({...formData, color: e.target.value})}
-          className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-        />
-      </div>
-      <div className="flex space-x-2">
-        <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700">
-          Add Event
-        </Button>
-        <Button type="button" onClick={onClose} className="flex-1 bg-gray-600 hover:bg-gray-700">
-          Cancel
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-white">{event.title}</h3>
+        <Button onClick={onClose} variant="ghost" size="sm">
+          <X className="h-4 w-4" />
         </Button>
       </div>
-    </form>
+      
+      <div className="space-y-3">
+        <div className="flex items-center space-x-2">
+          <Clock className="h-4 w-4 text-gray-400" />
+          <span className="text-gray-300">{event.time}</span>
+        </div>
+        
+        {event.location && (
+          <div className="flex items-center space-x-2">
+            <Flag className="h-4 w-4 text-gray-400" />
+            <span className="text-gray-300">{event.location}</span>
+          </div>
+        )}
+        
+        {event.description && (
+          <div>
+            <p className="text-gray-300">{event.description}</p>
+          </div>
+        )}
+        
+        <div className="flex items-center space-x-2">
+          <Lock className="h-4 w-4 text-gray-400" />
+          <span className="text-gray-300">Read-only view</span>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -147,7 +86,6 @@ const Calendar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [showEventModal, setShowEventModal] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<'all' | 'events' | 'holidays'>('all');
 
@@ -180,40 +118,8 @@ const Calendar = () => {
     }
   };
 
-  // Add new event
-  const addEvent = async (eventData: Omit<Event, 'id' | 'createdAt'>) => {
-    try {
-      const docRef = await addDoc(collection(db, 'events'), {
-        ...eventData,
-        createdAt: new Date()
-      });
-      await fetchEvents();
-      return docRef.id;
-    } catch (error) {
-      console.error('Error adding event:', error);
-    }
-  };
-
-  // Update event
-  const updateEvent = async (eventId: string, eventData: Partial<Event>) => {
-    try {
-      const eventRef = doc(db, 'events', eventId);
-      await updateDoc(eventRef, eventData);
-      await fetchEvents();
-    } catch (error) {
-      console.error('Error updating event:', error);
-    }
-  };
-
-  // Delete event
-  const deleteEvent = async (eventId: string) => {
-    try {
-      await deleteDoc(doc(db, 'events', eventId));
-      await fetchEvents();
-    } catch (error) {
-      console.error('Error deleting event:', error);
-    }
-  };
+  // Note: Users cannot add, update, or delete events - this is read-only view
+  // Only admins can modify events through the admin panel
 
   // Fetch public holidays
   const fetchPublicHolidays = React.useCallback(async (year: number) => {
@@ -409,18 +315,16 @@ const Calendar = () => {
             )}
           </div>
 
-          {/* Admin Section */}
-          {isAdmin && (
-            <div className="border-t border-gray-700 pt-6">
-              <Button
-                onClick={() => setShowEventModal(true)}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Event
-              </Button>
+          {/* Read-only Notice */}
+          <div className="border-t border-gray-700 pt-6">
+            <div className="flex items-center space-x-2 text-gray-400 text-sm">
+              <Lock className="h-4 w-4" />
+              <span>Read-only calendar view</span>
             </div>
-          )}
+            <p className="text-xs text-gray-500 mt-1">
+              Events are managed by administrators
+            </p>
+          </div>
         </div>
       </div>
 
@@ -511,14 +415,11 @@ const Calendar = () => {
               </Button>
             </div>
 
-            {/* Admin Toggle */}
-            <Button
-              onClick={() => setIsAdmin(!isAdmin)}
-              className={`${isAdmin ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-600 hover:bg-gray-700'} text-white`}
-            >
-              <Lock className="h-4 w-4 mr-2" />
-              {isAdmin ? 'Admin Mode' : 'User Mode'}
-            </Button>
+            {/* Read-only Indicator */}
+            <div className="flex items-center space-x-2 px-3 py-2 bg-gray-700 rounded-lg">
+              <Lock className="h-4 w-4 text-gray-400" />
+              <span className="text-sm text-gray-300">Read-only</span>
+            </div>
           </div>
         </div>
 
@@ -600,104 +501,17 @@ const Calendar = () => {
         </div>
       </div>
 
-      {/* Event Modal */}
-      {showEventModal && (
+      {/* Event Modal - Read Only */}
+      {showEventModal && selectedEvent && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold">
-                {selectedEvent ? 'Edit Event' : 'Add Event'}
-              </h3>
-              <button
-                onClick={() => {
-                  setShowEventModal(false);
-                  setSelectedEvent(null);
-                }}
-                className="text-gray-400 hover:text-white"
-              >
-                ×
-              </button>
-            </div>
-
-            {selectedEvent ? (
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
-                  <input
-                    type="text"
-                    value={selectedEvent.title}
-                    onChange={(e) => setSelectedEvent({...selectedEvent, title: e.target.value})}
-                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
-                  <textarea
-                    value={selectedEvent.description}
-                    onChange={(e) => setSelectedEvent({...selectedEvent, description: e.target.value})}
-                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-                    rows={3}
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Date</label>
-                    <input
-                      type="date"
-                      value={selectedEvent.date}
-                      onChange={(e) => setSelectedEvent({...selectedEvent, date: e.target.value})}
-                      className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Time</label>
-                    <input
-                      type="time"
-                      value={selectedEvent.time}
-                      onChange={(e) => setSelectedEvent({...selectedEvent, time: e.target.value})}
-                      className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Location</label>
-                  <input
-                    type="text"
-                    value={selectedEvent.location}
-                    onChange={(e) => setSelectedEvent({...selectedEvent, location: e.target.value})}
-                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-                  />
-                </div>
-                <div className="flex space-x-2">
-                  <Button
-                    onClick={() => {
-                      if (selectedEvent) {
-                        updateEvent(selectedEvent.id, selectedEvent);
-                        setShowEventModal(false);
-                        setSelectedEvent(null);
-                      }
-                    }}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700"
-                  >
-                    Update
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      if (selectedEvent) {
-                        deleteEvent(selectedEvent.id);
-                        setShowEventModal(false);
-                        setSelectedEvent(null);
-                      }
-                    }}
-                    className="flex-1 bg-red-600 hover:bg-red-700"
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <AddEventForm onAdd={addEvent} onClose={() => setShowEventModal(false)} />
-            )}
+            <EventDisplay 
+              event={selectedEvent} 
+              onClose={() => {
+                setShowEventModal(false);
+                setSelectedEvent(null);
+              }} 
+            />
           </div>
         </div>
       )}
