@@ -1,13 +1,21 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { 
   ChevronLeft, 
   ChevronRight, 
   Calendar as CalendarIcon,
+  Plus,
+  Clock,
   Flag,
-  Lock
+  Lock,
+  Search,
+  Filter,
+  Grid3X3,
+  CalendarDays
 } from "lucide-react";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore";
 
 interface Event {
   id: string;
@@ -20,6 +28,8 @@ interface Event {
   isHoliday: boolean;
   isPublicHoliday: boolean;
   color: string;
+  createdBy: string;
+  createdAt: Date;
 }
 
 interface CalendarDay {
@@ -32,135 +42,88 @@ interface CalendarDay {
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<'month' | 'week'>('month');
-  const [events] = useState<Event[]>([]);
-  const [isLoadingHolidays, setIsLoadingHolidays] = useState(true);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterType, setFilterType] = useState<'all' | 'events' | 'holidays'>('all');
 
   // State for public holidays
   const [publicHolidays, setPublicHolidays] = useState<Array<{ date: string; name: string; color: string }>>([]);
 
-  // Fetch public holidays for India using comprehensive API
-  const fetchPublicHolidays = React.useCallback(async (year: number) => {
+  // Fetch events from Firestore
+  const fetchEvents = async () => {
     try {
-      setIsLoadingHolidays(true);
-      
-      // Using a comprehensive Indian holidays API
-      const response = await fetch(`https://api.calendarlabs.com/v1/calendar/events?country=IN&year=${year}&type=national&key=test`);
-      
-      if (!response.ok) {
-        throw new Error('API request failed');
-      }
-      
-      const data = await response.json();
-      
-      if (data.error) {
-        throw new Error(data.error.message || 'API error');
-      }
-      
-      const formattedHolidays = data.data?.map((holiday: { date: string; name: string }) => ({
-        date: holiday.date,
-        name: holiday.name,
-        color: '#ef4444'
-      })) || [];
-      
-      setPublicHolidays(formattedHolidays);
-      
+      const eventsRef = collection(db, 'events');
+      const q = query(eventsRef, orderBy('date'));
+      const querySnapshot = await getDocs(q);
+      const eventsData = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate() || new Date()
+      })) as Event[];
+      setEvents(eventsData);
     } catch (error) {
-      console.error('Error fetching holidays:', error);
-      
-      // COMPREHENSIVE list with ALL Indian holidays
-      const fallbackHolidays = [
-        // National Holidays
-        { date: `${year}-01-01`, name: 'New Year\'s Day', color: '#ef4444' },
-        { date: `${year}-01-26`, name: 'Republic Day', color: '#ef4444' },
-        { date: `${year}-05-01`, name: 'Labour Day', color: '#ef4444' },
-        { date: `${year}-08-15`, name: 'Independence Day', color: '#ef4444' },
-        { date: `${year}-10-02`, name: 'Gandhi Jayanti', color: '#ef4444' },
-        { date: `${year}-11-14`, name: 'Children\'s Day', color: '#ef4444' },
-        { date: `${year}-12-25`, name: 'Christmas', color: '#ef4444' },
-        
-        // Hindu Festivals
-        { date: `${year}-01-14`, name: 'Makar Sankranti', color: '#ef4444' },
-        { date: `${year}-01-15`, name: 'Pongal', color: '#ef4444' },
-        { date: `${year}-02-14`, name: 'Valentine\'s Day', color: '#ef4444' },
-        { date: `${year}-03-08`, name: 'International Women\'s Day', color: '#ef4444' },
-        { date: `${year}-03-25`, name: 'Holi', color: '#ef4444' },
-        { date: `${year}-03-29`, name: 'Good Friday', color: '#ef4444' },
-        { date: `${year}-03-31`, name: 'Easter Sunday', color: '#ef4444' },
-        { date: `${year}-04-10`, name: 'Eid al-Fitr', color: '#ef4444' },
-        { date: `${year}-04-14`, name: 'Ambedkar Jayanti', color: '#ef4444' },
-        { date: `${year}-04-15`, name: 'Baisakhi', color: '#ef4444' },
-        { date: `${year}-05-01`, name: 'Labour Day', color: '#ef4444' },
-        { date: `${year}-06-21`, name: 'International Yoga Day', color: '#ef4444' },
-        { date: `${year}-07-20`, name: 'Eid al-Adha', color: '#ef4444' },
-        { date: `${year}-08-15`, name: 'Independence Day', color: '#ef4444' },
-        { date: `${year}-08-29`, name: 'Muharram', color: '#ef4444' },
-        { date: `${year}-08-30`, name: 'Raksha Bandhan', color: '#ef4444' },
-        { date: `${year}-09-05`, name: 'Teachers\' Day', color: '#ef4444' },
-        { date: `${year}-10-02`, name: 'Gandhi Jayanti', color: '#ef4444' },
-        { date: `${year}-10-31`, name: 'Halloween', color: '#ef4444' },
-        { date: `${year}-11-12`, name: 'Diwali', color: '#ef4444' },
-        { date: `${year}-11-14`, name: 'Children\'s Day', color: '#ef4444' },
-        { date: `${year}-12-25`, name: 'Christmas', color: '#ef4444' },
-        { date: `${year}-12-31`, name: 'New Year\'s Eve', color: '#ef4444' },
-        
-        // Additional Religious & Cultural Holidays
-        { date: `${year}-01-05`, name: 'Guru Gobind Singh Jayanti', color: '#ef4444' },
-        { date: `${year}-01-26`, name: 'Republic Day', color: '#ef4444' },
-        { date: `${year}-02-19`, name: 'Shivaji Jayanti', color: '#ef4444' },
-        { date: `${year}-03-01`, name: 'Mahashivratri', color: '#ef4444' },
-        { date: `${year}-03-15`, name: 'Holi', color: '#ef4444' },
-        { date: `${year}-04-02`, name: 'Ram Navami', color: '#ef4444' },
-        { date: `${year}-04-09`, name: 'Mahavir Jayanti', color: '#ef4444' },
-        { date: `${year}-04-21`, name: 'Hanuman Jayanti', color: '#ef4444' },
-        { date: `${year}-05-09`, name: 'Buddha Purnima', color: '#ef4444' },
-        { date: `${year}-06-05`, name: 'World Environment Day', color: '#ef4444' },
-        { date: `${year}-07-23`, name: 'Guru Purnima', color: '#ef4444' },
-        { date: `${year}-08-22`, name: 'Janmashtami', color: '#ef4444' },
-        { date: `${year}-09-10`, name: 'Ganesh Chaturthi', color: '#ef4444' },
-        { date: `${year}-09-28`, name: 'Navratri Begins', color: '#ef4444' },
-        { date: `${year}-10-07`, name: 'Dussehra', color: '#ef4444' },
-        { date: `${year}-10-24`, name: 'Karva Chauth', color: '#ef4444' },
-        { date: `${year}-11-04`, name: 'Guru Nanak Jayanti', color: '#ef4444' },
-        { date: `${year}-11-19`, name: 'Guru Tegh Bahadur Martyrdom Day', color: '#ef4444' },
-        { date: `${year}-12-06`, name: 'Dr. Ambedkar Mahaparinirvan Diwas', color: '#ef4444' },
-        { date: `${year}-12-22`, name: 'Winter Solstice', color: '#ef4444' },
-        
-        // Regional & State Holidays
-        { date: `${year}-01-13`, name: 'Lohri', color: '#ef4444' },
-        { date: `${year}-01-26`, name: 'Republic Day', color: '#ef4444' },
-        { date: `${year}-02-19`, name: 'Shivaji Jayanti', color: '#ef4444' },
-        { date: `${year}-03-08`, name: 'International Women\'s Day', color: '#ef4444' },
-        { date: `${year}-04-14`, name: 'Ambedkar Jayanti', color: '#ef4444' },
-        { date: `${year}-05-01`, name: 'Labour Day', color: '#ef4444' },
-        { date: `${year}-06-21`, name: 'International Yoga Day', color: '#ef4444' },
-        { date: `${year}-08-15`, name: 'Independence Day', color: '#ef4444' },
-        { date: `${year}-09-05`, name: 'Teachers\' Day', color: '#ef4444' },
-        { date: `${year}-10-02`, name: 'Gandhi Jayanti', color: '#ef4444' },
-        { date: `${year}-11-14`, name: 'Children\'s Day', color: '#ef4444' },
-        { date: `${year}-12-25`, name: 'Christmas', color: '#ef4444' },
-        
-        // International Days
-        { date: `${year}-01-26`, name: 'Republic Day', color: '#ef4444' },
-        { date: `${year}-02-14`, name: 'Valentine\'s Day', color: '#ef4444' },
-        { date: `${year}-03-08`, name: 'International Women\'s Day', color: '#ef4444' },
-        { date: `${year}-04-22`, name: 'Earth Day', color: '#ef4444' },
-        { date: `${year}-05-01`, name: 'Labour Day', color: '#ef4444' },
-        { date: `${year}-06-05`, name: 'World Environment Day', color: '#ef4444' },
-        { date: `${year}-06-21`, name: 'International Yoga Day', color: '#ef4444' },
-        { date: `${year}-08-15`, name: 'Independence Day', color: '#ef4444' },
-        { date: `${year}-09-05`, name: 'Teachers\' Day', color: '#ef4444' },
-        { date: `${year}-10-02`, name: 'Gandhi Jayanti', color: '#ef4444' },
-        { date: `${year}-11-14`, name: 'Children\'s Day', color: '#ef4444' },
-        { date: `${year}-12-25`, name: 'Christmas', color: '#ef4444' },
-      ];
-      setPublicHolidays(fallbackHolidays);
+      console.error('Error fetching events:', error);
     } finally {
-      setIsLoadingHolidays(false);
+      setIsLoading(false);
     }
+  };
+
+  // Add new event
+  const addEvent = async (eventData: Omit<Event, 'id' | 'createdAt'>) => {
+    try {
+      const docRef = await addDoc(collection(db, 'events'), {
+        ...eventData,
+        createdAt: new Date()
+      });
+      await fetchEvents();
+      return docRef.id;
+    } catch (error) {
+      console.error('Error adding event:', error);
+    }
+  };
+
+  // Update event
+  const updateEvent = async (eventId: string, eventData: Partial<Event>) => {
+    try {
+      const eventRef = doc(db, 'events', eventId);
+      await updateDoc(eventRef, eventData);
+      await fetchEvents();
+    } catch (error) {
+      console.error('Error updating event:', error);
+    }
+  };
+
+  // Delete event
+  const deleteEvent = async (eventId: string) => {
+    try {
+      await deleteDoc(doc(db, 'events', eventId));
+      await fetchEvents();
+    } catch (error) {
+      console.error('Error deleting event:', error);
+    }
+  };
+
+  // Fetch public holidays
+  const fetchPublicHolidays = React.useCallback(async (year: number) => {
+    const fallbackHolidays = [
+      { date: `${year}-01-26`, name: 'Republic Day', color: '#ef4444' },
+      { date: `${year}-08-15`, name: 'Independence Day', color: '#ef4444' },
+      { date: `${year}-10-02`, name: 'Gandhi Jayanti', color: '#ef4444' },
+      { date: `${year}-12-25`, name: 'Christmas', color: '#ef4444' },
+      { date: `${year}-03-25`, name: 'Holi', color: '#ef4444' },
+      { date: `${year}-11-12`, name: 'Diwali', color: '#ef4444' },
+      { date: `${year}-09-10`, name: 'Ganesh Chaturthi', color: '#ef4444' },
+      { date: `${year}-08-30`, name: 'Raksha Bandhan', color: '#ef4444' },
+    ];
+    setPublicHolidays(fallbackHolidays);
   }, []);
 
-  // Fetch holidays when component mounts or year changes
-  React.useEffect(() => {
+  useEffect(() => {
+    fetchEvents();
     const year = currentDate.getFullYear();
     fetchPublicHolidays(year);
   }, [currentDate, fetchPublicHolidays]);
@@ -233,223 +196,440 @@ const Calendar = () => {
     return holiday || null;
   };
 
+  const filteredEvents = events.filter(event => {
+    const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         event.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter = filterType === 'all' || 
+                         (filterType === 'events' && !event.isHoliday && !event.isPublicHoliday) ||
+                         (filterType === 'holidays' && (event.isHoliday || event.isPublicHoliday));
+    return matchesSearch && matchesFilter;
+  });
+
   const days = viewMode === 'month' ? getDaysInMonth(currentDate) : getWeekDays(currentDate);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 dark:from-amber-900 dark:via-orange-900 dark:to-red-900">
-      {/* Vintage Background Pattern */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}></div>
-      </div>
-
-      {/* Vintage Header */}
-      <div className="relative bg-gradient-to-r from-amber-800 via-orange-800 to-red-800 shadow-2xl border-b-4 border-amber-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-24">
-            <div className="flex items-center space-x-6">
-              <div className="relative">
-                <div className="absolute inset-0 bg-amber-600 rounded-full blur-lg opacity-75"></div>
-                <div className="relative bg-gradient-to-br from-amber-400 to-orange-600 p-4 rounded-full border-4 border-amber-300 shadow-lg">
-                  <CalendarIcon className="h-10 w-10 text-white" />
-                </div>
-              </div>
-              <div>
-                <h1 className="text-4xl font-bold text-white font-serif tracking-wider" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
-                  E-Cell Calendar
-                </h1>
-                <p className="text-amber-200 font-medium italic">
-                  Vintage Events & Holidays
-                  {isLoadingHolidays && (
-                    <span className="ml-3 inline-flex items-center text-amber-300">
-                      <div className="w-2 h-2 bg-amber-300 rounded-full animate-pulse mr-1"></div>
-                      Loading holidays...
-                    </span>
-                  )}
-                </p>
-              </div>
+    <div className="min-h-screen bg-gray-900 text-white">
+      {/* Sidebar */}
+      <div className="fixed left-0 top-0 h-full w-80 bg-gray-800 border-r border-gray-700 z-50">
+        <div className="p-6">
+          {/* Header */}
+          <div className="flex items-center space-x-3 mb-8">
+            <div className="bg-blue-600 p-2 rounded-lg">
+              <CalendarIcon className="h-6 w-6 text-white" />
             </div>
-            
-            <div className="flex items-center space-x-4">
-              {/* Vintage View Toggle */}
-              <div className="flex bg-amber-700/50 backdrop-blur-sm rounded-xl p-1 border-2 border-amber-500">
+            <div>
+              <h1 className="text-xl font-bold">Calendar</h1>
+              <p className="text-gray-400 text-sm">E-Cell Events</p>
+            </div>
+          </div>
+
+          {/* Search */}
+          <div className="mb-6">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search events..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          {/* Filter */}
+          <div className="mb-6">
+            <div className="flex items-center space-x-2 mb-3">
+              <Filter className="h-4 w-4 text-gray-400" />
+              <span className="text-sm font-medium text-gray-300">Filter</span>
+            </div>
+            <div className="space-y-2">
+              {[
+                { key: 'all', label: 'All Events', icon: CalendarDays },
+                { key: 'events', label: 'Events Only', icon: Grid3X3 },
+                { key: 'holidays', label: 'Holidays Only', icon: Flag }
+              ].map((filter) => (
                 <button
-                  onClick={() => setViewMode('month')}
-                  className={`px-6 py-3 rounded-lg text-sm font-bold transition-all duration-300 ${
-                    viewMode === 'month'
-                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg transform scale-105 border-2 border-amber-300'
-                      : 'text-amber-200 hover:text-white hover:bg-amber-600/50'
+                  key={filter.key}
+                  onClick={() => setFilterType(filter.key as any)}
+                  className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                    filterType === filter.key
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-700'
                   }`}
                 >
-                  Month
+                  <filter.icon className="h-4 w-4" />
+                  <span>{filter.label}</span>
                 </button>
-                <button
-                  onClick={() => setViewMode('week')}
-                  className={`px-6 py-3 rounded-lg text-sm font-bold transition-all duration-300 ${
-                    viewMode === 'week'
-                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg transform scale-105 border-2 border-amber-300'
-                      : 'text-amber-200 hover:text-white hover:bg-amber-600/50'
-                  }`}
-                >
-                  Week
-                </button>
-              </div>
+              ))}
+            </div>
+          </div>
 
-              {/* Vintage Navigation */}
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    const newDate = new Date(currentDate);
-                    if (viewMode === 'month') {
-                      newDate.setMonth(newDate.getMonth() - 1);
-                    } else {
-                      newDate.setDate(newDate.getDate() - 7);
-                    }
-                    setCurrentDate(newDate);
-                  }}
-                  className="border-2 border-amber-400 text-amber-800 hover:bg-amber-500 hover:text-white transition-all duration-300 font-bold"
-                >
-                  <ChevronLeft className="h-5 w-5" />
-                </Button>
-                
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentDate(new Date())}
-                  className="border-2 border-green-400 text-green-800 hover:bg-green-500 hover:text-white transition-all duration-300 font-bold"
-                >
-                  Today
-                </Button>
-                
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    const newDate = new Date(currentDate);
-                    if (viewMode === 'month') {
-                      newDate.setMonth(newDate.getMonth() + 1);
-                    } else {
-                      newDate.setDate(newDate.getDate() + 7);
-                    }
-                    setCurrentDate(newDate);
-                  }}
-                  className="border-2 border-amber-400 text-amber-800 hover:bg-amber-500 hover:text-white transition-all duration-300 font-bold"
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </Button>
-              </div>
+          {/* Upcoming Events */}
+          <div className="mb-6">
+            <h3 className="text-sm font-medium text-gray-300 mb-3">Upcoming Events</h3>
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+              {filteredEvents
+                .filter(event => new Date(event.date) >= new Date())
+                .slice(0, 5)
+                .map(event => (
+                  <div
+                    key={event.id}
+                    className="p-3 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-600 transition-colors"
+                    onClick={() => {
+                      setSelectedEvent(event);
+                      setShowEventModal(true);
+                    }}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm font-medium truncate">{event.title}</span>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: event.color }}></div>
+                    </div>
+                    <div className="flex items-center space-x-2 text-xs text-gray-400">
+                      <Clock className="h-3 w-3" />
+                      <span>{new Date(event.date).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
 
-              {/* Admin Access Button */}
-              <Button 
-                onClick={() => window.location.href = '/admin/calendar'}
-                className="bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border-2 border-red-400 font-bold"
+          {/* Admin Section */}
+          {isAdmin && (
+            <div className="border-t border-gray-700 pt-6">
+              <Button
+                onClick={() => setShowEventModal(true)}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
               >
-                <Lock className="h-4 w-4 mr-2" />
-                Admin Access
+                <Plus className="h-4 w-4 mr-2" />
+                Add Event
               </Button>
             </div>
+          )}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="ml-80 p-8">
+        {/* Top Bar */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="text-3xl font-bold">
+              {currentDate.toLocaleDateString('en-US', { 
+                month: 'long', 
+                year: 'numeric' 
+              })}
+            </h2>
+            <p className="text-gray-400">
+              {viewMode === 'month' ? 'Month View' : 'Week View'}
+            </p>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            {/* View Toggle */}
+            <div className="flex bg-gray-800 rounded-lg p-1">
+              <button
+                onClick={() => setViewMode('month')}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  viewMode === 'month'
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                Month
+              </button>
+              <button
+                onClick={() => setViewMode('week')}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  viewMode === 'week'
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                Week
+              </button>
+            </div>
+
+            {/* Navigation */}
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const newDate = new Date(currentDate);
+                  if (viewMode === 'month') {
+                    newDate.setMonth(newDate.getMonth() - 1);
+                  } else {
+                    newDate.setDate(newDate.getDate() - 7);
+                  }
+                  setCurrentDate(newDate);
+                }}
+                className="border-gray-600 text-gray-300 hover:bg-gray-700"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentDate(new Date())}
+                className="border-gray-600 text-gray-300 hover:bg-gray-700"
+              >
+                Today
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const newDate = new Date(currentDate);
+                  if (viewMode === 'month') {
+                    newDate.setMonth(newDate.getMonth() + 1);
+                  } else {
+                    newDate.setDate(newDate.getDate() + 7);
+                  }
+                  setCurrentDate(newDate);
+                }}
+                className="border-gray-600 text-gray-300 hover:bg-gray-700"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* Admin Toggle */}
+            <Button
+              onClick={() => setIsAdmin(!isAdmin)}
+              className={`${isAdmin ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-600 hover:bg-gray-700'} text-white`}
+            >
+              <Lock className="h-4 w-4 mr-2" />
+              {isAdmin ? 'Admin Mode' : 'User Mode'}
+            </Button>
+          </div>
+        </div>
+
+        {/* Calendar Grid */}
+        <div className="bg-gray-800 rounded-lg p-6">
+          {/* Day Headers */}
+          <div className="grid grid-cols-7 gap-1 mb-4">
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+              <div key={day} className="p-3 text-center">
+                <span className="text-sm font-medium text-gray-400">
+                  {day}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Calendar Days */}
+          <div className="grid grid-cols-7 gap-1">
+            {days.map((day, index) => {
+              const holiday = isPublicHoliday(day.date);
+              return (
+                <div
+                  key={index}
+                  className={`min-h-[120px] p-3 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors ${
+                    !day.isCurrentMonth ? 'opacity-30' : ''
+                  } ${day.isToday ? 'ring-2 ring-blue-500' : ''}`}
+                >
+                  {/* Date */}
+                  <div className="flex items-center justify-between mb-2">
+                    <span className={`text-sm font-medium ${
+                      day.isToday ? 'text-blue-400' : 'text-gray-300'
+                    }`}>
+                      {day.date.getDate()}
+                    </span>
+                    {holiday && (
+                      <Flag className="h-3 w-3 text-red-400" />
+                    )}
+                  </div>
+
+                  {/* Events */}
+                  <div className="space-y-1">
+                    {day.events.slice(0, 2).map(event => (
+                      <div
+                        key={event.id}
+                        className="text-xs p-1 rounded cursor-pointer hover:bg-gray-600 transition-colors"
+                        style={{ 
+                          backgroundColor: `${event.color}20`,
+                          borderLeft: `3px solid ${event.color}`
+                        }}
+                        onClick={() => {
+                          setSelectedEvent(event);
+                          setShowEventModal(true);
+                        }}
+                      >
+                        <div className="truncate font-medium">{event.title}</div>
+                        <div className="text-gray-400">{event.time}</div>
+                      </div>
+                    ))}
+                    
+                    {day.events.length > 2 && (
+                      <div className="text-xs text-gray-400 text-center py-1">
+                        +{day.events.length - 2} more
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Holiday Name */}
+                  {holiday && (
+                    <div className="mt-2">
+                      <div className="text-xs text-red-400 font-medium truncate">
+                        {holiday.name}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
 
-      {/* Vintage Calendar Grid */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Vintage Month/Year Header */}
-        <div className="text-center mb-8">
-          <h2 className="text-5xl font-bold text-amber-800 dark:text-amber-200 font-serif tracking-wider" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
-            {currentDate.toLocaleDateString('en-US', { 
-              month: 'long', 
-              year: 'numeric' 
-            })}
-          </h2>
-        </div>
-
-        {/* Vintage Day Headers */}
-        <div className="grid grid-cols-7 gap-3 mb-6">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-800 dark:to-orange-800 backdrop-blur-sm p-4 text-center rounded-xl border-2 border-amber-300 dark:border-amber-600 shadow-lg">
-              <span className="text-lg font-bold text-amber-800 dark:text-amber-200 font-serif">
-                {day}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Vintage Calendar Grid */}
-        <div className="grid grid-cols-7 gap-3">
-          {days.map((day, index) => {
-            const holiday = isPublicHoliday(day.date);
-            return (
-              <div
-                key={index}
-                className={`min-h-[160px] bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-800 dark:to-orange-800 backdrop-blur-sm p-4 rounded-xl border-2 border-amber-200 dark:border-amber-700 shadow-lg hover:shadow-xl transition-all duration-300 relative group ${
-                  !day.isCurrentMonth ? 'opacity-40' : ''
-                } ${day.isToday ? 'ring-4 ring-amber-500 ring-offset-2 ring-offset-amber-100 dark:ring-offset-amber-900' : ''}`}
+      {/* Event Modal */}
+      {showEventModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold">
+                {selectedEvent ? 'Edit Event' : 'Add Event'}
+              </h3>
+              <button
+                onClick={() => {
+                  setShowEventModal(false);
+                  setSelectedEvent(null);
+                }}
+                className="text-gray-400 hover:text-white"
               >
-                {/* Vintage Date Number */}
-                <div className="flex items-center justify-between mb-3">
-                  <span className={`text-lg font-bold font-serif ${
-                    day.isToday 
-                      ? 'text-amber-600 dark:text-amber-300' 
-                      : 'text-amber-800 dark:text-amber-200'
-                  }`}>
-                    {day.date.getDate()}
-                  </span>
-                  
-                  {/* Holiday Indicator */}
-                  {holiday && (
-                    <div className="flex items-center space-x-1">
-                      <Flag className="h-4 w-4 text-red-500" />
-                    </div>
-                  )}
-                </div>
+                ×
+              </button>
+            </div>
 
-                {/* Vintage Events */}
-                <div className="space-y-2">
-                  {day.events.slice(0, 3).map(event => (
-                    <div
-                      key={event.id}
-                      className={`text-xs p-2 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-md border-2 ${
-                        event.isHoliday || event.isPublicHoliday
-                          ? 'bg-gradient-to-r from-red-100 to-red-200 dark:from-red-900/30 dark:to-red-800/30 text-red-800 dark:text-red-200 border-red-300 dark:border-red-600'
-                          : 'bg-gradient-to-r from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-800/30 text-amber-800 dark:text-amber-200 border-amber-300 dark:border-amber-600'
-                      }`}
-                      style={{ 
-                        background: event.isHoliday || event.isPublicHoliday 
-                          ? `linear-gradient(135deg, ${event.color}20, ${event.color}30)` 
-                          : `linear-gradient(135deg, ${event.color}20, ${event.color}30)`,
-                        borderColor: event.color + '40'
-                      }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="truncate font-bold">{event.title}</span>
-                      </div>
-                    </div>
-                  ))}
-                  
-                  {day.events.length > 3 && (
-                    <div className="text-xs text-amber-600 dark:text-amber-400 text-center py-2 bg-amber-100/50 dark:bg-amber-800/50 rounded-lg border border-amber-300 dark:border-amber-600 font-bold">
-                      +{day.events.length - 3} more
-                    </div>
-                  )}
+            {selectedEvent ? (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
+                  <input
+                    type="text"
+                    value={selectedEvent.title}
+                    onChange={(e) => setSelectedEvent({...selectedEvent, title: e.target.value})}
+                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+                  />
                 </div>
-
-                {/* Vintage Holiday Name */}
-                {holiday && (
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <div className="text-xs text-red-600 dark:text-red-400 font-bold truncate bg-red-100 dark:bg-red-900/30 px-3 py-2 rounded-lg border-2 border-red-300 dark:border-red-600 shadow-md">
-                      {holiday.name}
-                    </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
+                  <textarea
+                    value={selectedEvent.description}
+                    onChange={(e) => setSelectedEvent({...selectedEvent, description: e.target.value})}
+                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+                    rows={3}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Date</label>
+                    <input
+                      type="date"
+                      value={selectedEvent.date}
+                      onChange={(e) => setSelectedEvent({...selectedEvent, date: e.target.value})}
+                      className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+                    />
                   </div>
-                )}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Time</label>
+                    <input
+                      type="time"
+                      value={selectedEvent.time}
+                      onChange={(e) => setSelectedEvent({...selectedEvent, time: e.target.value})}
+                      className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Location</label>
+                  <input
+                    type="text"
+                    value={selectedEvent.location}
+                    onChange={(e) => setSelectedEvent({...selectedEvent, location: e.target.value})}
+                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+                  />
+                </div>
+                <div className="flex space-x-2">
+                  <Button
+                    onClick={() => {
+                      if (selectedEvent) {
+                        updateEvent(selectedEvent.id, selectedEvent);
+                        setShowEventModal(false);
+                        setSelectedEvent(null);
+                      }
+                    }}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700"
+                  >
+                    Update
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      if (selectedEvent) {
+                        deleteEvent(selectedEvent.id);
+                        setShowEventModal(false);
+                        setSelectedEvent(null);
+                      }
+                    }}
+                    className="flex-1 bg-red-600 hover:bg-red-700"
+                  >
+                    Delete
+                  </Button>
+                </div>
               </div>
-            );
-          })}
+            ) : (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
+                  <input
+                    type="text"
+                    placeholder="Event title"
+                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
+                  <textarea
+                    placeholder="Event description"
+                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+                    rows={3}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Date</label>
+                    <input
+                      type="date"
+                      className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Time</label>
+                    <input
+                      type="time"
+                      className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Location</label>
+                  <input
+                    type="text"
+                    placeholder="Event location"
+                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+                  />
+                </div>
+                <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                  Add Event
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
