@@ -3,18 +3,20 @@ import { getFirestore, Firestore } from 'firebase/firestore';
 import { getAuth, Auth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyBvOkT3gZTgTa7TaK4HjCWTb6m2JjqXpXo",
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "ecellrec.firebaseapp.com",
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "ecellrec",
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "ecellrec.appspot.com",
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "123456789012",
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:123456789012:web:abcdef1234567890"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyAsMdkdVnvPo6OQsg3JCCoS-EiC3HNeN1M",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "ecell-rec.firebaseapp.com",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "ecell-rec",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "ecell-rec.firebasestorage.app",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "363890310179",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:363890310179:web:bd08d942b973fd2d9e4596",
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-MHY76R4ZTY"
 };
 
 // Check if Firebase config is valid
 const isUsingPlaceholder = firebaseConfig.apiKey === "AIzaSyBvOkT3gZTgTa7TaK4HjCWTb6m2JjqXpXo" || 
                           firebaseConfig.projectId === "ecellrec" ||
-                          firebaseConfig.messagingSenderId === "123456789012";
+                          firebaseConfig.messagingSenderId === "123456789012" ||
+                          firebaseConfig.projectId === "demo";
 
 if (isUsingPlaceholder) {
   console.warn("⚠️ Firebase configuration is using placeholder values!");
