@@ -12,8 +12,22 @@ const firebaseConfig = {
 };
 
 // Check if Firebase config is valid
-if (!firebaseConfig.apiKey || firebaseConfig.apiKey === "AIzaSyBvOkT3gZTgTa7TaK4HjCWTb6m2JjqXpXo") {
-  console.warn("Firebase configuration is using placeholder values. Please set up proper environment variables.");
+const isUsingPlaceholder = firebaseConfig.apiKey === "AIzaSyBvOkT3gZTgTa7TaK4HjCWTb6m2JjqXpXo" || 
+                          firebaseConfig.projectId === "ecellrec" ||
+                          firebaseConfig.messagingSenderId === "123456789012";
+
+if (isUsingPlaceholder) {
+  console.warn("⚠️ Firebase configuration is using placeholder values!");
+  console.warn("Please set up proper environment variables in Vercel:");
+  console.warn("- NEXT_PUBLIC_FIREBASE_API_KEY");
+  console.warn("- NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN");
+  console.warn("- NEXT_PUBLIC_FIREBASE_PROJECT_ID");
+  console.warn("- NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET");
+  console.warn("- NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID");
+  console.warn("- NEXT_PUBLIC_FIREBASE_APP_ID");
+} else {
+  console.log("✅ Firebase configuration loaded successfully");
+  console.log("Project ID:", firebaseConfig.projectId);
 }
 
 // Initialize Firebase
@@ -25,20 +39,14 @@ try {
   app = initializeApp(firebaseConfig);
   db = getFirestore(app);
   auth = getAuth(app);
+  
+  // Test the connection
+  console.log("🔗 Firebase initialized successfully");
 } catch (error) {
-  console.error("Firebase initialization failed:", error);
-  // Fallback initialization with minimal config
-  const fallbackConfig = {
-    apiKey: "demo-key",
-    authDomain: "demo.firebaseapp.com",
-    projectId: "demo",
-    storageBucket: "demo.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:demo"
-  };
-  app = initializeApp(fallbackConfig, 'fallback');
-  db = getFirestore(app);
-  auth = getAuth(app);
+  console.error("❌ Firebase initialization failed:", error);
+  
+  // Don't use fallback config as it will cause more errors
+  throw new Error("Firebase initialization failed. Please check your configuration.");
 }
 
 export { db, auth };
