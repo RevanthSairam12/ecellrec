@@ -32,6 +32,8 @@ interface Event {
   isHoliday: boolean;
   isPublicHoliday: boolean;
   color: string;
+  createdBy?: string;
+  createdAt?: Date;
 }
 
 interface CalendarDay {
@@ -65,11 +67,23 @@ const AdminCalendar = () => {
       const eventsRef = collection(db, 'events');
       const q = query(eventsRef, orderBy('date'));
       const querySnapshot = await getDocs(q);
-      const eventsData = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date()
-      })) as Event[];
+      const eventsData = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          title: data.title || '',
+          description: data.description || '',
+          date: data.date || '',
+          time: data.time || '',
+          location: data.location || '',
+          attendees: data.attendees || [],
+          isHoliday: data.isHoliday || false,
+          isPublicHoliday: data.isPublicHoliday || false,
+          color: data.color || '#3b82f6',
+          createdBy: data.createdBy || 'admin',
+          createdAt: data.createdAt?.toDate() || new Date()
+        } as Event;
+      });
       setEvents(eventsData);
     } catch (error) {
       console.error('Error fetching events:', error);
