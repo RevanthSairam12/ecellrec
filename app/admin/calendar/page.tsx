@@ -1,26 +1,21 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { 
   ChevronLeft, 
   ChevronRight, 
-  Plus, 
-  Edit, 
-  Trash2, 
   Calendar as CalendarIcon,
+  Clock,
   Flag,
-  X,
-  Check,
   Lock,
-  Shield,
-  ArrowLeft
+  Search,
+  Filter,
+  Grid3X3,
+  CalendarDays,
+  X
 } from "lucide-react";
 import { db } from "@/lib/firebase";
-import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore";
-import { localStorageService, LocalEvent } from "@/lib/localStorage";
+import { collection, getDocs, query, orderBy } from "firebase/firestore
 
 interface Event {
   id: string;
@@ -33,8 +28,8 @@ interface Event {
   isHoliday: boolean;
   isPublicHoliday: boolean;
   color: string;
-  createdBy?: string;
-  createdAt?: Date;
+  createdBy: string;
+  createdAt: Date;
 }
 
 interface CalendarDay {
@@ -44,16 +39,55 @@ interface CalendarDay {
   events: Event[];
 }
 
-const AdminCalendar = () => {
+// Read-only event display component
+const EventDisplay: React.FC<{ event: Event; onClose: () => void }> = ({ event, onClose }) => {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-white">{event.title}</h3>
+        <Button onClick={onClose} variant="ghost" size="sm">
+          <X className="h-4 w-4" />
+        </Button>
+      </div>
+      
+      <div className="space-y-3">
+        <div className="flex items-center space-x-2">
+          <Clock className="h-4 w-4 text-gray-400" />
+          <span className="text-gray-300">{event.time}</span>
+        </div>
+        
+        {event.location && (
+          <div className="flex items-center space-x-2">
+            <Flag className="h-4 w-4 text-gray-400" />
+            <span className="text-gray-300">{event.location}</span>
+          </div>
+        )}
+        
+        {event.description && (
+          <div>
+            <p className="text-gray-300">{event.description}</p>
+          </div>
+        )}
+        
+        <div className="flex items-center space-x-2">
+          <Lock className="h-4 w-4 text-gray-400" />
+          <span className="text-gray-300">Read-only view</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<'month' | 'week'>('month');
   const [events, setEvents] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [, setIsAuthenticated] = useState(false);
-  const [isLoadingHolidays, setIsLoadingHolidays] = useState(true);
-  const [adminCredentials, setAdminCredentials] = useState({ username: '', password: '' });
-  const [showLogin, setShowLogin] = useState(true);
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterType, setFilterType] = useState<'all' | 'events' | 'holidays'>('all');
+  const [isUsingLocalStorage, setIsUsingLocalStorage] = useState(false);
 
   // State for public holidays
   const [publicHolidays, setPublicHolidays] = useState<Array<{ date: string; name: string; color: string }>>([]);
@@ -65,133 +99,38 @@ const AdminCalendar = () => {
         console.warn('Firestore not initialized, using local storage');
         const localEvents = localStorageService.getEvents();
         setEvents(localEvents);
+        setIsUsingLocalStorage(true);
+        setIsLoading(false);
         return;
       }
       
       const eventsRef = collection(db, 'events');
       const q = query(eventsRef, orderBy('date'));
       const querySnapshot = await getDocs(q);
-      const eventsData = querySnapshot.docs.map(doc => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          title: data.title || '',
-          description: data.description || '',
-          date: data.date || '',
-          time: data.time || '',
-          location: data.location || '',
-          attendees: data.attendees || [],
-          isHoliday: data.isHoliday || false,
-          isPublicHoliday: data.isPublicHoliday || false,
-          color: data.color || '#3b82f6',
-          createdBy: data.createdBy || 'admin',
-          createdAt: data.createdAt?.toDate() || new Date()
-        } as Event;
-      });
+      const eventsData = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate() || new Date()
+      })) as Event[];
       setEvents(eventsData);
+      setIsUsingLocalStorage(false);
     } catch (error) {
       console.error('Error fetching events from Firebase, using local storage:', error);
+      // Fallback to local storage if Firebase fails
       const localEvents = localStorageService.getEvents();
       setEvents(localEvents);
+      setIsUsingLocalStorage(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Add new event with local storage fallback
-  const addEvent = async (eventData: Omit<Event, 'id'>) => {
-    try {
-      if (!db) {
-        console.warn('Using local storage for adding event');
-        const id = localStorageService.addEvent(eventData);
-        await fetchEvents();
-        return id;
-      }
-      
-      const docRef = await addDoc(collection(db, 'events'), {
-        ...eventData,
-        createdAt: new Date()
-      });
-      await fetchEvents();
-      return docRef.id;
-    } catch (error) {
-      console.error('Error adding event to Firebase, using local storage:', error);
-      const id = localStorageService.addEvent(eventData);
-      await fetchEvents();
-      return id;
-    }
-  };
-
-  // Update event with local storage fallback
-  const updateEvent = async (eventId: string, eventData: Partial<Event>) => {
-    try {
-      if (!db) {
-        console.warn('Using local storage for updating event');
-        localStorageService.updateEvent(eventId, eventData);
-        await fetchEvents();
-        return;
-      }
-      
-      const eventRef = doc(db, 'events', eventId);
-      await updateDoc(eventRef, eventData);
-      await fetchEvents();
-    } catch (error) {
-      console.error('Error updating event in Firebase, using local storage:', error);
-      localStorageService.updateEvent(eventId, eventData);
-      await fetchEvents();
-    }
-  };
-
-  // Delete event with local storage fallback
-  const deleteEvent = async (eventId: string) => {
-    try {
-      if (!db) {
-        console.warn('Using local storage for deleting event');
-        localStorageService.deleteEvent(eventId);
-        await fetchEvents();
-        return;
-      }
-      
-      await deleteDoc(doc(db, 'events', eventId));
-      await fetchEvents();
-    } catch (error) {
-      console.error('Error deleting event from Firebase, using local storage:', error);
-      localStorageService.deleteEvent(eventId);
-      await fetchEvents();
-    }
-  };
-
-  // Load events when component mounts
-  useEffect(() => {
-    if (!showLogin) {
-      fetchEvents();
-    }
-  }, [showLogin]);
-
-  const colors = [
-    { hex: '#3b82f6', name: 'Blue' },
-    { hex: '#10b981', name: 'Green' },
-    { hex: '#f59e0b', name: 'Amber' },
-    { hex: '#ef4444', name: 'Red' },
-    { hex: '#8b5cf6', name: 'Purple' },
-    { hex: '#06b6d4', name: 'Cyan' },
-    { hex: '#f97316', name: 'Orange' },
-    { hex: '#ec4899', name: 'Pink' }
-  ];
-
-  // Simple admin authentication (in production, use proper auth)
-  const handleLogin = () => {
-    if (adminCredentials.username === 'admin' && adminCredentials.password === 'ecell2024') {
-      setIsAuthenticated(true);
-      setShowLogin(false);
-    } else {
-      alert('Invalid credentials!');
-    }
-  };
+  // Note: Users cannot add, update, or delete events - this is read-only view
+  // Only admins can modify events through the admin panel
 
   // Fetch public holidays using Google Calendar API
   const fetchPublicHolidays = React.useCallback(async (year: number) => {
     try {
-      setIsLoadingHolidays(true);
-      
       // Google Calendar API endpoint for Indian holidays
       const calendarId = 'en.indian#holiday@group.v.calendar.google.com';
       const apiKey = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY;
@@ -231,51 +170,25 @@ const AdminCalendar = () => {
     } catch (error) {
       console.error('Error fetching holidays from Google Calendar API:', error);
       
-      // Fallback to comprehensive Indian holidays list
+      // Fallback to basic Indian holidays list
       const fallbackHolidays = [
-        // National Holidays
-        { date: `${year}-01-01`, name: 'New Year\'s Day', color: '#ef4444' },
         { date: `${year}-01-26`, name: 'Republic Day', color: '#ef4444' },
-        { date: `${year}-05-01`, name: 'Labour Day', color: '#ef4444' },
         { date: `${year}-08-15`, name: 'Independence Day', color: '#ef4444' },
         { date: `${year}-10-02`, name: 'Gandhi Jayanti', color: '#ef4444' },
-        { date: `${year}-11-14`, name: 'Children\'s Day', color: '#ef4444' },
         { date: `${year}-12-25`, name: 'Christmas', color: '#ef4444' },
-        
-        // Hindu Festivals
-        { date: `${year}-01-14`, name: 'Makar Sankranti', color: '#ef4444' },
-        { date: `${year}-01-15`, name: 'Pongal', color: '#ef4444' },
-        { date: `${year}-02-14`, name: 'Valentine\'s Day', color: '#ef4444' },
-        { date: `${year}-03-08`, name: 'International Women\'s Day', color: '#ef4444' },
         { date: `${year}-03-25`, name: 'Holi', color: '#ef4444' },
-        { date: `${year}-03-29`, name: 'Good Friday', color: '#ef4444' },
-        { date: `${year}-03-31`, name: 'Easter Sunday', color: '#ef4444' },
-        { date: `${year}-04-10`, name: 'Eid al-Fitr', color: '#ef4444' },
-        { date: `${year}-04-14`, name: 'Ambedkar Jayanti', color: '#ef4444' },
-        { date: `${year}-04-15`, name: 'Baisakhi', color: '#ef4444' },
-        { date: `${year}-05-01`, name: 'Labour Day', color: '#ef4444' },
-        { date: `${year}-06-21`, name: 'International Yoga Day', color: '#ef4444' },
-        { date: `${year}-07-20`, name: 'Eid al-Adha', color: '#ef4444' },
-        { date: `${year}-08-15`, name: 'Independence Day', color: '#ef4444' },
-        { date: `${year}-08-29`, name: 'Muharram', color: '#ef4444' },
-        { date: `${year}-08-30`, name: 'Raksha Bandhan', color: '#ef4444' },
-        { date: `${year}-09-05`, name: 'Teachers\' Day', color: '#ef4444' },
-        { date: `${year}-10-02`, name: 'Gandhi Jayanti', color: '#ef4444' },
-        { date: `${year}-10-31`, name: 'Halloween', color: '#ef4444' },
         { date: `${year}-11-12`, name: 'Diwali', color: '#ef4444' },
-        { date: `${year}-11-14`, name: 'Children\'s Day', color: '#ef4444' },
-        { date: `${year}-12-25`, name: 'Christmas', color: '#ef4444' },
-        { date: `${year}-12-31`, name: 'New Year\'s Eve', color: '#ef4444' },
+        { date: `${year}-09-10`, name: 'Ganesh Chaturthi', color: '#ef4444' },
+        { date: `${year}-08-30`, name: 'Raksha Bandhan', color: '#ef4444' },
       ];
       setPublicHolidays(fallbackHolidays);
       console.log('📅 Using fallback holidays list');
-    } finally {
-      setIsLoadingHolidays(false);
     }
   }, []);
 
-  // Fetch holidays when component mounts or year changes
-  React.useEffect(() => {
+  useEffect(() => {
+    setIsLoading(true);
+    fetchEvents();
     const year = currentDate.getFullYear();
     fetchPublicHolidays(year);
   }, [currentDate, fetchPublicHolidays]);
@@ -342,537 +255,321 @@ const AdminCalendar = () => {
     return date.toISOString().split('T')[0];
   };
 
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    date: '',
-    time: '',
-    location: '',
-    attendees: '',
-    isHoliday: false,
-    isPublicHoliday: false,
-    color: '#3b82f6'
-  });
-
-  const handleAddEvent = () => {
-    setSelectedEvent(null);
-    setFormData({
-      title: '',
-      description: '',
-      date: formatDate(currentDate),
-      time: '',
-      location: '',
-      attendees: '',
-      isHoliday: false,
-      isPublicHoliday: false,
-      color: '#3b82f6'
-    });
-    setIsModalOpen(true);
-  };
-
-  const handleEditEvent = (event: Event) => {
-    setSelectedEvent(event);
-    setFormData({
-      title: event.title,
-      description: event.description,
-      date: event.date,
-      time: event.time,
-      location: event.location,
-      attendees: event.attendees.join(', '),
-      isHoliday: event.isHoliday,
-      isPublicHoliday: event.isPublicHoliday,
-      color: event.color
-    });
-    setIsModalOpen(true);
-  };
-
-  const handleSaveEvent = async () => {
-    const eventData = {
-      title: formData.title,
-      description: formData.description,
-      date: formData.date,
-      time: formData.time,
-      location: formData.location,
-      attendees: formData.attendees.split(',').map(a => a.trim()).filter(a => a),
-      isHoliday: formData.isHoliday,
-      isPublicHoliday: formData.isPublicHoliday,
-      color: formData.color
-    };
-
-    if (selectedEvent) {
-      await updateEvent(selectedEvent.id, eventData);
-    } else {
-      await addEvent(eventData);
-    }
-
-    setIsModalOpen(false);
-    setSelectedEvent(null);
-  };
-
-  const handleDeleteEvent = async (eventId: string) => {
-    await deleteEvent(eventId);
-    setIsModalOpen(false);
-    setSelectedEvent(null);
-  };
-
   const isPublicHoliday = (date: Date): { name: string; color: string } | null => {
     const dateStr = formatDate(date);
     const holiday = publicHolidays.find(h => h.date === dateStr);
     return holiday || null;
   };
 
+  const filteredEvents = events.filter(event => {
+    const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         event.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter = filterType === 'all' || 
+                         (filterType === 'events' && !event.isHoliday && !event.isPublicHoliday) ||
+                         (filterType === 'holidays' && (event.isHoliday || event.isPublicHoliday));
+    return matchesSearch && matchesFilter;
+  });
+
   const days = viewMode === 'month' ? getDaysInMonth(currentDate) : getWeekDays(currentDate);
 
-  // Login Form
-  if (showLogin) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 dark:from-amber-900 dark:via-orange-900 dark:to-red-900 flex items-center justify-center">
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8 max-w-md w-full border-2 border-amber-300 dark:border-amber-600">
-          <div className="text-center mb-8">
-            <div className="mx-auto w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center mb-4">
-              <Shield className="h-8 w-8 text-white" />
-            </div>
-            <h2 className="text-2xl font-bold text-amber-800 dark:text-amber-200 font-serif">Admin Access</h2>
-            <p className="text-amber-600 dark:text-amber-400 mt-2">Enter your credentials to manage events</p>
-          </div>
-          
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="username" className="text-amber-800 dark:text-amber-200 font-bold">Username</Label>
-              <Input
-                id="username"
-                type="text"
-                value={adminCredentials.username}
-                onChange={(e) => setAdminCredentials({...adminCredentials, username: e.target.value})}
-                className="border-2 border-amber-300 dark:border-amber-600 focus:border-amber-500"
-                placeholder="Enter username"
-              />
-            </div>
-            
-            <div>
-              <Label htmlFor="password" className="text-amber-800 dark:text-amber-200 font-bold">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={adminCredentials.password}
-                onChange={(e) => setAdminCredentials({...adminCredentials, password: e.target.value})}
-                className="border-2 border-amber-300 dark:border-amber-600 focus:border-amber-500"
-                placeholder="Enter password"
-              />
-            </div>
-            
-            <Button
-              onClick={handleLogin}
-              className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold py-3"
-            >
-              <Lock className="h-4 w-4 mr-2" />
-              Login
-            </Button>
-            
-            <Button
-              variant="outline"
-              onClick={() => window.location.href = '/calendar'}
-              className="w-full border-2 border-amber-300 text-amber-800 hover:bg-amber-50 font-bold"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Calendar
-            </Button>
-          </div>
-          
-          <div className="mt-6 text-center text-sm text-amber-600 dark:text-amber-400">
-            <p>Demo Credentials:</p>
-            <p>Username: admin</p>
-            <p>Password: ecell2024</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 dark:from-amber-900 dark:via-orange-900 dark:to-red-900">
-      {/* Vintage Background Pattern */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}></div>
-      </div>
-
-      {/* Vintage Header */}
-      <div className="relative bg-gradient-to-r from-amber-800 via-orange-800 to-red-800 shadow-2xl border-b-4 border-amber-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-24">
-            <div className="flex items-center space-x-6">
-              <div className="relative">
-                <div className="absolute inset-0 bg-amber-600 rounded-full blur-lg opacity-75"></div>
-                <div className="relative bg-gradient-to-br from-amber-400 to-orange-600 p-4 rounded-full border-4 border-amber-300 shadow-lg">
-                  <CalendarIcon className="h-10 w-10 text-white" />
-                </div>
-              </div>
-              <div>
-                <h1 className="text-4xl font-bold text-white font-serif tracking-wider" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
-                  Admin Calendar
-                </h1>
-                <p className="text-amber-200 font-medium italic">
-                  Manage Events & Holidays
-                  {isLoadingHolidays && (
-                    <span className="ml-3 inline-flex items-center text-amber-300">
-                      <div className="w-2 h-2 bg-amber-300 rounded-full animate-pulse mr-1"></div>
-                      Loading holidays...
-                    </span>
-                  )}
-                </p>
-              </div>
+    <div className="min-h-screen bg-gray-900 text-white">
+      {/* Sidebar */}
+      <div className="fixed left-0 top-0 h-full w-80 bg-gray-800 border-r border-gray-700 z-50">
+        <div className="p-6">
+          {/* Header */}
+          <div className="flex items-center space-x-3 mb-8">
+            <div className="bg-blue-600 p-2 rounded-lg">
+              <CalendarIcon className="h-6 w-6 text-white" />
             </div>
-            
-            <div className="flex items-center space-x-4">
-              {/* Vintage View Toggle */}
-              <div className="flex bg-amber-700/50 backdrop-blur-sm rounded-xl p-1 border-2 border-amber-500">
+            <div>
+              <h1 className="text-xl font-bold">Calendar</h1>
+              <p className="text-gray-400 text-sm">E-Cell Events</p>
+            </div>
+          </div>
+
+          {/* Search */}
+          <div className="mb-6">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search events..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          {/* Filter */}
+          <div className="mb-6">
+            <div className="flex items-center space-x-2 mb-3">
+              <Filter className="h-4 w-4 text-gray-400" />
+              <span className="text-sm font-medium text-gray-300">Filter</span>
+            </div>
+            <div className="space-y-2">
+              {[
+                { key: 'all', label: 'All Events', icon: CalendarDays },
+                { key: 'events', label: 'Events Only', icon: Grid3X3 },
+                { key: 'holidays', label: 'Holidays Only', icon: Flag }
+              ].map((filter) => (
                 <button
-                  onClick={() => setViewMode('month')}
-                  className={`px-6 py-3 rounded-lg text-sm font-bold transition-all duration-300 ${
-                    viewMode === 'month'
-                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg transform scale-105 border-2 border-amber-300'
-                      : 'text-amber-200 hover:text-white hover:bg-amber-600/50'
+                  key={filter.key}
+                  onClick={() => setFilterType(filter.key as 'all' | 'events' | 'holidays')}
+                  className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                    filterType === filter.key
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-700'
                   }`}
                 >
-                  Month
+                  <filter.icon className="h-4 w-4" />
+                  <span>{filter.label}</span>
                 </button>
-                <button
-                  onClick={() => setViewMode('week')}
-                  className={`px-6 py-3 rounded-lg text-sm font-bold transition-all duration-300 ${
-                    viewMode === 'week'
-                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg transform scale-105 border-2 border-amber-300'
-                      : 'text-amber-200 hover:text-white hover:bg-amber-600/50'
-                  }`}
-                >
-                  Week
-                </button>
-              </div>
-
-              {/* Vintage Navigation */}
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    const newDate = new Date(currentDate);
-                    if (viewMode === 'month') {
-                      newDate.setMonth(newDate.getMonth() - 1);
-                    } else {
-                      newDate.setDate(newDate.getDate() - 7);
-                    }
-                    setCurrentDate(newDate);
-                  }}
-                  className="border-2 border-amber-400 text-amber-800 hover:bg-amber-500 hover:text-white transition-all duration-300 font-bold"
-                >
-                  <ChevronLeft className="h-5 w-5" />
-                </Button>
-                
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentDate(new Date())}
-                  className="border-2 border-green-400 text-green-800 hover:bg-green-500 hover:text-white transition-all duration-300 font-bold"
-                >
-                  Today
-                </Button>
-                
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    const newDate = new Date(currentDate);
-                    if (viewMode === 'month') {
-                      newDate.setMonth(newDate.getMonth() + 1);
-                    } else {
-                      newDate.setDate(newDate.getDate() + 7);
-                    }
-                    setCurrentDate(newDate);
-                  }}
-                  className="border-2 border-amber-400 text-amber-800 hover:bg-amber-500 hover:text-white transition-all duration-300 font-bold"
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </Button>
-              </div>
-
-              {/* Admin Controls */}
-              <Button 
-                onClick={handleAddEvent}
-                className="bg-gradient-to-r from-green-600 to-green-800 hover:from-green-700 hover:to-green-900 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border-2 border-green-400 font-bold"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Event
-              </Button>
-
-              <Button 
-                onClick={() => window.location.href = '/calendar'}
-                className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border-2 border-blue-400 font-bold"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                View Calendar
-              </Button>
+              ))}
             </div>
+          </div>
+
+          {/* Upcoming Events */}
+          <div className="mb-6">
+            <h3 className="text-sm font-medium text-gray-300 mb-3">Upcoming Events</h3>
+            {isLoading ? (
+              <div className="text-center py-4">
+                <div className="text-gray-400 text-sm">Loading events...</div>
+              </div>
+            ) : (
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+              {filteredEvents
+                .filter(event => new Date(event.date) >= new Date())
+                .slice(0, 5)
+                .map(event => (
+                  <div
+                    key={event.id}
+                    className="p-3 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-600 transition-colors"
+                    onClick={() => {
+                      setSelectedEvent(event);
+                      setShowEventModal(true);
+                    }}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm font-medium truncate">{event.title}</span>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: event.color }}></div>
+                    </div>
+                    <div className="flex items-center space-x-2 text-xs text-gray-400">
+                      <Clock className="h-3 w-3" />
+                      <span>{new Date(event.date).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                ))}
+            </div>
+            )}
+          </div>
+
+          {/* Read-only Notice */}
+          <div className="border-t border-gray-700 pt-6">
+            <div className="flex items-center space-x-2 text-gray-400 text-sm">
+              <Lock className="h-4 w-4" />
+              <span>Read-only calendar view</span>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Events are managed by administrators
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Vintage Calendar Grid */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Vintage Month/Year Header */}
-        <div className="text-center mb-8">
-          <h2 className="text-5xl font-bold text-amber-800 dark:text-amber-200 font-serif tracking-wider" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
-            {currentDate.toLocaleDateString('en-US', { 
-              month: 'long', 
-              year: 'numeric' 
-            })}
-          </h2>
-        </div>
+      {/* Main Content */}
+      <div className="ml-80 p-8">
+        {/* Top Bar */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="text-3xl font-bold">
+              {currentDate.toLocaleDateString('en-US', { 
+                month: 'long', 
+                year: 'numeric' 
+              })}
+            </h2>
+            <p className="text-gray-400">
+              {viewMode === 'month' ? 'Month View' : 'Week View'}
+            </p>
+          </div>
 
-        {/* Vintage Day Headers */}
-        <div className="grid grid-cols-7 gap-3 mb-6">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-800 dark:to-orange-800 backdrop-blur-sm p-4 text-center rounded-xl border-2 border-amber-300 dark:border-amber-600 shadow-lg">
-              <span className="text-lg font-bold text-amber-800 dark:text-amber-200 font-serif">
-                {day}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Vintage Calendar Grid */}
-        <div className="grid grid-cols-7 gap-3">
-          {days.map((day, index) => {
-            const holiday = isPublicHoliday(day.date);
-            return (
-              <div
-                key={index}
-                className={`min-h-[160px] bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-800 dark:to-orange-800 backdrop-blur-sm p-4 rounded-xl border-2 border-amber-200 dark:border-amber-700 shadow-lg hover:shadow-xl transition-all duration-300 relative group ${
-                  !day.isCurrentMonth ? 'opacity-40' : ''
-                } ${day.isToday ? 'ring-4 ring-amber-500 ring-offset-2 ring-offset-amber-100 dark:ring-offset-amber-900' : ''}`}
+          <div className="flex items-center space-x-4">
+            {/* View Toggle */}
+            <div className="flex bg-gray-800 rounded-lg p-1">
+              <button
+                onClick={() => setViewMode('month')}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  viewMode === 'month'
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-300 hover:text-white'
+                }`}
               >
-                {/* Vintage Date Number */}
-                <div className="flex items-center justify-between mb-3">
-                  <span className={`text-lg font-bold font-serif ${
-                    day.isToday 
-                      ? 'text-amber-600 dark:text-amber-300' 
-                      : 'text-amber-800 dark:text-amber-200'
-                  }`}>
-                    {day.date.getDate()}
-                  </span>
-                  
-                  {/* Holiday Indicator */}
-                  {holiday && (
-                    <div className="flex items-center space-x-1">
-                      <Flag className="h-4 w-4 text-red-500" />
-                    </div>
-                  )}
-                </div>
+                Month
+              </button>
+              <button
+                onClick={() => setViewMode('week')}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  viewMode === 'week'
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                Week
+              </button>
+            </div>
 
-                {/* Vintage Events */}
-                <div className="space-y-2">
-                  {day.events.slice(0, 3).map(event => (
-                    <div
-                      key={event.id}
-                      className={`text-xs p-2 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-md border-2 ${
-                        event.isHoliday || event.isPublicHoliday
-                          ? 'bg-gradient-to-r from-red-100 to-red-200 dark:from-red-900/30 dark:to-red-800/30 text-red-800 dark:text-red-200 border-red-300 dark:border-red-600'
-                          : 'bg-gradient-to-r from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-800/30 text-amber-800 dark:text-amber-200 border-amber-300 dark:border-amber-600'
-                      }`}
-                      style={{ 
-                        background: event.isHoliday || event.isPublicHoliday 
-                          ? `linear-gradient(135deg, ${event.color}20, ${event.color}30)` 
-                          : `linear-gradient(135deg, ${event.color}20, ${event.color}30)`,
-                        borderColor: event.color + '40'
-                      }}
-                      onClick={() => handleEditEvent(event)}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="truncate font-bold">{event.title}</span>
-                        <Edit className="h-2 w-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            {/* Navigation */}
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const newDate = new Date(currentDate);
+                  if (viewMode === 'month') {
+                    newDate.setMonth(newDate.getMonth() - 1);
+                  } else {
+                    newDate.setDate(newDate.getDate() - 7);
+                  }
+                  setCurrentDate(newDate);
+                }}
+                className="border-gray-600 text-gray-300 hover:bg-gray-700"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentDate(new Date())}
+                className="border-gray-600 text-gray-300 hover:bg-gray-700"
+              >
+                Today
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const newDate = new Date(currentDate);
+                  if (viewMode === 'month') {
+                    newDate.setMonth(newDate.getMonth() + 1);
+                  } else {
+                    newDate.setDate(newDate.getDate() + 7);
+                  }
+                  setCurrentDate(newDate);
+                }}
+                className="border-gray-600 text-gray-300 hover:bg-gray-700"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* Status Indicators */}
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 px-3 py-2 bg-gray-700 rounded-lg">
+                <Lock className="h-4 w-4 text-gray-400" />
+                <span className="text-sm text-gray-300">Read-only</span>
+              </div>
+              {isUsingLocalStorage && (
+                <div className="flex items-center space-x-2 px-3 py-2 bg-yellow-700 rounded-lg">
+                  <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+                  <span className="text-sm text-yellow-300">Local Storage</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Calendar Grid */}
+        <div className="bg-gray-800 rounded-lg p-6">
+          {/* Day Headers */}
+          <div className="grid grid-cols-7 gap-1 mb-4">
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+              <div key={day} className="p-3 text-center">
+                <span className="text-sm font-medium text-gray-400">
+                  {day}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Calendar Days */}
+          <div className="grid grid-cols-7 gap-1">
+            {days.map((day, index) => {
+              const holiday = isPublicHoliday(day.date);
+              return (
+                <div
+                  key={index}
+                  className={`min-h-[120px] p-3 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors ${
+                    !day.isCurrentMonth ? 'opacity-30' : ''
+                  } ${day.isToday ? 'ring-2 ring-blue-500' : ''}`}
+                >
+                  {/* Date */}
+                  <div className="flex items-center justify-between mb-2">
+                    <span className={`text-sm font-medium ${
+                      day.isToday ? 'text-blue-400' : 'text-gray-300'
+                    }`}>
+                      {day.date.getDate()}
+                    </span>
+                    {holiday && (
+                      <Flag className="h-3 w-3 text-red-400" />
+                    )}
+                  </div>
+
+                  {/* Events */}
+                  <div className="space-y-1">
+                    {day.events.slice(0, 2).map(event => (
+                      <div
+                        key={event.id}
+                        className="text-xs p-1 rounded cursor-pointer hover:bg-gray-600 transition-colors"
+                        style={{ 
+                          backgroundColor: `${event.color}20`,
+                          borderLeft: `3px solid ${event.color}`
+                        }}
+                        onClick={() => {
+                          setSelectedEvent(event);
+                          setShowEventModal(true);
+                        }}
+                      >
+                        <div className="truncate font-medium">{event.title}</div>
+                        <div className="text-gray-400">{event.time}</div>
+                      </div>
+                    ))}
+                    
+                    {day.events.length > 2 && (
+                      <div className="text-xs text-gray-400 text-center py-1">
+                        +{day.events.length - 2} more
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Holiday Name */}
+                  {holiday && (
+                    <div className="mt-2">
+                      <div className="text-xs text-red-400 font-medium truncate">
+                        {holiday.name}
                       </div>
                     </div>
-                  ))}
-                  
-                  {day.events.length > 3 && (
-                    <div className="text-xs text-amber-600 dark:text-amber-400 text-center py-2 bg-amber-100/50 dark:bg-amber-800/50 rounded-lg border border-amber-300 dark:border-amber-600 font-bold">
-                      +{day.events.length - 3} more
-                    </div>
                   )}
                 </div>
-
-                {/* Vintage Holiday Name */}
-                {holiday && (
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <div className="text-xs text-red-600 dark:text-red-400 font-bold truncate bg-red-100 dark:bg-red-900/30 px-3 py-2 rounded-lg border-2 border-red-300 dark:border-red-600 shadow-md">
-                      {holiday.name}
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      {/* Event Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto border-2 border-amber-300 dark:border-amber-600">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-amber-800 dark:text-amber-200 font-serif">
-                  {selectedEvent ? 'Edit Event' : 'Add Event'}
-                </h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsModalOpen(false)}
-                  className="hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400"
-                >
-                  <X className="h-5 w-5" />
-                </Button>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="title" className="text-sm font-medium text-amber-800 dark:text-amber-200 font-bold">Event Title</Label>
-                  <Input
-                    id="title"
-                    value={formData.title}
-                    onChange={(e) => setFormData({...formData, title: e.target.value})}
-                    placeholder="Enter event title"
-                    className="mt-1 border-2 border-amber-300 dark:border-amber-600 focus:border-amber-500 dark:focus:border-amber-400"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="description" className="text-sm font-medium text-amber-800 dark:text-amber-200 font-bold">Description</Label>
-                  <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
-                    placeholder="Enter event description"
-                    rows={3}
-                    className="mt-1 border-2 border-amber-300 dark:border-amber-600 focus:border-amber-500 dark:focus:border-amber-400"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="date" className="text-sm font-medium text-amber-800 dark:text-amber-200 font-bold">Date</Label>
-                    <Input
-                      id="date"
-                      type="date"
-                      value={formData.date}
-                      onChange={(e) => setFormData({...formData, date: e.target.value})}
-                      className="mt-1 border-2 border-amber-300 dark:border-amber-600 focus:border-amber-500 dark:focus:border-amber-400"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="time" className="text-sm font-medium text-amber-800 dark:text-amber-200 font-bold">Time</Label>
-                    <Input
-                      id="time"
-                      type="time"
-                      value={formData.time}
-                      onChange={(e) => setFormData({...formData, time: e.target.value})}
-                      className="mt-1 border-2 border-amber-300 dark:border-amber-600 focus:border-amber-500 dark:focus:border-amber-400"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="location" className="text-sm font-medium text-amber-800 dark:text-amber-200 font-bold">Location</Label>
-                  <Input
-                    id="location"
-                    value={formData.location}
-                    onChange={(e) => setFormData({...formData, location: e.target.value})}
-                    placeholder="Enter location"
-                    className="mt-1 border-2 border-amber-300 dark:border-amber-600 focus:border-amber-500 dark:focus:border-amber-400"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="attendees" className="text-sm font-medium text-amber-800 dark:text-amber-200 font-bold">Attendees (comma-separated)</Label>
-                  <Input
-                    id="attendees"
-                    value={formData.attendees}
-                    onChange={(e) => setFormData({...formData, attendees: e.target.value})}
-                    placeholder="Enter attendees"
-                    className="mt-1 border-2 border-amber-300 dark:border-amber-600 focus:border-amber-500 dark:focus:border-amber-400"
-                  />
-                </div>
-
-                <div>
-                  <Label className="text-sm font-medium text-amber-800 dark:text-amber-200 font-bold">Event Color</Label>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {colors.map(color => (
-                      <button
-                        key={color.hex}
-                        className={`w-8 h-8 rounded-full border-2 transition-all duration-300 hover:scale-110 ${
-                          formData.color === color.hex 
-                            ? 'border-amber-900 dark:border-amber-100 shadow-lg' 
-                            : 'border-amber-300 dark:border-amber-600 hover:border-amber-400 dark:hover:border-amber-500'
-                        }`}
-                        style={{ backgroundColor: color.hex }}
-                        onClick={() => setFormData({...formData, color: color.hex})}
-                        title={color.name}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-4">
-                  <label className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      checked={formData.isHoliday}
-                      onChange={(e) => setFormData({...formData, isHoliday: e.target.checked})}
-                      className="rounded border-amber-300 dark:border-amber-600 text-amber-600 focus:ring-amber-500 dark:focus:ring-amber-400"
-                    />
-                    <span className="text-sm text-amber-800 dark:text-amber-200 font-bold">Holiday</span>
-                  </label>
-                  <label className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      checked={formData.isPublicHoliday}
-                      onChange={(e) => setFormData({...formData, isPublicHoliday: e.target.checked})}
-                      className="rounded border-amber-300 dark:border-amber-600 text-amber-600 focus:ring-amber-500 dark:focus:ring-amber-400"
-                    />
-                    <span className="text-sm text-amber-800 dark:text-amber-200 font-bold">Public Holiday</span>
-                  </label>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between mt-6 pt-6 border-t border-amber-200 dark:border-amber-700">
-                <div className="flex space-x-2">
-                  <Button
-                    onClick={handleSaveEvent}
-                    className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 font-bold"
-                  >
-                    <Check className="h-4 w-4 mr-2" />
-                    {selectedEvent ? 'Update Event' : 'Add Event'}
-                  </Button>
-                  {selectedEvent && (
-                    <Button
-                      variant="destructive"
-                      onClick={() => handleDeleteEvent(selectedEvent.id)}
-                      className="hover:bg-red-700 transform hover:scale-105 transition-all duration-300 font-bold"
-                    >
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Delete
-                    </Button>
-                  )}
-                </div>
-                <Button
-                  variant="outline"
-                  onClick={() => setIsModalOpen(false)}
-                  className="border-2 border-amber-300 dark:border-amber-600 hover:bg-amber-50 dark:hover:bg-amber-800/50 font-bold"
-                >
-                  Cancel
-                </Button>
-              </div>
-            </div>
+      {/* Event Modal - Read Only */}
+      {showEventModal && selectedEvent && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4">
+            <EventDisplay 
+              event={selectedEvent} 
+              onClose={() => {
+                setShowEventModal(false);
+                setSelectedEvent(null);
+              }} 
+            />
           </div>
         </div>
       )}
@@ -880,4 +577,4 @@ const AdminCalendar = () => {
   );
 };
 
-export default AdminCalendar; 
+export default Calendar; 
