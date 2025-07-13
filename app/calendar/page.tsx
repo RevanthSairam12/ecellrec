@@ -39,11 +39,112 @@ interface CalendarDay {
   events: Event[];
 }
 
+interface AddEventFormProps {
+  onAdd: (eventData: Omit<Event, 'id' | 'createdAt'>) => Promise<string | undefined>;
+  onClose: () => void;
+}
+
+const AddEventForm: React.FC<AddEventFormProps> = ({ onAdd, onClose }) => {
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    date: '',
+    time: '',
+    location: '',
+    attendees: [] as string[],
+    isHoliday: false,
+    isPublicHoliday: false,
+    color: '#3b82f6',
+    createdBy: 'admin'
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await onAdd(formData);
+    onClose();
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
+        <input
+          type="text"
+          placeholder="Event title"
+          value={formData.title}
+          onChange={(e) => setFormData({...formData, title: e.target.value})}
+          className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+          required
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
+        <textarea
+          placeholder="Event description"
+          value={formData.description}
+          onChange={(e) => setFormData({...formData, description: e.target.value})}
+          className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+          rows={3}
+        />
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-1">Date</label>
+          <input
+            type="date"
+            value={formData.date}
+            onChange={(e) => setFormData({...formData, date: e.target.value})}
+            className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-1">Time</label>
+          <input
+            type="time"
+            value={formData.time}
+            onChange={(e) => setFormData({...formData, time: e.target.value})}
+            className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+            required
+          />
+        </div>
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-1">Location</label>
+        <input
+          type="text"
+          placeholder="Event location"
+          value={formData.location}
+          onChange={(e) => setFormData({...formData, location: e.target.value})}
+          className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-1">Color</label>
+        <input
+          type="color"
+          value={formData.color}
+          onChange={(e) => setFormData({...formData, color: e.target.value})}
+          className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
+        />
+      </div>
+      <div className="flex space-x-2">
+        <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700">
+          Add Event
+        </Button>
+        <Button type="button" onClick={onClose} className="flex-1 bg-gray-600 hover:bg-gray-700">
+          Cancel
+        </Button>
+      </div>
+    </form>
+  );
+};
+
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<'month' | 'week'>('month');
   const [events, setEvents] = useState<Event[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [showEventModal, setShowEventModal] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -123,6 +224,7 @@ const Calendar = () => {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     fetchEvents();
     const year = currentDate.getFullYear();
     fetchPublicHolidays(year);
@@ -251,7 +353,7 @@ const Calendar = () => {
               ].map((filter) => (
                 <button
                   key={filter.key}
-                  onClick={() => setFilterType(filter.key as any)}
+                  onClick={() => setFilterType(filter.key as 'all' | 'events' | 'holidays')}
                   className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-colors ${
                     filterType === filter.key
                       ? 'bg-blue-600 text-white'
@@ -268,6 +370,11 @@ const Calendar = () => {
           {/* Upcoming Events */}
           <div className="mb-6">
             <h3 className="text-sm font-medium text-gray-300 mb-3">Upcoming Events</h3>
+            {isLoading ? (
+              <div className="text-center py-4">
+                <div className="text-gray-400 text-sm">Loading events...</div>
+              </div>
+            ) : (
             <div className="space-y-2 max-h-64 overflow-y-auto">
               {filteredEvents
                 .filter(event => new Date(event.date) >= new Date())
@@ -292,6 +399,7 @@ const Calendar = () => {
                   </div>
                 ))}
             </div>
+            )}
           </div>
 
           {/* Admin Section */}
@@ -581,51 +689,7 @@ const Calendar = () => {
                 </div>
               </div>
             ) : (
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
-                  <input
-                    type="text"
-                    placeholder="Event title"
-                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
-                  <textarea
-                    placeholder="Event description"
-                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-                    rows={3}
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Date</label>
-                    <input
-                      type="date"
-                      className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Time</label>
-                    <input
-                      type="time"
-                      className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Location</label>
-                  <input
-                    type="text"
-                    placeholder="Event location"
-                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white"
-                  />
-                </div>
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                  Add Event
-                </Button>
-              </div>
+              <AddEventForm onAdd={addEvent} onClose={() => setShowEventModal(false)} />
             )}
           </div>
         </div>
