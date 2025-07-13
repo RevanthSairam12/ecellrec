@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +18,8 @@ import {
   Shield,
   ArrowLeft
 } from "lucide-react";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore";
 
 interface Event {
   id: string;
@@ -52,6 +54,70 @@ const AdminCalendar = () => {
 
   // State for public holidays
   const [publicHolidays, setPublicHolidays] = useState<Array<{ date: string; name: string; color: string }>>([]);
+
+  // Fetch events from Firestore
+  const fetchEvents = async () => {
+    try {
+      if (!db) {
+        console.warn('Firestore not initialized, using local state');
+        return;
+      }
+      const eventsRef = collection(db, 'events');
+      const q = query(eventsRef, orderBy('date'));
+      const querySnapshot = await getDocs(q);
+      const eventsData = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate() || new Date()
+      })) as Event[];
+      setEvents(eventsData);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      setEvents([]);
+    }
+  };
+
+  // Add new event
+  const addEvent = async (eventData: Omit<Event, 'id'>) => {
+    try {
+      const docRef = await addDoc(collection(db, 'events'), {
+        ...eventData,
+        createdAt: new Date()
+      });
+      await fetchEvents();
+      return docRef.id;
+    } catch (error) {
+      console.error('Error adding event:', error);
+    }
+  };
+
+  // Update event
+  const updateEvent = async (eventId: string, eventData: Partial<Event>) => {
+    try {
+      const eventRef = doc(db, 'events', eventId);
+      await updateDoc(eventRef, eventData);
+      await fetchEvents();
+    } catch (error) {
+      console.error('Error updating event:', error);
+    }
+  };
+
+  // Delete event
+  const deleteEvent = async (eventId: string) => {
+    try {
+      await deleteDoc(doc(db, 'events', eventId));
+      await fetchEvents();
+    } catch (error) {
+      console.error('Error deleting event:', error);
+    }
+  };
+
+  // Load events when component mounts
+  useEffect(() => {
+    if (!showLogin) {
+      fetchEvents();
+    }
+  }, [showLogin]);
 
   const colors = [
     { hex: '#3b82f6', name: 'Blue' },
@@ -257,9 +323,8 @@ const AdminCalendar = () => {
     setIsModalOpen(true);
   };
 
-  const handleSaveEvent = () => {
-    const newEvent: Event = {
-      id: selectedEvent?.id || Date.now().toString(),
+  const handleSaveEvent = async () => {
+    const eventData = {
       title: formData.title,
       description: formData.description,
       date: formData.date,
@@ -272,17 +337,19 @@ const AdminCalendar = () => {
     };
 
     if (selectedEvent) {
-      setEvents(events.map(e => e.id === selectedEvent.id ? newEvent : e));
+      await updateEvent(selectedEvent.id, eventData);
     } else {
-      setEvents([...events, newEvent]);
+      await addEvent(eventData);
     }
 
     setIsModalOpen(false);
+    setSelectedEvent(null);
   };
 
-  const handleDeleteEvent = (eventId: string) => {
-    setEvents(events.filter(e => e.id !== eventId));
+  const handleDeleteEvent = async (eventId: string) => {
+    await deleteEvent(eventId);
     setIsModalOpen(false);
+    setSelectedEvent(null);
   };
 
   const isPublicHoliday = (date: Date): { name: string; color: string } | null => {
