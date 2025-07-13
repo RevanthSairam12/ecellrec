@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore";
+import { localStorageService, LocalEvent } from "@/lib/localStorage";
 
 interface Event {
   id: string;
@@ -57,13 +58,16 @@ const AdminCalendar = () => {
   // State for public holidays
   const [publicHolidays, setPublicHolidays] = useState<Array<{ date: string; name: string; color: string }>>([]);
 
-  // Fetch events from Firestore
+  // Fetch events from Firestore with local storage fallback
   const fetchEvents = async () => {
     try {
       if (!db) {
-        console.warn('Firestore not initialized, using local state');
+        console.warn('Firestore not initialized, using local storage');
+        const localEvents = localStorageService.getEvents();
+        setEvents(localEvents);
         return;
       }
+      
       const eventsRef = collection(db, 'events');
       const q = query(eventsRef, orderBy('date'));
       const querySnapshot = await getDocs(q);
@@ -86,14 +90,22 @@ const AdminCalendar = () => {
       });
       setEvents(eventsData);
     } catch (error) {
-      console.error('Error fetching events:', error);
-      setEvents([]);
+      console.error('Error fetching events from Firebase, using local storage:', error);
+      const localEvents = localStorageService.getEvents();
+      setEvents(localEvents);
     }
   };
 
-  // Add new event
+  // Add new event with local storage fallback
   const addEvent = async (eventData: Omit<Event, 'id'>) => {
     try {
+      if (!db) {
+        console.warn('Using local storage for adding event');
+        const id = localStorageService.addEvent(eventData);
+        await fetchEvents();
+        return id;
+      }
+      
       const docRef = await addDoc(collection(db, 'events'), {
         ...eventData,
         createdAt: new Date()
@@ -101,28 +113,49 @@ const AdminCalendar = () => {
       await fetchEvents();
       return docRef.id;
     } catch (error) {
-      console.error('Error adding event:', error);
+      console.error('Error adding event to Firebase, using local storage:', error);
+      const id = localStorageService.addEvent(eventData);
+      await fetchEvents();
+      return id;
     }
   };
 
-  // Update event
+  // Update event with local storage fallback
   const updateEvent = async (eventId: string, eventData: Partial<Event>) => {
     try {
+      if (!db) {
+        console.warn('Using local storage for updating event');
+        localStorageService.updateEvent(eventId, eventData);
+        await fetchEvents();
+        return;
+      }
+      
       const eventRef = doc(db, 'events', eventId);
       await updateDoc(eventRef, eventData);
       await fetchEvents();
     } catch (error) {
-      console.error('Error updating event:', error);
+      console.error('Error updating event in Firebase, using local storage:', error);
+      localStorageService.updateEvent(eventId, eventData);
+      await fetchEvents();
     }
   };
 
-  // Delete event
+  // Delete event with local storage fallback
   const deleteEvent = async (eventId: string) => {
     try {
+      if (!db) {
+        console.warn('Using local storage for deleting event');
+        localStorageService.deleteEvent(eventId);
+        await fetchEvents();
+        return;
+      }
+      
       await deleteDoc(doc(db, 'events', eventId));
       await fetchEvents();
     } catch (error) {
-      console.error('Error deleting event:', error);
+      console.error('Error deleting event from Firebase, using local storage:', error);
+      localStorageService.deleteEvent(eventId);
+      await fetchEvents();
     }
   };
 
@@ -154,36 +187,51 @@ const AdminCalendar = () => {
     }
   };
 
-  // Fetch public holidays for India using comprehensive API
+  // Fetch public holidays using Google Calendar API
   const fetchPublicHolidays = React.useCallback(async (year: number) => {
     try {
       setIsLoadingHolidays(true);
       
-      // Using a comprehensive Indian holidays API
-      const response = await fetch(`https://api.calendarlabs.com/v1/calendar/events?country=IN&year=${year}&type=national&key=test`);
+      // Google Calendar API endpoint for Indian holidays
+      const calendarId = 'en.indian#holiday@group.v.calendar.google.com';
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY;
+      
+      if (!apiKey) {
+        console.warn('Google Calendar API key not found, using fallback holidays');
+        throw new Error('API key not configured');
+      }
+      
+      const startDate = `${year}-01-01T00:00:00Z`;
+      const endDate = `${year}-12-31T23:59:59Z`;
+      
+      const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?` +
+        `timeMin=${startDate}&timeMax=${endDate}&key=${apiKey}&singleEvents=true&orderBy=startTime`;
+      
+      const response = await fetch(url);
       
       if (!response.ok) {
-        throw new Error('API request failed');
+        throw new Error(`Google Calendar API error: ${response.status}`);
       }
       
       const data = await response.json();
       
-      if (data.error) {
-        throw new Error(data.error.message || 'API error');
-      }
-      
-      const formattedHolidays = data.data?.map((holiday: { date: string; name: string }) => ({
-        date: holiday.date,
-        name: holiday.name,
-        color: '#ef4444'
-      })) || [];
+      const formattedHolidays = data.items?.map((event: any) => {
+        const startDate = event.start?.date || event.start?.dateTime;
+        const date = new Date(startDate).toISOString().split('T')[0];
+        return {
+          date: date,
+          name: event.summary,
+          color: '#ef4444'
+        };
+      }) || [];
       
       setPublicHolidays(formattedHolidays);
+      console.log(`✅ Fetched ${formattedHolidays.length} holidays from Google Calendar API`);
       
     } catch (error) {
-      console.error('Error fetching holidays:', error);
+      console.error('Error fetching holidays from Google Calendar API:', error);
       
-      // COMPREHENSIVE list with ALL Indian holidays
+      // Fallback to comprehensive Indian holidays list
       const fallbackHolidays = [
         // National Holidays
         { date: `${year}-01-01`, name: 'New Year\'s Day', color: '#ef4444' },
@@ -220,6 +268,7 @@ const AdminCalendar = () => {
         { date: `${year}-12-31`, name: 'New Year\'s Eve', color: '#ef4444' },
       ];
       setPublicHolidays(fallbackHolidays);
+      console.log('📅 Using fallback holidays list');
     } finally {
       setIsLoadingHolidays(false);
     }
