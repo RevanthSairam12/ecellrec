@@ -71,24 +71,13 @@ const Calendar = () => {
       { date: `${year}-12-25`, name: 'Christmas', color: '#ef4444' },
     ];
 
-    // Add variable holidays (approximate dates - these vary by year)
-    const variableHolidays = [
-      { name: 'Holi', color: '#ef4444' },
-      { name: 'Raksha Bandhan', color: '#ef4444' },
-      { name: 'Independence Day', color: '#ef4444' },
-      { name: 'Diwali', color: '#ef4444' },
-      { name: 'Eid al-Fitr', color: '#ef4444' },
-      { name: 'Eid al-Adha', color: '#ef4444' },
-      { name: 'Muharram', color: '#ef4444' },
-      { name: 'Good Friday', color: '#ef4444' },
-      { name: 'Easter Sunday', color: '#ef4444' },
-    ];
+
 
     return holidays;
   };
 
   // Fetch public holidays for India
-  const fetchPublicHolidays = async (year: number) => {
+  const fetchPublicHolidays = React.useCallback(async (year: number) => {
     try {
       setIsLoadingHolidays(true);
       
@@ -110,13 +99,13 @@ const Calendar = () => {
     } finally {
       setIsLoadingHolidays(false);
     }
-  };
+  }, []);
 
   // Fetch holidays when component mounts or year changes
   React.useEffect(() => {
     const year = currentDate.getFullYear();
     fetchPublicHolidays(year);
-  }, [currentDate]);
+  }, [currentDate, fetchPublicHolidays]);
 
   const colors = [
     { hex: '#3b82f6', name: 'Blue' },
