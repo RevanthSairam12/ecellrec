@@ -95,10 +95,11 @@ const Calendar = () => {
   const fetchEvents = async () => {
     try {
       if (!db) {
-        console.warn('Firestore not initialized, using local state');
+        console.error('Firestore not initialized');
         setIsLoading(false);
         return;
       }
+      
       const eventsRef = collection(db, 'events');
       const q = query(eventsRef, orderBy('date'));
       const querySnapshot = await getDocs(q);
@@ -109,8 +110,7 @@ const Calendar = () => {
       })) as Event[];
       setEvents(eventsData);
     } catch (error) {
-      console.error('Error fetching events:', error);
-      // Fallback to local state if Firebase fails
+      console.error('Error fetching events from Firebase:', error);
       setEvents([]);
     } finally {
       setIsLoading(false);
@@ -120,19 +120,62 @@ const Calendar = () => {
   // Note: Users cannot add, update, or delete events - this is read-only view
   // Only admins can modify events through the admin panel
 
-  // Fetch public holidays
+  // Fetch public holidays using Google Calendar API
   const fetchPublicHolidays = React.useCallback(async (year: number) => {
-    const fallbackHolidays = [
-      { date: `${year}-01-26`, name: 'Republic Day', color: '#ef4444' },
-      { date: `${year}-08-15`, name: 'Independence Day', color: '#ef4444' },
-      { date: `${year}-10-02`, name: 'Gandhi Jayanti', color: '#ef4444' },
-      { date: `${year}-12-25`, name: 'Christmas', color: '#ef4444' },
-      { date: `${year}-03-25`, name: 'Holi', color: '#ef4444' },
-      { date: `${year}-11-12`, name: 'Diwali', color: '#ef4444' },
-      { date: `${year}-09-10`, name: 'Ganesh Chaturthi', color: '#ef4444' },
-      { date: `${year}-08-30`, name: 'Raksha Bandhan', color: '#ef4444' },
-    ];
-    setPublicHolidays(fallbackHolidays);
+    try {
+      // Google Calendar API endpoint for Indian holidays
+      const calendarId = 'en.indian#holiday@group.v.calendar.google.com';
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY;
+      
+      if (!apiKey) {
+        console.warn('Google Calendar API key not found, using fallback holidays');
+        throw new Error('API key not configured');
+      }
+      
+      const startDate = `${year}-01-01T00:00:00Z`;
+      const endDate = `${year}-12-31T23:59:59Z`;
+      
+      const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?` +
+        `timeMin=${startDate}&timeMax=${endDate}&key=${apiKey}&singleEvents=true&orderBy=startTime`;
+      
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`Google Calendar API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      const formattedHolidays = data.items?.map((event: any) => {
+        const startDate = event.start?.date || event.start?.dateTime;
+        const date = new Date(startDate).toISOString().split('T')[0];
+        return {
+          date: date,
+          name: event.summary,
+          color: '#ef4444'
+        };
+      }) || [];
+      
+      setPublicHolidays(formattedHolidays);
+      console.log(`✅ Fetched ${formattedHolidays.length} holidays from Google Calendar API`);
+      
+    } catch (error) {
+      console.error('Error fetching holidays from Google Calendar API:', error);
+      
+      // Fallback to basic Indian holidays list
+      const fallbackHolidays = [
+        { date: `${year}-01-26`, name: 'Republic Day', color: '#ef4444' },
+        { date: `${year}-08-15`, name: 'Independence Day', color: '#ef4444' },
+        { date: `${year}-10-02`, name: 'Gandhi Jayanti', color: '#ef4444' },
+        { date: `${year}-12-25`, name: 'Christmas', color: '#ef4444' },
+        { date: `${year}-03-25`, name: 'Holi', color: '#ef4444' },
+        { date: `${year}-11-12`, name: 'Diwali', color: '#ef4444' },
+        { date: `${year}-09-10`, name: 'Ganesh Chaturthi', color: '#ef4444' },
+        { date: `${year}-08-30`, name: 'Raksha Bandhan', color: '#ef4444' },
+      ];
+      setPublicHolidays(fallbackHolidays);
+      console.log('📅 Using fallback holidays list');
+    }
   }, []);
 
   useEffect(() => {
