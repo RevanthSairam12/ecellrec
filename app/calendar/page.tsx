@@ -5,7 +5,6 @@ import {
   ChevronLeft, 
   ChevronRight, 
   Calendar as CalendarIcon,
-  Plus,
   Clock,
   Flag,
   Lock,
@@ -16,7 +15,7 @@ import {
   X
 } from "lucide-react";
 import { db } from "@/lib/firebase";
-import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 
 interface Event {
   id: string;
