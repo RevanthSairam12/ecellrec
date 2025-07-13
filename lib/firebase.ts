@@ -1,6 +1,6 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { initializeApp, FirebaseApp } from 'firebase/app';
+import { getFirestore, Firestore } from 'firebase/firestore';
+import { getAuth, Auth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyBvOkT3gZTgTa7TaK4HjCWTb6m2JjqXpXo",
@@ -11,13 +11,35 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:123456789012:web:abcdef1234567890"
 };
 
+// Check if Firebase config is valid
+if (!firebaseConfig.apiKey || firebaseConfig.apiKey === "AIzaSyBvOkT3gZTgTa7TaK4HjCWTb6m2JjqXpXo") {
+  console.warn("Firebase configuration is using placeholder values. Please set up proper environment variables.");
+}
+
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+let app: FirebaseApp;
+let db: Firestore;
+let auth: Auth;
 
-// Initialize Firestore
-export const db = getFirestore(app);
+try {
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  auth = getAuth(app);
+} catch (error) {
+  console.error("Firebase initialization failed:", error);
+  // Fallback initialization with minimal config
+  const fallbackConfig = {
+    apiKey: "demo-key",
+    authDomain: "demo.firebaseapp.com",
+    projectId: "demo",
+    storageBucket: "demo.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:demo"
+  };
+  app = initializeApp(fallbackConfig, 'fallback');
+  db = getFirestore(app);
+  auth = getAuth(app);
+}
 
-// Initialize Auth
-export const auth = getAuth(app);
-
+export { db, auth };
 export default app; 
