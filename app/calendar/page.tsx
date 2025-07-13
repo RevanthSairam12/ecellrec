@@ -157,6 +157,11 @@ const Calendar = () => {
   // Fetch events from Firestore
   const fetchEvents = async () => {
     try {
+      if (!db) {
+        console.warn('Firestore not initialized, using local state');
+        setIsLoading(false);
+        return;
+      }
       const eventsRef = collection(db, 'events');
       const q = query(eventsRef, orderBy('date'));
       const querySnapshot = await getDocs(q);
@@ -168,6 +173,8 @@ const Calendar = () => {
       setEvents(eventsData);
     } catch (error) {
       console.error('Error fetching events:', error);
+      // Fallback to local state if Firebase fails
+      setEvents([]);
     } finally {
       setIsLoading(false);
     }
