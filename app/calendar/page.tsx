@@ -146,12 +146,12 @@ const Calendar = () => {
       
       const data = await response.json();
       
-      const formattedHolidays = data.items?.map((event: any) => {
+      const formattedHolidays = data.items?.map((event: { start?: { date?: string; dateTime?: string }; summary?: string }) => {
         const startDate = event.start?.date || event.start?.dateTime;
-        const date = new Date(startDate).toISOString().split('T')[0];
+        const date = new Date(startDate || '').toISOString().split('T')[0];
         return {
           date: date,
-          name: event.summary,
+          name: event.summary || 'Holiday',
           color: '#ef4444'
         };
       }) || [];
