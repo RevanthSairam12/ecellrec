@@ -88,7 +88,7 @@ const Calendar = () => {
   const [showEventModal, setShowEventModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<'all' | 'events' | 'holidays'>('all');
-  const [sidebarOpen, setSidebarOpen] = useState(false); // For mobile drawer
+  const [sidebarOpen, setSidebarOpen] = useState(false); // For drawer
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   // State for public holidays
@@ -188,7 +188,7 @@ const Calendar = () => {
     fetchPublicHolidays(year);
   }, [currentDate, fetchPublicHolidays]);
 
-  // Close sidebar when clicking outside (mobile)
+  // Close sidebar when clicking outside
   useEffect(() => {
     if (!sidebarOpen) return;
     function handleClick(e: MouseEvent) {
@@ -281,35 +281,33 @@ const Calendar = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white relative">
-      {/* Hamburger menu for mobile */}
-      <div className="lg:hidden flex items-center p-2">
+      {/* Fixed Hamburger menu for all devices */}
+      <div className="fixed top-4 left-4 z-50 flex items-center">
         <button
           aria-label="Open sidebar"
-          className="text-gray-200 focus:outline-none"
+          className="text-gray-200 focus:outline-none bg-gray-800 rounded-lg p-2 shadow-lg border border-gray-700"
           onClick={() => setSidebarOpen(true)}
         >
           <svg className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-        <span className="ml-3 text-lg font-bold">Calendar</span>
+        <span className="ml-3 text-lg font-bold hidden sm:inline">Calendar</span>
       </div>
 
-      {/* Sidebar: Drawer on mobile, fixed on desktop */}
-      {/* Overlay for mobile drawer */}
+      {/* Sidebar: Drawer on all devices */}
       {sidebarOpen && (
-        <div className="fixed inset-0 z-40 bg-black bg-opacity-40 lg:hidden" onClick={() => setSidebarOpen(false)}></div>
+        <div className="fixed inset-0 z-40 bg-black bg-opacity-40" onClick={() => setSidebarOpen(false)}></div>
       )}
       <div
         ref={sidebarRef}
-        className={`fixed z-50 top-0 left-0 h-full w-72 bg-gray-800 border-r border-gray-700 transition-transform duration-300 lg:translate-x-0 lg:static lg:w-80
+        className={`fixed z-50 top-0 left-0 h-full w-72 bg-gray-800 border-r border-gray-700 transition-transform duration-300
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-          lg:transform-none
         `}
         style={{ maxWidth: '90vw' }}
       >
-        {/* Close button for mobile */}
-        <div className="flex lg:hidden justify-end p-2">
+        {/* Close button */}
+        <div className="flex justify-end p-2">
           <button aria-label="Close sidebar" onClick={() => setSidebarOpen(false)} className="text-gray-300">
             <X className="h-6 w-6" />
           </button>
@@ -416,10 +414,10 @@ const Calendar = () => {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="lg:ml-80 transition-all duration-300 p-2 sm:p-4 md:p-6 lg:p-8">
-        {/* Top Bar (add margin for mobile hamburger) */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-8 gap-2 sm:gap-0 mt-2 lg:mt-0">
+      {/* Main Content - always full width, centered calendar */}
+      <div className="flex flex-col items-center justify-center min-h-screen transition-all duration-300 px-2 sm:px-4 md:px-8">
+        {/* Top Bar (add margin for hamburger) */}
+        <div className="w-full max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-8 gap-2 sm:gap-0 mt-20 sm:mt-8">
           <div>
             <h2 className="text-xl sm:text-3xl font-bold">
               {currentDate.toLocaleDateString('en-US', {
@@ -511,39 +509,39 @@ const Calendar = () => {
           </div>
         </div>
 
-        {/* Calendar Grid - always fits page, no horizontal scroll */}
-        <div className="bg-gray-800 rounded-lg p-1 sm:p-4 overflow-x-hidden">
+        {/* Calendar Grid - centered, large on desktop, compact on mobile */}
+        <div className="w-full max-w-6xl mx-auto bg-gray-800 rounded-lg p-1 sm:p-6 overflow-x-hidden">
           {/* Day Headers */}
           <div className="grid grid-cols-7 gap-[2px] mb-1 sm:mb-4">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-              <div key={day} className="p-1 sm:p-2 text-center">
-                <span className="text-[11px] sm:text-sm font-medium text-gray-400">
+              <div key={day} className="p-1 sm:p-3 text-center">
+                <span className="text-[12px] sm:text-base font-medium text-gray-400">
                   {day}
                 </span>
               </div>
             ))}
           </div>
 
-          {/* Calendar Days - compact for mobile */}
+          {/* Calendar Days - large on desktop, compact on mobile */}
           <div className="grid grid-cols-7 gap-[2px]">
             {days.map((day, index) => {
               const holiday = isPublicHoliday(day.date);
               return (
                 <div
                   key={index}
-                  className={`min-h-[48px] sm:min-h-[90px] p-1 sm:p-2 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors ${
+                  className={`min-h-[60px] sm:min-h-[120px] p-1 sm:p-3 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors ${
                     !day.isCurrentMonth ? 'opacity-30' : ''
                   } ${day.isToday ? 'ring-2 ring-blue-500' : ''}`}
                 >
                   {/* Date */}
-                  <div className="flex items-center justify-between mb-1">
-                    <span className={`text-xs font-medium ${
+                  <div className="flex items-center justify-between mb-1 sm:mb-2">
+                    <span className={`text-xs sm:text-lg font-medium ${
                       day.isToday ? 'text-blue-400' : 'text-gray-300'
                     }`}>
                       {day.date.getDate()}
                     </span>
                     {holiday && (
-                      <Flag className="h-3 w-3 text-red-400" />
+                      <Flag className="h-3 w-3 sm:h-5 sm:w-5 text-red-400" />
                     )}
                   </div>
                   {/* Events */}
@@ -551,7 +549,7 @@ const Calendar = () => {
                     {day.events.slice(0, 2).map(event => (
                       <div
                         key={event.id}
-                        className="text-[10px] sm:text-xs p-1 rounded cursor-pointer hover:bg-gray-600 transition-colors"
+                        className="text-[11px] sm:text-base p-1 rounded cursor-pointer hover:bg-gray-600 transition-colors"
                         style={{
                           backgroundColor: `${event.color}20`,
                           borderLeft: `3px solid ${event.color}`
@@ -566,15 +564,15 @@ const Calendar = () => {
                       </div>
                     ))}
                     {day.events.length > 2 && (
-                      <div className="text-[10px] sm:text-xs text-gray-400 text-center py-1">
+                      <div className="text-[11px] sm:text-base text-gray-400 text-center py-1">
                         +{day.events.length - 2} more
                       </div>
                     )}
                   </div>
                   {/* Holiday Name */}
                   {holiday && (
-                    <div className="mt-1">
-                      <div className="text-[10px] sm:text-xs text-red-400 font-medium truncate">
+                    <div className="mt-1 sm:mt-2">
+                      <div className="text-[11px] sm:text-base text-red-400 font-medium truncate">
                         {holiday.name}
                       </div>
                     </div>
