@@ -1,16 +1,55 @@
-.card {
+/* .card {
   position: relative;
   width: 200px;
-  height: 306px;
-  border-radius: 8px;
+  height: 306px;  
+  border-radius: 12px;
   overflow: hidden;
-  background: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
+  border: 2px solid transparent;
+} */
+
+
+.card {
+  position: relative;
+  width: 220px;
+  height: 320px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f8fbff;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease-in-out;
+  border: 1.5px solid #e0e7ff;
 }
+
+
+.card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  /* Taller for more impact */
+  background: linear-gradient(to top,
+      rgba(37, 99, 235, 0.5),
+      transparent);
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.3s ease;
+}
+
+
+
+
 
 .card:hover {
   transform: scale(1.05);
+  border: 2px solid rgba(59, 130, 246, 0.2);
+  outline: 3px solid #3b82f6;
+  outline-offset: -1px;
+  box-shadow: 0 0 28px rgba(59, 130, 246, 0.3);
 }
 
 .infoOverlay {
@@ -18,27 +57,34 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 25%; /* Adjust height for the bottom overlay */
-  background: rgba(0, 0, 0, 0.459); /* Darker overlay for contrast */
+  height: 35%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  z-index: 2;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   opacity: 0;
-  transform: translateY(20px); /* Start with offset */
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transform: translateY(20px);
+
+
 }
 
 .card:hover .infoOverlay {
   opacity: 1;
-  transform: translateY(0); /* Move to position smoothly */
+  transform: translateY(0);
+  /* Move to position smoothly */
 }
 
 .name {
-  font-size: 1.2rem; /* Adjust for smaller overlay */
-  color: #fff;
+  font-size: 1.1rem;
+  /* Adjust for smaller overlay */
   margin-bottom: 5px;
   text-align: center;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+  /* Makes text pop over any blue */
 }
 
 .socialLinks {
@@ -54,7 +100,16 @@
 }
 
 .socialLinks a:hover {
-  color: #00acee; /* Twitter blue or adjust to platform color */
+  color: #00acee;
+  /* Twitter blue or adjust to platform color */
+}
+
+.socialLinks a img {
+  transition: transform 0.2s ease;
+}
+
+.socialLinks a:hover img {
+  transform: scale(1.15);
 }
 
 .role {
@@ -65,7 +120,7 @@
   font-weight: bold;
   color: #fff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-  z-index: 1;
+  z-index: 3;
 }
 
 .imageContainer {
@@ -75,7 +130,7 @@
 }
 
 .image {
-  border-radius: 8px;
+  object-fit: cover;
 }
 
 @media only screen and (max-width: 768px) {
@@ -90,5 +145,9 @@
 
   .role {
     font-size: 1rem;
+  }
+
+  .infoOverlay {
+    padding: 10px 12px;
   }
 }
