@@ -142,10 +142,16 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Team */}
-      <div id="team" className="mt-20 sm:mt-40 px-2">
-        <h1 className="text-2xl sm:text-4xl font-mono flex justify-center m-3 sm:m-5">Our Team</h1>
-        <Team />
+      {/* Current Team */}
+      <div id="team" className="mt-40">
+        <Team TeamContainer={"CurrentTeam"} />
+      </div>
+
+      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent my-40" />
+      
+      {/* Former Team */}
+      <div id="Formerteam">
+        <Team TeamContainer={"FormerTeam"} />
       </div>
 
       {/* Testimonials */}
