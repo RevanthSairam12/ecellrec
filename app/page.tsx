@@ -33,35 +33,35 @@ export default function Home() {
           <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-purple-400/10 rounded-full blur-2xl animate-pulse-slow delay-1000 -translate-x-1/2" />
         </div>
         {/* LOGOS ROW: left, center, right with animation */}
-        <div className="absolute top-0 left-0 z-20 w-full flex flex-row justify-between items-start px-4">
+        <div className="absolute top-0 left-0 z-20 w-full flex flex-col sm:flex-row justify-between items-start sm:items-start px-4">
           {/* Left logo */}
-          <div className="w-40 md:w-56 h-auto flex items-center justify-start mt-3 animate-fade-in-up" style={{animationDelay:'0.2s'}}>
+          <div className="w-28 sm:w-40 md:w-56 h-auto flex items-center justify-start mt-3 animate-fade-in-up" style={{animationDelay:'0.2s'}}>
             <Image src={EcellNew} alt="Ecell Logo" className="object-contain" priority />
           </div>
-          {/* Right logo */}
-          <div className="w-40 md:w-56 h-auto flex items-center justify-end mt-3 animate-fade-in-up" style={{animationDelay:'0.4s'}}>
-            <Image src={IICLogo} alt="IIC Logo" className="object-contain" priority />
-          </div>
-          {/* Center logo absolutely centered */}
-          <div className="w-40 md:w-56 h-auto flex items-center justify-center mt-3 animate-fade-in-up" style={{position:'absolute', left:'45%', transform:'translateX(-50%)', animationDelay:'0.6s'}}>
+          {/* Center logo absolutely centered on desktop, centered in column on mobile */}
+          <div className="w-28 sm:w-40 md:w-56 h-auto flex items-center justify-center mt-3 animate-fade-in-up sm:absolute sm:left-1/2 sm:transform sm:-translate-x-1/2" style={{animationDelay:'0.6s'}}>
             <Image src={RaghuLogo} alt="Raghu Logo" className="object-contain" priority />
+          </div>
+          {/* Right logo */}
+          <div className="w-28 sm:w-40 md:w-56 h-auto flex items-center justify-end mt-3 animate-fade-in-up self-end sm:self-auto" style={{animationDelay:'0.4s'}}>
+            <Image src={IICLogo} alt="IIC Logo" className="object-contain" priority />
           </div>
         </div>
         {/* Content with animation */}
-        <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-3xl px-6 py-16 gap-8 mt-8">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-[#e6c97b] mb-4 tracking-tight text-center animate-fade-in-up" style={{letterSpacing: '1px', animationDelay:'0.8s'}}>
+        <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-3xl px-4 sm:px-6 py-10 sm:py-16 gap-6 sm:gap-8 mt-8">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#e6c97b] mb-2 sm:mb-4 tracking-tight text-center animate-fade-in-up" style={{letterSpacing: '1px', animationDelay:'0.8s'}}>
             E-CELL REC
           </h1>
-          <p className="text-lg md:text-xl text-white mb-6 font-medium leading-relaxed text-center animate-fade-in-up" style={{animationDelay:'1s'}}>
+          <p className="text-base sm:text-lg md:text-xl text-white mb-4 sm:mb-6 font-medium leading-relaxed text-center animate-fade-in-up" style={{animationDelay:'1s'}}>
             The Entrepreneurship Cell (E-Cell) of IIT Bombay has been inspiring Entrepreneurs since 1998 and is Asia&#39;s largest student-run entrepreneurship-promoting Non-Profit Organization as designated by Thomson Reuters.
           </p>
-          <button className="flex items-center gap-2 px-8 py-3 rounded-full bg-[#d1b06b] hover:bg-[#e6c97b] text-lg font-bold text-[#232526] shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#e6c97b] transform hover:scale-105 animate-fade-in-up" style={{animationDelay:'1.2s'}}>
+          <button className="flex items-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-[#d1b06b] hover:bg-[#e6c97b] text-base sm:text-lg font-bold text-[#232526] shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#e6c97b] transform hover:scale-105 animate-fade-in-up" style={{animationDelay:'1.2s'}}>
             Know More <span className="text-2xl">→</span>
           </button>
         </div>
         {/* Down Arrow with bounce animation */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce-slow">
-          <span className="text-4xl text-[#e6c97b]">↓</span>
+          <span className="text-3xl sm:text-4xl text-[#e6c97b]">↓</span>
         </div>
         {/* Custom Animations */}
         <style jsx global>{`
@@ -90,17 +90,17 @@ export default function Home() {
         `}</style>
       </section>
 
-      <div className="fixed bottom-10 w-full flex justify-center z-10">
+      <div className="fixed bottom-2 sm:bottom-10 w-full flex justify-center z-10">
           <Mydoc />
         </div>
 
       {/* About Section */}
-      <div className="flex flex-col items-center justify-center mx-auto mb-40" id="about">
+      <div className="flex flex-col items-center justify-center mx-auto mb-10 sm:mb-40 px-2" id="about">
         <About />
       </div>
 
       {/* Vision Component */}
-      <div className="flex flex-col items-center justify-center mx-auto mb-40" id="vision">
+      <div className="flex flex-col items-center justify-center mx-auto mb-10 sm:mb-40 px-2" id="vision">
         <Vision />
       </div>
 
@@ -108,29 +108,29 @@ export default function Home() {
      
 
       {/* Events */}
-      <div className="mb-64 m-5 sm:m-44" id="events">
-        <h1 className="text-xl sm:text-4xl font-mono flex justify-center m-5">Explore Past Events</h1>
+      <div className="mb-20 sm:mb-64 m-2 sm:m-44" id="events">
+        <h1 className="text-lg sm:text-4xl font-mono flex justify-center m-3 sm:m-5">Explore Past Events</h1>
         <EventsVideo />
-        <div className="flex justify-center p-10" onClick={() => window.location.href = "https://esummit-rec.vercel.app/"}>
+        <div className="flex justify-center p-4 sm:p-10" onClick={() => window.location.href = "https://esummit-rec.vercel.app/"}>
           <RainbowButton>Visit E-SUMMIT&apos;25 site</RainbowButton>
         </div>
       </div>
 
       {/* Highlights */}
-      <div className="m-5">
-        <h1 className="text-4xl font-mono flex justify-center m-10">Highlights</h1>
+      <div className="m-2 sm:m-5">
+        <h1 className="text-2xl sm:text-4xl font-mono flex justify-center m-4 sm:m-10">Highlights</h1>
         <BlurFade />
       </div>
 
       {/* Resources */}
-      <div id="resources" className="mt-40">
-        <h1 className="text-4xl font-mono flex justify-center m-5">Resources</h1>
+      <div id="resources" className="mt-20 sm:mt-40 px-2">
+        <h1 className="text-2xl sm:text-4xl font-mono flex justify-center m-3 sm:m-5">Resources</h1>
         <BentoGridSecondDemo />
       </div>
 
       {/* Faculty Coordinator */}
-      <div id="team" className="mt-40">
-        <h1 className="text-4xl font-mono flex justify-center m-5">Faculty Coordinator</h1>
+      <div id="team" className="mt-20 sm:mt-40 px-2">
+        <h1 className="text-2xl sm:text-4xl font-mono flex justify-center m-3 sm:m-5">Faculty Coordinator</h1>
         <div className="flex justify-center">
           <TeamCard
             key={20}
@@ -143,13 +143,13 @@ export default function Home() {
       </div>
 
       {/* Team */}
-      <div id="team" className="mt-40">
-        <h1 className="text-4xl font-mono flex justify-center m-5">Our Team</h1>
+      <div id="team" className="mt-20 sm:mt-40 px-2">
+        <h1 className="text-2xl sm:text-4xl font-mono flex justify-center m-3 sm:m-5">Our Team</h1>
         <Team />
       </div>
 
       {/* Testimonials */}
-      <div className="mt-4 items-center justify-center mx-auto ">
+      <div className="mt-4 items-center justify-center mx-auto px-2 ">
         <div id="Testimonials">
           <Testimonials />
         </div>
@@ -157,7 +157,7 @@ export default function Home() {
 
       {/* Footer */}
       <Footer />
-      <div className="w-full h-10 bg-black text-white flex items-center justify-center font-mono overflow-hidden">
+      <div className="w-full h-10 bg-black text-white flex items-center justify-center font-mono overflow-hidden text-xs sm:text-base">
         <span className="scrolling-text">Developed By WebTech Team © ECELL REC</span>
       </div>
     </>
