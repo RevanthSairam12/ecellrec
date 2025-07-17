@@ -33,17 +33,17 @@ export default function Home() {
           <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-purple-400/10 rounded-full blur-2xl animate-pulse-slow delay-1000 -translate-x-1/2" />
         </div>
         {/* LOGOS ROW: left, center, right with animation */}
-        <div className="absolute top-0 left-0 z-20 w-full flex flex-col sm:flex-row justify-between items-start sm:items-start px-4">
+        <div className="absolute top-0 left-0 z-20 w-full flex flex-row justify-between items-start px-4 gap-2">
           {/* Left logo */}
-          <div className="w-28 sm:w-40 md:w-56 h-auto flex items-center justify-start mt-3 animate-fade-in-up" style={{animationDelay:'0.2s'}}>
+          <div className="w-24 sm:w-40 md:w-56 h-auto flex items-center justify-start mt-3 animate-fade-in-up" style={{animationDelay:'0.2s'}}>
             <Image src={EcellNew} alt="Ecell Logo" className="object-contain" priority />
           </div>
-          {/* Center logo absolutely centered on desktop, centered in column on mobile */}
-          <div className="w-28 sm:w-40 md:w-56 h-auto flex items-center justify-center mt-3 animate-fade-in-up sm:absolute sm:left-1/2 sm:transform sm:-translate-x-1/2" style={{animationDelay:'0.6s'}}>
+          {/* Center logo */}
+          <div className="w-24 sm:w-40 md:w-56 h-auto flex items-center justify-center mt-3 animate-fade-in-up" style={{animationDelay:'0.6s'}}>
             <Image src={RaghuLogo} alt="Raghu Logo" className="object-contain" priority />
           </div>
           {/* Right logo */}
-          <div className="w-28 sm:w-40 md:w-56 h-auto flex items-center justify-end mt-3 animate-fade-in-up self-end sm:self-auto" style={{animationDelay:'0.4s'}}>
+          <div className="w-24 sm:w-40 md:w-56 h-auto flex items-center justify-end mt-3 animate-fade-in-up" style={{animationDelay:'0.4s'}}>
             <Image src={IICLogo} alt="IIC Logo" className="object-contain" priority />
           </div>
         </div>
