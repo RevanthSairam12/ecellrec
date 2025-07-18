@@ -1,3 +1,4 @@
+"use client";
 import CurrentTeamMembers from './CurrentTeamData';
 import FormerTeamMembers from './FormerTeamData';
 import TeamCard from './TeamCard';
