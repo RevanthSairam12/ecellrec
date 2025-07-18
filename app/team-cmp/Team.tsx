@@ -1,3 +1,4 @@
+"use client";
 import TeamRender from './TeamRender';
 import { motion } from "framer-motion";
 
