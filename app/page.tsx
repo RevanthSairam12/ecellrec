@@ -10,9 +10,9 @@ import { RainbowButton } from "@/components/ui/rainbow-button";
 import { BentoGridSecondDemo } from "./pages/BentoGridSecondDemo";
 import { Testimonials } from "./pages/testimonials";
 import EventsVideo from './pages/EventsVideo';
-import Team from "./team-cmp/Team";
+
 import Footer from "./pages/Footer";
-import TeamCard from "./team-cmp/TeamCard";
+
 import About from "./about/page";
 import BlurFade from "./BlurFadeCollage";
 
@@ -158,16 +158,6 @@ export default function Home() {
       </div>
 
       {/* Team */}
- <div id="team" className="mt-40">
-        <Team TeamContainer={"CurrentTeam"} />
-      </div>
-
-      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent my-40" />
-      
-      {/* Former Team */}
-      <div id="Formerteam">
-        <Team TeamContainer={"FormerTeam"} />
-      </div>
 
       {/* Testimonials */}
       <div className="mt-4 items-center justify-center mx-auto px-2 ">
