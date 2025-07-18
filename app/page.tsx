@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import EcellNew from "./images/ecellverynew.png";
 import IICLogo from "./images/iic.png";
@@ -17,6 +17,21 @@ import About from "./about/page";
 import BlurFade from "./BlurFadeCollage";
 
 export default function Home() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 3000); // 3 seconds
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black">
+        <img src="/loadingpage.gif" alt="Loading..." className="w-48 h-48" />
+      </div>
+    );
+  }
+
   return (
     <>
       {/* HERO SECTION - Redesigned */}
@@ -142,16 +157,10 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Current Team */}
-      <div id="team" className="mt-40">
-        <Team TeamContainer={"CurrentTeam"} />
-      </div>
-
-      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent my-40" />
-      
-      {/* Former Team */}
-      <div id="Formerteam">
-        <Team TeamContainer={"FormerTeam"} />
+      {/* Team */}
+      <div id="team" className="mt-20 sm:mt-40 px-2">
+        <h1 className="text-2xl sm:text-4xl font-mono flex justify-center m-3 sm:m-5">Our Team</h1>
+        <Team />
       </div>
 
       {/* Testimonials */}
