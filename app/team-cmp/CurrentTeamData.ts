@@ -16,7 +16,7 @@ const CurrentTeamMembers = [{
         { platform: 'Twitter', url: '#' },
         { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/sree-venkatanadh-677bbb31b/' },
     ],
-    imageUrl: "/Team/venky.jpg",
+    imageUrl: "/venky.jpg",
 }, {
     role: "Vice President",
     name: "Aamuktha Malyadha",
@@ -32,7 +32,7 @@ const CurrentTeamMembers = [{
         { platform: 'Twitter', url: 'https://x.com/SantoshGv173485' },
         { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/santosh-gv-545021293' },
     ],
-    imageUrl: "/Team/santosh.jpg",
+    imageUrl: "/santosh.jpg",
 }, {
     role: "Startup Assistance & program Head",
     name: "Tappiti Ganesh",
@@ -48,7 +48,7 @@ const CurrentTeamMembers = [{
         { platform: 'Twitter', url: 'https://x.com/pawan28016' },
         { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/ponugupati-sai-pawan/' },
     ],
-    imageUrl: "/Team/pavan.jpg",
+    imageUrl: "/pavan.jpg",
 }, {
     role: "Alumni & Community Relations Head",
     name: "Ujjesha Nitya Routhu",
@@ -56,7 +56,7 @@ const CurrentTeamMembers = [{
         { platform: 'Twitter', url: 'https://x.com/UjjeshaNitya' },
         { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/ujjesha-nitya-routhu-5a4938312/' },
     ],
-    imageUrl: "/Team/nitya.jpg",
+    imageUrl: "/nitya.jpg",
 }, {
     role: "Web Tech Head",
     name: "Jeevan Sai Eddipilli",
@@ -64,7 +64,7 @@ const CurrentTeamMembers = [{
         { platform: 'Twitter', url: 'https://x.com/__Jeevan_sai__' },
         { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/jeevan-sai-eddipilli-43734a329/' },
     ],
-    imageUrl: "/Team/EJeevan.jpg",
+    imageUrl: "/EJeevan.jpg",
 }, {
     role: "Web Tech Head",
     name: "Revanth Sai Ram",
@@ -80,7 +80,7 @@ const CurrentTeamMembers = [{
         { platform: 'Twitter', url: '#' },
         { platform: 'LinkedIn', url: '#' },
     ],
-    imageUrl: "/Team/sashank.jpg"
+    imageUrl: "/sashank.jpg"
 }, {
     role: "Marketing & Outreach Head",
     name: "Vineela Vadrevu",
@@ -88,7 +88,7 @@ const CurrentTeamMembers = [{
         { platform: 'Twitter', url: 'https://x.com/VVadrevu39607' },
         { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/sai-satya-vineela-vadrevu-976b04374/' },
     ],
-    imageUrl: "/Team/vineela.jpg",
+    imageUrl: "/vineela.jpg",
 }, {
     role: "Marketing & Outreach Head",
     name: "Sagi Sanvitha",
@@ -96,7 +96,7 @@ const CurrentTeamMembers = [{
         { platform: 'Twitter', url: '#' },
         { platform: 'LinkedIn', url: '#' },
     ],
-    imageUrl: "/Team/sanvitha.jpg",
+    imageUrl: "/sanvitha.jpg",
 }, {
     role: "Events & Management Head",
     name: "Mohammad Shahidulla",
@@ -104,7 +104,7 @@ const CurrentTeamMembers = [{
         { platform: 'Twitter', url: '#' },
         { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/mohammad-shahidulla-214428321/' },
     ],
-    imageUrl: "/Team/shahid.jpg",
+    imageUrl: "/shahid.jpg",
 }, {
     role: "Events & Management Head",
     name: "Shazia sadaf",
@@ -112,7 +112,7 @@ const CurrentTeamMembers = [{
         { platform: 'Twitter', url: '#' },
         { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/shazia-sadaf-83837933a/' },
     ],
-    imageUrl: "/Team/shazia.jpg",
+    imageUrl: "/shazia.jpg",
 }, {
     role: "Events & Management Head",
     name: "Enduga Ramya",
@@ -120,7 +120,7 @@ const CurrentTeamMembers = [{
         { platform: 'Twitter', url: '#' },
         { platform: 'LinkedIn', url: '#' },
     ],
-    imageUrl: "/Team/ramya.jpg",
+    imageUrl: "/ramya.jpg",
 }, {
     role: "Events & Management Head",
     name: "Jeevan Kurmadasu",
@@ -128,7 +128,7 @@ const CurrentTeamMembers = [{
         { platform: 'Twitter', url: '#' },
         { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/kurmadasu-jeevan-a54903337/' },
     ],
-    imageUrl: "/Team/KJeevan.jpg",
+    imageUrl: "/KJeevan.jpg",
 }, {
     role: "Club Chronicles Head",
     name: "Renitha Ashwa",
@@ -136,7 +136,7 @@ const CurrentTeamMembers = [{
         { platform: 'Twitter', url: '#' },
         { platform: 'LinkedIn', url: '#' },
     ],
-    imageUrl: "/Team/renitha.jpeg",
+    imageUrl: "/renitha.jpeg",
 }, {
     role: "Club Chronicles Head",
     name: "shaik karishma",
@@ -144,7 +144,7 @@ const CurrentTeamMembers = [{
         { platform: 'Twitter', url: '#' },
         { platform: 'LinkedIn', url: '#' },
     ],
-    imageUrl: "/Team/karishma.jpg",
+    imageUrl: "/karishma.jpg",
 }
 
 ]
